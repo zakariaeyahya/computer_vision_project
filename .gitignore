@@ -8,7 +8,9 @@ frontend/dist/
 frontend/build/
 backend/dist/
 backend/build/
+  
 
+  
 # Environment variables
 .env
 .env.local
