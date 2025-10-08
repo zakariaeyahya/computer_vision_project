@@ -1,0 +1,2 @@
+// Popular destinations section component
+

@@ -1,0 +1,2 @@
+// Empty trips placeholder component
+
