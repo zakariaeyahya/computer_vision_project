@@ -1,2 +1,0 @@
-// Travel preferences component
-

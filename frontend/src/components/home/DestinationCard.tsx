@@ -1,2 +1,0 @@
-// Destination card component
-
