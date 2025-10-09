@@ -9,11 +9,13 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { useNavigation } from '@react-navigation/native';
 
 type BudgetType = 'SMALL' | 'MEDIUM' | 'LARGE';
 type PreferenceType = 'CULTURE' | 'NATURE' | 'GASTRONOMY';
 
 export default function StartTravelScreen() {
+  const navigation = useNavigation();
   const [destination, setDestination] = useState('Tétouan');
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)); // +7 jours
@@ -52,6 +54,13 @@ export default function StartTravelScreen() {
   };
 
   const handleGenerateItinerary = () => {
+    // Validation simple
+    if (preferences.length === 0) {
+      alert('Veuillez sélectionner au moins une préférence');
+      return;
+    }
+
+    // Log des données (pour debug)
     console.log({
       destination,
       startDate,
@@ -59,8 +68,9 @@ export default function StartTravelScreen() {
       budget,
       preferences,
     });
-    // TODO: Navigation vers la page itinéraire
-    alert('Génération de l\'itinéraire...');
+
+    // Navigation vers la page itinéraire
+    navigation.navigate('Itinerary' as never, { id: '1' } as never);
   };
 
   return (
