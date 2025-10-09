@@ -7,11 +7,13 @@ import StartTravelScreen from '../screens/StartTravelScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
 import MyTripsScreen from '../screens/MyTripsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import TetouanDetailsScreen from '../screens/TetouanDetailsScreen';
 
 // Types for navigation
 export type RootStackParamList = {
   MainTabs: undefined;
   Itinerary: { id: string };
+  TetouanDetails: undefined;
 };
 
 export type TabParamList = {
@@ -33,20 +35,20 @@ function MainTabs() {
         tabBarActiveTintColor: '#2C5F2D',
         tabBarInactiveTintColor: '#6B7280',
         tabBarStyle: {
-          height: 70,
-          paddingBottom: 10,
-          paddingTop: 10,
+          height: 78,
+          paddingBottom: 28,
+          paddingTop: 0,
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#E5E7EB',
         },
         tabBarLabelStyle: {
-          fontSize: 13,
+          fontSize: 12,
           fontWeight: '600',
-          marginTop: 4,
+          marginTop: 2,
         },
         tabBarIconStyle: {
-          marginTop: 5,
+          marginTop: 3,
         },
       }}
     >
@@ -124,6 +126,11 @@ export default function AppNavigator() {
         name="Itinerary" 
         component={ItineraryScreen}
         options={{ title: 'Itinéraire' }}
+      />
+      <Stack.Screen 
+        name="TetouanDetails" 
+        component={TetouanDetailsScreen}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );

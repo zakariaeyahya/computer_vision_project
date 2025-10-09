@@ -1,10 +1,12 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
 
 const { width } = Dimensions.get('window');
 
 export default function HomeScreen() {
+  const navigation = useNavigation();
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Hero Section */}
@@ -74,7 +76,10 @@ export default function HomeScreen() {
                 </View>
               </View>
               
-              <TouchableOpacity style={styles.exploreButton}>
+              <TouchableOpacity 
+                style={styles.exploreButton}
+                onPress={() => navigation.navigate('TetouanDetails' as never)}
+              >
                 <Text style={styles.exploreButtonText}>Explorer Tétouan</Text>
                 <Text style={styles.exploreButtonIcon}>→</Text>
               </TouchableOpacity>

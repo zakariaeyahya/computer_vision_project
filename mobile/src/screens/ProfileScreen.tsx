@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 
 export default function ProfileScreen() {
@@ -13,9 +13,13 @@ export default function ProfileScreen() {
         end={{ x: 1, y: 1 }}
       >
         <View style={styles.avatarContainer}>
-          <Text style={styles.avatar}>👤</Text>
+          <Image
+            source={require('../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg')}
+            style={styles.avatarImage}
+            resizeMode="cover"
+          />
         </View>
-        <Text style={styles.headerName}>Alejandro Martinez</Text>
+        <Text style={styles.headerName}>issam siraj eddine</Text>
         <Text style={styles.headerSubtitle}>Voyageur passionné</Text>
       </LinearGradient>
 
@@ -36,7 +40,7 @@ export default function ProfileScreen() {
           <View style={styles.cardContent}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Nom complet</Text>
-              <Text style={styles.infoValue}>Alejandro Martinez</Text>
+              <Text style={styles.infoValue}>issam siraj eddino</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Pays</Text>
@@ -186,6 +190,11 @@ const styles = StyleSheet.create({
     marginBottom: 16,
     borderWidth: 4,
     borderColor: 'rgba(255, 255, 255, 0.3)',
+    overflow: 'hidden',
+  },
+  avatarImage: {
+    width: '100%',
+    height: '100%',
   },
   avatar: {
     fontSize: 50,
