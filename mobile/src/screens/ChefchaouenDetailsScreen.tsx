@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { TETOUAN_PLACES, Place } from '../../mock';
+import { CHEFCHAOUEN_PLACES, Place } from '../../mock';
 
 const { width, height } = Dimensions.get('window');
-const PLACES_TO_VISIT = TETOUAN_PLACES;
+const PLACES_TO_VISIT = CHEFCHAOUEN_PLACES;
 
-export default function TetouanDetailsScreen() {
+export default function ChefchaouenDetailsScreen() {
   const navigation = useNavigation();
 
   return (
@@ -23,12 +23,12 @@ export default function TetouanDetailsScreen() {
       {/* Hero Image avec overlay */}
       <View style={styles.heroContainer}>
         <Image
-          source={require('../../assets/images/destinations/tetouan.jpg')}
+          source={require('../../assets/images/destinations/chefchaouen.jpg')}
           style={styles.heroImage}
           resizeMode="cover"
         />
         <LinearGradient
-          colors={['transparent', 'rgba(196, 30, 58, 0.8)', '#8B0000']}
+          colors={['transparent', 'rgba(37, 99, 235, 0.8)', '#2563EB']}
           style={styles.heroOverlay}
         >
           <TouchableOpacity
@@ -41,25 +41,25 @@ export default function TetouanDetailsScreen() {
           <View style={styles.heroContent}>
             <View style={styles.locationBadge}>
               <Text style={styles.locationEmoji}>📍</Text>
-              <Text style={styles.locationText}>Nord du Maroc</Text>
+              <Text style={styles.locationText}>Montagnes du Rif</Text>
             </View>
-            <Text style={styles.heroTitle}>Tétouan</Text>
-            <Text style={styles.heroSubtitle}>La Colombe Blanche</Text>
+            <Text style={styles.heroTitle}>Chefchaouen</Text>
+            <Text style={styles.heroSubtitle}>La Perle Bleue</Text>
             
             <View style={styles.heroStats}>
               <View style={styles.statItem}>
-                <Text style={styles.statIcon}>🏛️</Text>
-                <Text style={styles.statText}>UNESCO</Text>
+                <Text style={styles.statIcon}>🔵</Text>
+                <Text style={styles.statText}>Ville Bleue</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statIcon}>🎨</Text>
-                <Text style={styles.statText}>Culture</Text>
+                <Text style={styles.statIcon}>⛰️</Text>
+                <Text style={styles.statText}>Montagnes</Text>
               </View>
               <View style={styles.statDivider} />
               <View style={styles.statItem}>
-                <Text style={styles.statIcon}>🌊</Text>
-                <Text style={styles.statText}>Plages</Text>
+                <Text style={styles.statIcon}>📸</Text>
+                <Text style={styles.statText}>Photogénique</Text>
               </View>
             </View>
           </View>
@@ -69,10 +69,10 @@ export default function TetouanDetailsScreen() {
       <View style={styles.content}>
         {/* Description */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Découvrez Tétouan</Text>
+          <Text style={styles.sectionTitle}>Découvrez Chefchaouen</Text>
           <Text style={styles.description}>
-            Tétouan, la "Colombe Blanche", est une ville authentique nichée entre les montagnes du Rif et la mer Méditerranée. 
-            Sa médina, inscrite au patrimoine mondial de l'UNESCO depuis 1997, est un joyau architectural andalou-mauresque.
+            Chefchaouen, la "Perle Bleue", est célèbre dans le monde entier pour ses ruelles et bâtiments peints en bleu. 
+            Nichée dans les montagnes du Rif à 600m d'altitude, elle offre une atmosphère paisible et des paysages époustouflants.
           </Text>
         </View>
 
@@ -83,30 +83,15 @@ export default function TetouanDetailsScreen() {
           <View style={styles.highlightsGrid}>
             <View style={styles.highlightCard}>
               <LinearGradient
-                colors={['#C41E3A', '#8B0000']}
+                colors={['#2563EB', '#60A5FA']}
                 style={styles.highlightGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.highlightIcon}>🏛️</Text>
-                <Text style={styles.highlightTitle}>Médina UNESCO</Text>
+                <Text style={styles.highlightIcon}>🔵</Text>
+                <Text style={styles.highlightTitle}>Ville Bleue</Text>
                 <Text style={styles.highlightDescription}>
-                  Architecture andalouse préservée
-                </Text>
-              </LinearGradient>
-            </View>
-
-            <View style={styles.highlightCard}>
-              <LinearGradient
-                colors={['#1E40AF', '#3B82F6']}
-                style={styles.highlightGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.highlightIcon}>🎨</Text>
-                <Text style={styles.highlightTitle}>Art & Artisanat</Text>
-                <Text style={styles.highlightDescription}>
-                  Célèbre pour ses zellige et broderies
+                  Ruelles entièrement peintes en bleu
                 </Text>
               </LinearGradient>
             </View>
@@ -118,10 +103,25 @@ export default function TetouanDetailsScreen() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.highlightIcon}>🌊</Text>
-                <Text style={styles.highlightTitle}>Plages à Proximité</Text>
+                <Text style={styles.highlightIcon}>⛰️</Text>
+                <Text style={styles.highlightTitle}>Randonnées</Text>
                 <Text style={styles.highlightDescription}>
-                  Martil et M'diq à 10km
+                  Sentiers dans les montagnes du Rif
+                </Text>
+              </LinearGradient>
+            </View>
+
+            <View style={styles.highlightCard}>
+              <LinearGradient
+                colors={['#7C3AED', '#A78BFA']}
+                style={styles.highlightGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.highlightIcon}>📸</Text>
+                <Text style={styles.highlightTitle}>Photographie</Text>
+                <Text style={styles.highlightDescription}>
+                  Paradis des photographes
                 </Text>
               </LinearGradient>
             </View>
@@ -133,10 +133,10 @@ export default function TetouanDetailsScreen() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.highlightIcon}>🍽️</Text>
-                <Text style={styles.highlightTitle}>Gastronomie</Text>
+                <Text style={styles.highlightIcon}>🛍️</Text>
+                <Text style={styles.highlightTitle}>Artisanat</Text>
                 <Text style={styles.highlightDescription}>
-                  Cuisine andalouse authentique
+                  Tissage et produits locaux
                 </Text>
               </LinearGradient>
             </View>
@@ -174,7 +174,7 @@ export default function TetouanDetailsScreen() {
               <Text style={styles.infoIcon}>🗓️</Text>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>Meilleure période</Text>
-                <Text style={styles.infoValue}>Mars à Juin, Septembre à Novembre</Text>
+                <Text style={styles.infoValue}>Avril-Juin, Septembre-Novembre</Text>
               </View>
             </View>
 
@@ -184,7 +184,7 @@ export default function TetouanDetailsScreen() {
               <Text style={styles.infoIcon}>💰</Text>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>Budget moyen/jour</Text>
-                <Text style={styles.infoValue}>300-500 DH</Text>
+                <Text style={styles.infoValue}>250-400 DH</Text>
               </View>
             </View>
 
@@ -193,18 +193,18 @@ export default function TetouanDetailsScreen() {
             <View style={styles.infoRow}>
               <Text style={styles.infoIcon}>🚗</Text>
               <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Accès depuis Tanger</Text>
-                <Text style={styles.infoValue}>1h en voiture (60 km)</Text>
+                <Text style={styles.infoLabel}>Accès</Text>
+                <Text style={styles.infoValue}>2h30 depuis Tanger, 4h depuis Fès</Text>
               </View>
             </View>
 
             <View style={styles.infoDivider} />
 
             <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>🗣️</Text>
+              <Text style={styles.infoIcon}>⛰️</Text>
               <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Langues</Text>
-                <Text style={styles.infoValue}>Arabe, Espagnol, Français</Text>
+                <Text style={styles.infoLabel}>Altitude</Text>
+                <Text style={styles.infoValue}>600 mètres</Text>
               </View>
             </View>
           </View>
@@ -223,7 +223,7 @@ export default function TetouanDetailsScreen() {
             end={{ x: 1, y: 0 }}
           >
             <Text style={styles.ctaIcon}>✈️</Text>
-            <Text style={styles.ctaText}>Planifier mon voyage à Tétouan</Text>
+            <Text style={styles.ctaText}>Planifier mon voyage à Chefchaouen</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -264,7 +264,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    backdropFilter: 'blur(10px)',
   },
   backButtonText: {
     fontSize: 28,

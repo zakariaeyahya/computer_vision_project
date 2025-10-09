@@ -10,12 +10,12 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { TETOUAN_PLACES, Place } from '../../mock';
+import { TANGER_PLACES, Place } from '../../mock';
 
 const { width, height } = Dimensions.get('window');
-const PLACES_TO_VISIT = TETOUAN_PLACES;
+const PLACES_TO_VISIT = TANGER_PLACES;
 
-export default function TetouanDetailsScreen() {
+export default function TangerDetailsScreen() {
   const navigation = useNavigation();
 
   return (
@@ -23,12 +23,12 @@ export default function TetouanDetailsScreen() {
       {/* Hero Image avec overlay */}
       <View style={styles.heroContainer}>
         <Image
-          source={require('../../assets/images/destinations/tetouan.jpg')}
+          source={require('../../assets/images/destinations/tanger.webp')}
           style={styles.heroImage}
           resizeMode="cover"
         />
         <LinearGradient
-          colors={['transparent', 'rgba(196, 30, 58, 0.8)', '#8B0000']}
+          colors={['transparent', 'rgba(30, 64, 175, 0.8)', '#1E40AF']}
           style={styles.heroOverlay}
         >
           <TouchableOpacity
@@ -43,23 +43,23 @@ export default function TetouanDetailsScreen() {
               <Text style={styles.locationEmoji}>📍</Text>
               <Text style={styles.locationText}>Nord du Maroc</Text>
             </View>
-            <Text style={styles.heroTitle}>Tétouan</Text>
-            <Text style={styles.heroSubtitle}>La Colombe Blanche</Text>
+            <Text style={styles.heroTitle}>Tanger</Text>
+            <Text style={styles.heroSubtitle}>La Perle du Détroit</Text>
             
             <View style={styles.heroStats}>
               <View style={styles.statItem}>
-                <Text style={styles.statIcon}>🏛️</Text>
-                <Text style={styles.statText}>UNESCO</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Text style={styles.statIcon}>🎨</Text>
-                <Text style={styles.statText}>Culture</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
                 <Text style={styles.statIcon}>🌊</Text>
-                <Text style={styles.statText}>Plages</Text>
+                <Text style={styles.statText}>Détroit</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statIcon}>🏰</Text>
+                <Text style={styles.statText}>Kasbah</Text>
+              </View>
+              <View style={styles.statDivider} />
+              <View style={styles.statItem}>
+                <Text style={styles.statIcon}>🎭</Text>
+                <Text style={styles.statText}>Culture</Text>
               </View>
             </View>
           </View>
@@ -69,10 +69,10 @@ export default function TetouanDetailsScreen() {
       <View style={styles.content}>
         {/* Description */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Découvrez Tétouan</Text>
+          <Text style={styles.sectionTitle}>Découvrez Tanger</Text>
           <Text style={styles.description}>
-            Tétouan, la "Colombe Blanche", est une ville authentique nichée entre les montagnes du Rif et la mer Méditerranée. 
-            Sa médina, inscrite au patrimoine mondial de l'UNESCO depuis 1997, est un joyau architectural andalou-mauresque.
+            Tanger, la "Perle du Détroit", est une ville cosmopolite unique où l'Europe et l'Afrique se rencontrent. 
+            Située entre la mer Méditerranée et l'océan Atlantique, elle a toujours été un carrefour culturel fascinant.
           </Text>
         </View>
 
@@ -83,45 +83,30 @@ export default function TetouanDetailsScreen() {
           <View style={styles.highlightsGrid}>
             <View style={styles.highlightCard}>
               <LinearGradient
-                colors={['#C41E3A', '#8B0000']}
-                style={styles.highlightGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.highlightIcon}>🏛️</Text>
-                <Text style={styles.highlightTitle}>Médina UNESCO</Text>
-                <Text style={styles.highlightDescription}>
-                  Architecture andalouse préservée
-                </Text>
-              </LinearGradient>
-            </View>
-
-            <View style={styles.highlightCard}>
-              <LinearGradient
                 colors={['#1E40AF', '#3B82F6']}
                 style={styles.highlightGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.highlightIcon}>🎨</Text>
-                <Text style={styles.highlightTitle}>Art & Artisanat</Text>
+                <Text style={styles.highlightIcon}>🌊</Text>
+                <Text style={styles.highlightTitle}>Cap Spartel</Text>
                 <Text style={styles.highlightDescription}>
-                  Célèbre pour ses zellige et broderies
+                  Point de rencontre Atlantique-Méditerranée
                 </Text>
               </LinearGradient>
             </View>
 
             <View style={styles.highlightCard}>
               <LinearGradient
-                colors={['#059669', '#10B981']}
+                colors={['#7C3AED', '#A78BFA']}
                 style={styles.highlightGradient}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.highlightIcon}>🌊</Text>
-                <Text style={styles.highlightTitle}>Plages à Proximité</Text>
+                <Text style={styles.highlightIcon}>🏰</Text>
+                <Text style={styles.highlightTitle}>Kasbah</Text>
                 <Text style={styles.highlightDescription}>
-                  Martil et M'diq à 10km
+                  Quartier historique avec vue panoramique
                 </Text>
               </LinearGradient>
             </View>
@@ -133,10 +118,25 @@ export default function TetouanDetailsScreen() {
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 1 }}
               >
-                <Text style={styles.highlightIcon}>🍽️</Text>
-                <Text style={styles.highlightTitle}>Gastronomie</Text>
+                <Text style={styles.highlightIcon}>🎭</Text>
+                <Text style={styles.highlightTitle}>Patrimoine</Text>
                 <Text style={styles.highlightDescription}>
-                  Cuisine andalouse authentique
+                  Histoire cosmopolite unique
+                </Text>
+              </LinearGradient>
+            </View>
+
+            <View style={styles.highlightCard}>
+              <LinearGradient
+                colors={['#059669', '#10B981']}
+                style={styles.highlightGradient}
+                start={{ x: 0, y: 0 }}
+                end={{ x: 1, y: 1 }}
+              >
+                <Text style={styles.highlightIcon}>🏖️</Text>
+                <Text style={styles.highlightTitle}>Plages</Text>
+                <Text style={styles.highlightDescription}>
+                  Magnifiques plages urbaines
                 </Text>
               </LinearGradient>
             </View>
@@ -174,7 +174,7 @@ export default function TetouanDetailsScreen() {
               <Text style={styles.infoIcon}>🗓️</Text>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>Meilleure période</Text>
-                <Text style={styles.infoValue}>Mars à Juin, Septembre à Novembre</Text>
+                <Text style={styles.infoValue}>Toute l'année, idéal Avril-Octobre</Text>
               </View>
             </View>
 
@@ -184,17 +184,17 @@ export default function TetouanDetailsScreen() {
               <Text style={styles.infoIcon}>💰</Text>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>Budget moyen/jour</Text>
-                <Text style={styles.infoValue}>300-500 DH</Text>
+                <Text style={styles.infoValue}>400-700 DH</Text>
               </View>
             </View>
 
             <View style={styles.infoDivider} />
 
             <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>🚗</Text>
+              <Text style={styles.infoIcon}>✈️</Text>
               <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Accès depuis Tanger</Text>
-                <Text style={styles.infoValue}>1h en voiture (60 km)</Text>
+                <Text style={styles.infoLabel}>Aéroport</Text>
+                <Text style={styles.infoValue}>Aéroport Ibn Battouta (15 km du centre)</Text>
               </View>
             </View>
 
@@ -204,7 +204,7 @@ export default function TetouanDetailsScreen() {
               <Text style={styles.infoIcon}>🗣️</Text>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>Langues</Text>
-                <Text style={styles.infoValue}>Arabe, Espagnol, Français</Text>
+                <Text style={styles.infoValue}>Arabe, Français, Espagnol, Anglais</Text>
               </View>
             </View>
           </View>
@@ -223,7 +223,7 @@ export default function TetouanDetailsScreen() {
             end={{ x: 1, y: 0 }}
           >
             <Text style={styles.ctaIcon}>✈️</Text>
-            <Text style={styles.ctaText}>Planifier mon voyage à Tétouan</Text>
+            <Text style={styles.ctaText}>Planifier mon voyage à Tanger</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -264,7 +264,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    backdropFilter: 'blur(10px)',
   },
   backButtonText: {
     fontSize: 28,

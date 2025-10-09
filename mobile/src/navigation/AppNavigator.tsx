@@ -8,12 +8,16 @@ import ItineraryScreen from '../screens/ItineraryScreen';
 import MyTripsScreen from '../screens/MyTripsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
 import TetouanDetailsScreen from '../screens/TetouanDetailsScreen';
+import TangerDetailsScreen from '../screens/TangerDetailsScreen';
+import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
 
 // Types for navigation
 export type RootStackParamList = {
   MainTabs: undefined;
   Itinerary: { id: string };
   TetouanDetails: undefined;
+  TangerDetails: undefined;
+  ChefchaouenDetails: undefined;
 };
 
 export type TabParamList = {
@@ -130,6 +134,16 @@ export default function AppNavigator() {
       <Stack.Screen 
         name="TetouanDetails" 
         component={TetouanDetailsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="TangerDetails" 
+        component={TangerDetailsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen 
+        name="ChefchaouenDetails" 
+        component={ChefchaouenDetailsScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

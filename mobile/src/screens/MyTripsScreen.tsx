@@ -9,32 +9,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-
-// Mock data pour les voyages
-const MOCK_TRIPS = [
-  {
-    id: 1,
-    destination: 'Tétouan',
-    startDate: '3 Mai 2025',
-    endDate: '5 Mai 2025',
-    status: 'upcoming',
-    image: '🏛️',
-    backgroundColor: ['#C41E3A', '#8B0000'],
-    budget: 850,
-    days: 3,
-  },
-  {
-    id: 2,
-    destination: 'Tanger',
-    startDate: '10 Avril 2025',
-    endDate: '12 Avril 2025',
-    status: 'completed',
-    image: '🌊',
-    backgroundColor: ['#1E40AF', '#3B82F6'],
-    budget: 1200,
-    days: 3,
-  },
-];
+import { MOCK_TRIPS } from '../../mock';
 
 export default function MyTripsScreen() {
   const navigation = useNavigation();
