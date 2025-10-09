@@ -1,4 +1,5 @@
 import React from 'react';
+import { Text } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import HomeScreen from '../screens/HomeScreen';
@@ -31,31 +32,84 @@ function MainTabs() {
         headerShown: false,
         tabBarActiveTintColor: '#2C5F2D',
         tabBarInactiveTintColor: '#6B7280',
+        tabBarStyle: {
+          height: 70,
+          paddingBottom: 10,
+          paddingTop: 10,
+          backgroundColor: '#FFFFFF',
+          borderTopWidth: 1,
+          borderTopColor: '#E5E7EB',
+        },
+        tabBarLabelStyle: {
+          fontSize: 13,
+          fontWeight: '600',
+          marginTop: 4,
+        },
+        tabBarIconStyle: {
+          marginTop: 5,
+        },
       }}
     >
       <Tab.Screen 
         name="Home" 
         component={HomeScreen}
-        options={{ title: 'Accueil' }}
+        options={{ 
+          title: 'Accueil',
+          tabBarIcon: ({ color, size }) => (
+            <HomeIcon color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen 
         name="StartTravel" 
         component={StartTravelScreen}
-        options={{ title: 'Voyage' }}
+        options={{ 
+          title: 'Voyage',
+          tabBarIcon: ({ color, size }) => (
+            <TravelIcon color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen 
         name="MyTrips" 
         component={MyTripsScreen}
-        options={{ title: 'Mes Voyages' }}
+        options={{ 
+          title: 'Mes Voyages',
+          tabBarIcon: ({ color, size }) => (
+            <TripsIcon color={color} size={size} />
+          ),
+        }}
       />
       <Tab.Screen 
         name="Profile" 
         component={ProfileScreen}
-        options={{ title: 'Profil' }}
+        options={{ 
+          title: 'Profil',
+          tabBarIcon: ({ color, size }) => (
+            <ProfileIcon color={color} size={size} />
+          ),
+        }}
       />
     </Tab.Navigator>
   );
 }
+
+// Simple icon components using emojis
+const HomeIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size, color }}>🏠</Text>
+);
+
+const TravelIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size, color }}>✈️</Text>
+);
+
+const TripsIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size, color }}>🧳</Text>
+);
+
+const ProfileIcon = ({ color, size }: { color: string; size: number }) => (
+  <Text style={{ fontSize: size, color }}>👤</Text>
+);
 
 // Main Stack Navigator
 export default function AppNavigator() {
