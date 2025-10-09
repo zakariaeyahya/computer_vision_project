@@ -16,7 +16,7 @@ type PreferenceType = 'CULTURE' | 'NATURE' | 'GASTRONOMY';
 
 export default function StartTravelScreen() {
   const navigation = useNavigation();
-  const [destination, setDestination] = useState('Tétouan');
+  const [destination] = useState('Tétouan');
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)); // +7 jours
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
@@ -31,14 +31,14 @@ export default function StartTravelScreen() {
     return `${day}/${month}/${year}`;
   };
 
-  const onStartDateChange = (event: any, selectedDate?: Date) => {
+  const onStartDateChange = (_event: unknown, selectedDate?: Date) => {
     setShowStartDatePicker(Platform.OS === 'ios');
     if (selectedDate) {
       setStartDate(selectedDate);
     }
   };
 
-  const onEndDateChange = (event: any, selectedDate?: Date) => {
+  const onEndDateChange = (_event: unknown, selectedDate?: Date) => {
     setShowEndDatePicker(Platform.OS === 'ios');
     if (selectedDate) {
       setEndDate(selectedDate);
@@ -260,7 +260,7 @@ export default function StartTravelScreen() {
         {/* Préférences */}
         <View style={styles.formSection}>
           <Text style={styles.label}>Préférences</Text>
-          <Text style={styles.sublabel}>Sélectionnez vos centres d'intérêt</Text>
+          <Text style={styles.sublabel}>Sélectionnez vos centres d&quot;intérêt</Text>
 
           <TouchableOpacity
             style={[

@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ImageSourcePropType,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { TETOUAN_PLACES, Place } from '../../mock';
+import { TETOUAN_PLACES } from '../../mock';
 
 const { width, height } = Dimensions.get('window');
 const PLACES_TO_VISIT = TETOUAN_PLACES;
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const tetouanImage = require('../../assets/images/destinations/tetouan.jpg') as ImageSourcePropType;
 
 export default function TetouanDetailsScreen() {
   const navigation = useNavigation();
@@ -23,7 +27,7 @@ export default function TetouanDetailsScreen() {
       {/* Hero Image avec overlay */}
       <View style={styles.heroContainer}>
         <Image
-          source={require('../../assets/images/destinations/tetouan.jpg')}
+          source={tetouanImage}
           style={styles.heroImage}
           resizeMode="cover"
         />
@@ -71,8 +75,8 @@ export default function TetouanDetailsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Découvrez Tétouan</Text>
           <Text style={styles.description}>
-            Tétouan, la "Colombe Blanche", est une ville authentique nichée entre les montagnes du Rif et la mer Méditerranée. 
-            Sa médina, inscrite au patrimoine mondial de l'UNESCO depuis 1997, est un joyau architectural andalou-mauresque.
+            Tétouan, la &quot;Colombe Blanche&quot;, est une ville authentique nichée entre les montagnes du Rif et la mer Méditerranée. 
+            Sa médina, inscrite au patrimoine mondial de l&quot;UNESCO depuis 1997, est un joyau architectural andalou-mauresque.
           </Text>
         </View>
 
@@ -121,7 +125,7 @@ export default function TetouanDetailsScreen() {
                 <Text style={styles.highlightIcon}>🌊</Text>
                 <Text style={styles.highlightTitle}>Plages à Proximité</Text>
                 <Text style={styles.highlightDescription}>
-                  Martil et M'diq à 10km
+                  Martil et M&quot;diq à 10km
                 </Text>
               </LinearGradient>
             </View>

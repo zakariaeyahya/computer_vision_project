@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ImageSourcePropType,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { TANGER_PLACES, Place } from '../../mock';
+import { TANGER_PLACES } from '../../mock';
 
 const { width, height } = Dimensions.get('window');
 const PLACES_TO_VISIT = TANGER_PLACES;
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const tangerImage = require('../../assets/images/destinations/tanger.webp') as ImageSourcePropType;
 
 export default function TangerDetailsScreen() {
   const navigation = useNavigation();
@@ -23,7 +27,7 @@ export default function TangerDetailsScreen() {
       {/* Hero Image avec overlay */}
       <View style={styles.heroContainer}>
         <Image
-          source={require('../../assets/images/destinations/tanger.webp')}
+          source={tangerImage}
           style={styles.heroImage}
           resizeMode="cover"
         />
@@ -71,8 +75,8 @@ export default function TangerDetailsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Découvrez Tanger</Text>
           <Text style={styles.description}>
-            Tanger, la "Perle du Détroit", est une ville cosmopolite unique où l'Europe et l'Afrique se rencontrent. 
-            Située entre la mer Méditerranée et l'océan Atlantique, elle a toujours été un carrefour culturel fascinant.
+            Tanger, la &quot;Perle du Détroit&quot;, est une ville cosmopolite unique où l&quot;Europe et l&quot;Afrique se rencontrent. 
+            Située entre la mer Méditerranée et l&quot;océan Atlantique, elle a toujours été un carrefour culturel fascinant.
           </Text>
         </View>
 
@@ -174,7 +178,7 @@ export default function TangerDetailsScreen() {
               <Text style={styles.infoIcon}>🗓️</Text>
               <View style={styles.infoTextContainer}>
                 <Text style={styles.infoLabel}>Meilleure période</Text>
-                <Text style={styles.infoValue}>Toute l'année, idéal Avril-Octobre</Text>
+                <Text style={styles.infoValue}>Toute l&quot;année, idéal Avril-Octobre</Text>
               </View>
             </View>
 

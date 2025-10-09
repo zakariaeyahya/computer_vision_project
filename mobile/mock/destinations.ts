@@ -1,15 +1,18 @@
+import { ImageSourcePropType } from 'react-native';
+
 export interface Destination {
   id: string;
   name: string;
   nickname: string;
   location: string;
   colors: [string, string];
-  image: any;
+  image: ImageSourcePropType;
   features: Array<{ icon: string; text: string }>;
   route: string;
   description: string;
 }
 
+/* eslint-disable @typescript-eslint/no-require-imports */
 export const DESTINATIONS: Destination[] = [
   {
     id: '1',
@@ -17,7 +20,7 @@ export const DESTINATIONS: Destination[] = [
     nickname: 'La Colombe Blanche',
     location: 'Nord du Maroc',
     colors: ['#C41E3A', '#8B0000'],
-    image: require('../assets/images/destinations/tetouan.jpg'),
+    image: require('../assets/images/destinations/tetouan.jpg') as ImageSourcePropType,
     features: [
       { icon: '🏛️', text: 'Médina UNESCO' },
       { icon: '🎨', text: 'Art & Culture' },
@@ -32,7 +35,7 @@ export const DESTINATIONS: Destination[] = [
     nickname: 'La Perle du Détroit',
     location: 'Nord du Maroc',
     colors: ['#1E40AF', '#3B82F6'],
-    image: require('../assets/images/destinations/tanger.webp'),
+    image: require('../assets/images/destinations/tanger.webp') as ImageSourcePropType,
     features: [
       { icon: '🌊', text: 'Cap Spartel' },
       { icon: '🏰', text: 'Kasbah' },
@@ -47,7 +50,7 @@ export const DESTINATIONS: Destination[] = [
     nickname: 'La Perle Bleue',
     location: 'Montagnes du Rif',
     colors: ['#2563EB', '#60A5FA'],
-    image: require('../assets/images/destinations/chefchaouen.jpg'),
+    image: require('../assets/images/destinations/chefchaouen.jpg') as ImageSourcePropType,
     features: [
       { icon: '🔵', text: 'Ville bleue' },
       { icon: '⛰️', text: 'Montagnes du Rif' },
@@ -57,4 +60,5 @@ export const DESTINATIONS: Destination[] = [
     description: 'Chefchaouen, "La Perle Bleue", est célèbre pour ses ruelles peintes en bleu. Nichée dans les montagnes du Rif, elle offre une atmosphère paisible et des paysages à couper le souffle.',
   },
 ];
+/* eslint-enable @typescript-eslint/no-require-imports */
 

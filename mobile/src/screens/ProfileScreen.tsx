@@ -1,6 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const profileImage = require('../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg') as ImageSourcePropType;
 
 export default function ProfileScreen() {
   return (
@@ -14,7 +17,7 @@ export default function ProfileScreen() {
       >
         <View style={styles.avatarContainer}>
           <Image
-            source={require('../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg')}
+            source={profileImage}
             style={styles.avatarImage}
             resizeMode="cover"
           />
@@ -75,7 +78,7 @@ export default function ProfileScreen() {
               </View>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Centres d'intérêt</Text>
+              <Text style={styles.infoLabel}>Centres d&quot;intérêt</Text>
               <View style={styles.interestsContainer}>
                 <View style={styles.interestTag}>
                   <Text style={styles.interestEmoji}>⚽</Text>
@@ -132,7 +135,7 @@ export default function ProfileScreen() {
             </View>
             <View style={styles.cardHeaderText}>
               <Text style={styles.cardTitle}>Paramètres</Text>
-              <Text style={styles.cardSubtitle}>Configuration de l'app</Text>
+              <Text style={styles.cardSubtitle}>Configuration de l&apos;app</Text>
             </View>
             <Text style={styles.cardArrow}>›</Text>
           </View>

@@ -5,7 +5,6 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
-  Image,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
@@ -13,9 +12,9 @@ import { MOCK_TRIPS } from '../../mock';
 
 export default function MyTripsScreen() {
   const navigation = useNavigation();
-  const [trips, setTrips] = useState(MOCK_TRIPS);
+  const [trips] = useState(MOCK_TRIPS);
 
-  const handleViewDetails = (tripId: number) => {
+  const handleViewDetails = (_tripId: number) => {
     // Navigation vers la page de détails (ItineraryScreen)
     navigation.navigate('Itinerary' as never);
   };

@@ -36,7 +36,7 @@ const PreferenceCheckbox: React.FC<PreferenceCheckboxProps> = ({
   return (
     <View style={styles.container}>
       <Text style={styles.label}>Préférences</Text>
-      <Text style={styles.sublabel}>Sélectionnez vos centres d'intérêt</Text>
+      <Text style={styles.sublabel}>Sélectionnez vos centres d&apos;intérêt</Text>
 
       {preferenceOptions.map((option) => {
         const isSelected = preferences.includes(option.value);

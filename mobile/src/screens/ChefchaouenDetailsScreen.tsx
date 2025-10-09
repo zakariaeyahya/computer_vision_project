@@ -7,13 +7,17 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
+  ImageSourcePropType,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
-import { CHEFCHAOUEN_PLACES, Place } from '../../mock';
+import { CHEFCHAOUEN_PLACES } from '../../mock';
 
 const { width, height } = Dimensions.get('window');
 const PLACES_TO_VISIT = CHEFCHAOUEN_PLACES;
+
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const chefchaouenImage = require('../../assets/images/destinations/chefchaouen.jpg') as ImageSourcePropType;
 
 export default function ChefchaouenDetailsScreen() {
   const navigation = useNavigation();
@@ -23,7 +27,7 @@ export default function ChefchaouenDetailsScreen() {
       {/* Hero Image avec overlay */}
       <View style={styles.heroContainer}>
         <Image
-          source={require('../../assets/images/destinations/chefchaouen.jpg')}
+          source={chefchaouenImage}
           style={styles.heroImage}
           resizeMode="cover"
         />
@@ -71,8 +75,8 @@ export default function ChefchaouenDetailsScreen() {
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Découvrez Chefchaouen</Text>
           <Text style={styles.description}>
-            Chefchaouen, la "Perle Bleue", est célèbre dans le monde entier pour ses ruelles et bâtiments peints en bleu. 
-            Nichée dans les montagnes du Rif à 600m d'altitude, elle offre une atmosphère paisible et des paysages époustouflants.
+            Chefchaouen, la &quot;Perle Bleue&quot;, est célèbre dans le monde entier pour ses ruelles et bâtiments peints en bleu. 
+            Nichée dans les montagnes du Rif à 600m d&quot;altitude, elle offre une atmosphère paisible et des paysages époustouflants.
           </Text>
         </View>
 
