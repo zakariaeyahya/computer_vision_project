@@ -6,4 +6,5 @@ export * from './chefchaouenPlaces';
 export * from './trips';
 export * from './itinerary';
 export * from './preferences';
+export * from './userProfile';
 

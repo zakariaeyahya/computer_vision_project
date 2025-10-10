@@ -1,11 +1,26 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
+import { View, Text, ScrollView, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useNavigation } from '@react-navigation/native';
+import { MOCK_USER_PROFILE, SETTINGS_OPTIONS, APP_INFO } from '../../mock';
+import { profileStyles as styles } from '../styles/profileStyles';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const profileImage = require('../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg') as ImageSourcePropType;
 
 export default function ProfileScreen() {
+  const navigation = useNavigation();
+  const userProfile = MOCK_USER_PROFILE;
+
+  const handleNavigateToPersonalInfo = () => {
+    // @ts-expect-error - Navigation typing to be fixed
+    navigation.navigate('PersonalInfo');
+  };
+
+  const handleNavigateToTravelPreferences = () => {
+    // @ts-expect-error - Navigation typing to be fixed
+    navigation.navigate('TravelPreferences');
+  };
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header Profile */}
@@ -22,13 +37,17 @@ export default function ProfileScreen() {
             resizeMode="cover"
           />
         </View>
-        <Text style={styles.headerName}>issam siraj eddine</Text>
-        <Text style={styles.headerSubtitle}>Voyageur passionné</Text>
+        <Text style={styles.headerName}>{userProfile.fullName}</Text>
+        <Text style={styles.headerSubtitle}>{userProfile.subtitle}</Text>
       </LinearGradient>
 
       <View style={styles.content}>
         {/* Informations Personnelles Card */}
-        <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.7}
+          onPress={handleNavigateToPersonalInfo}
+        >
           <View style={styles.cardHeader}>
             <View style={styles.cardIconContainer}>
               <Text style={styles.cardIcon}>📋</Text>
@@ -43,21 +62,27 @@ export default function ProfileScreen() {
           <View style={styles.cardContent}>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Nom complet</Text>
-              <Text style={styles.infoValue}>issam siraj eddino</Text>
+              <Text style={styles.infoValue}>{userProfile.personalInfo.fullName}</Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Pays</Text>
-              <Text style={styles.infoValue}>🇪🇸 Espagne</Text>
+              <Text style={styles.infoValue}>
+                {userProfile.personalInfo.country.flag} {userProfile.personalInfo.country.name}
+              </Text>
             </View>
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Langue</Text>
-              <Text style={styles.infoValue}>Espagnol</Text>
+              <Text style={styles.infoValue}>{userProfile.personalInfo.language}</Text>
             </View>
           </View>
         </TouchableOpacity>
 
         {/* Préférences de Voyage Card */}
-        <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.7}
+          onPress={handleNavigateToTravelPreferences}
+        >
           <View style={styles.cardHeader}>
             <View style={styles.cardIconContainer}>
               <Text style={styles.cardIcon}>⚙️</Text>
@@ -73,21 +98,19 @@ export default function ProfileScreen() {
             <View style={styles.infoRow}>
               <Text style={styles.infoLabel}>Budget habituel</Text>
               <View style={styles.budgetBadge}>
-                <Text style={styles.budgetEmoji}>💰💰</Text>
-                <Text style={styles.budgetText}>Moyen</Text>
+                <Text style={styles.budgetEmoji}>{userProfile.travelPreferences.budgetEmoji}</Text>
+                <Text style={styles.budgetText}>{userProfile.travelPreferences.budgetLabel}</Text>
               </View>
             </View>
             <View style={styles.infoRow}>
-              <Text style={styles.infoLabel}>Centres d&quot;intérêt</Text>
+              <Text style={styles.infoLabel}>Centres d&apos;intérêt</Text>
               <View style={styles.interestsContainer}>
-                <View style={styles.interestTag}>
-                  <Text style={styles.interestEmoji}>⚽</Text>
-                  <Text style={styles.interestText}>Football</Text>
-                </View>
-                <View style={styles.interestTag}>
-                  <Text style={styles.interestEmoji}>🍽️</Text>
-                  <Text style={styles.interestText}>Gastronomie</Text>
-                </View>
+                {userProfile.travelPreferences.interests.slice(0, 2).map((interest) => (
+                  <View key={interest.id} style={styles.interestTag}>
+                    <Text style={styles.interestEmoji}>{interest.emoji}</Text>
+                    <Text style={styles.interestText}>{interest.label}</Text>
+                  </View>
+                ))}
               </View>
             </View>
           </View>
@@ -108,19 +131,19 @@ export default function ProfileScreen() {
           <View style={styles.cardDivider} />
           <View style={styles.statsGrid}>
             <View style={styles.statBox}>
-              <Text style={styles.statNumber}>2</Text>
+              <Text style={styles.statNumber}>{userProfile.statistics.totalTrips}</Text>
               <Text style={styles.statLabel}>Voyages</Text>
               <Text style={styles.statEmoji}>✈️</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statBox}>
-              <Text style={styles.statNumber}>3</Text>
+              <Text style={styles.statNumber}>{userProfile.statistics.totalDestinations}</Text>
               <Text style={styles.statLabel}>Destinations</Text>
               <Text style={styles.statEmoji}>🗺️</Text>
             </View>
             <View style={styles.statDivider} />
             <View style={styles.statBox}>
-              <Text style={styles.statNumber}>15</Text>
+              <Text style={styles.statNumber}>{userProfile.statistics.totalDays}</Text>
               <Text style={styles.statLabel}>Jours</Text>
               <Text style={styles.statEmoji}>📅</Text>
             </View>
@@ -141,18 +164,12 @@ export default function ProfileScreen() {
           </View>
           <View style={styles.cardDivider} />
           <View style={styles.settingsList}>
-            <View style={styles.settingItem}>
-              <Text style={styles.settingIcon}>🔔</Text>
-              <Text style={styles.settingText}>Notifications</Text>
-            </View>
-            <View style={styles.settingItem}>
-              <Text style={styles.settingIcon}>🌍</Text>
-              <Text style={styles.settingText}>Langue et région</Text>
-            </View>
-            <View style={styles.settingItem}>
-              <Text style={styles.settingIcon}>🔒</Text>
-              <Text style={styles.settingText}>Confidentialité</Text>
-            </View>
+            {SETTINGS_OPTIONS.slice(0, 3).map((setting) => (
+              <View key={setting.id} style={styles.settingItem}>
+                <Text style={styles.settingIcon}>{setting.icon}</Text>
+                <Text style={styles.settingText}>{setting.label}</Text>
+              </View>
+            ))}
           </View>
         </TouchableOpacity>
 
@@ -163,255 +180,10 @@ export default function ProfileScreen() {
         </TouchableOpacity>
 
         <View style={styles.footer}>
-          <Text style={styles.footerText}>Version 1.0.0</Text>
+          <Text style={styles.footerText}>Version {APP_INFO.version}</Text>
         </View>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-
-  // Header
-  header: {
-    padding: 32,
-    paddingTop: 60,
-    paddingBottom: 40,
-    alignItems: 'center',
-  },
-  avatarContainer: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginBottom: 16,
-    borderWidth: 4,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    overflow: 'hidden',
-  },
-  avatarImage: {
-    width: '100%',
-    height: '100%',
-  },
-  avatar: {
-    fontSize: 50,
-  },
-  headerName: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  headerSubtitle: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    opacity: 0.9,
-  },
-
-  // Content
-  content: {
-    padding: 20,
-    paddingBottom: 40,
-  },
-
-  // Card
-  card: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  cardHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  cardIconContainer: {
-    width: 48,
-    height: 48,
-    borderRadius: 12,
-    backgroundColor: '#F0F9FF',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 12,
-  },
-  cardIcon: {
-    fontSize: 24,
-  },
-  cardHeaderText: {
-    flex: 1,
-  },
-  cardTitle: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 2,
-  },
-  cardSubtitle: {
-    fontSize: 13,
-    color: '#6B7280',
-  },
-  cardArrow: {
-    fontSize: 28,
-    color: '#D1D5DB',
-    fontWeight: '300',
-  },
-  cardDivider: {
-    height: 1,
-    backgroundColor: '#E5E7EB',
-    marginBottom: 16,
-  },
-  cardContent: {
-    gap: 12,
-  },
-
-  // Info Rows
-  infoRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  infoLabel: {
-    fontSize: 15,
-    color: '#6B7280',
-  },
-  infoValue: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#1F2937',
-  },
-
-  // Budget Badge
-  budgetBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F0F9FF',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    gap: 6,
-  },
-  budgetEmoji: {
-    fontSize: 16,
-  },
-  budgetText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#2C5F2D',
-  },
-
-  // Interests
-  interestsContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  interestTag: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F3F4F6',
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-    borderRadius: 16,
-    gap: 4,
-  },
-  interestEmoji: {
-    fontSize: 14,
-  },
-  interestText: {
-    fontSize: 13,
-    fontWeight: '600',
-    color: '#4B5563',
-  },
-
-  // Stats Grid
-  statsGrid: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  statBox: {
-    flex: 1,
-    alignItems: 'center',
-    paddingVertical: 8,
-  },
-  statNumber: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#2C5F2D',
-    marginBottom: 4,
-  },
-  statLabel: {
-    fontSize: 13,
-    color: '#6B7280',
-    marginBottom: 4,
-  },
-  statEmoji: {
-    fontSize: 20,
-  },
-  statDivider: {
-    width: 1,
-    height: 60,
-    backgroundColor: '#E5E7EB',
-  },
-
-  // Settings List
-  settingsList: {
-    gap: 4,
-  },
-  settingItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 12,
-    gap: 12,
-  },
-  settingIcon: {
-    fontSize: 20,
-  },
-  settingText: {
-    fontSize: 15,
-    color: '#4B5563',
-    fontWeight: '500',
-  },
-
-  // Logout Button
-  logoutButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#FEE2E2',
-    padding: 16,
-    borderRadius: 12,
-    marginTop: 8,
-    gap: 8,
-  },
-  logoutIcon: {
-    fontSize: 20,
-  },
-  logoutText: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#DC2626',
-  },
-
-  // Footer
-  footer: {
-    alignItems: 'center',
-    marginTop: 24,
-  },
-  footerText: {
-    fontSize: 13,
-    color: '#9CA3AF',
-  },
-});
 

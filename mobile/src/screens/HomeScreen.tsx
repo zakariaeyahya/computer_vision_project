@@ -94,7 +94,7 @@ export default function HomeScreen() {
                     <Text style={styles.cityNickname}>{item.nickname}</Text>
                     
                     <View style={styles.cityFeatures}>
-                      {item.features.map((feature, index) => (
+                      {item.features.map((feature: { icon: string; text: string }, index: number) => (
                         <View key={index} style={styles.feature}>
                           <Text style={styles.featureIcon}>{feature.icon}</Text>
                           <Text style={styles.featureText}>{feature.text}</Text>

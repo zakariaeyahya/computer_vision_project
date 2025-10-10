@@ -7,6 +7,8 @@ import StartTravelScreen from '../screens/StartTravelScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
 import MyTripsScreen from '../screens/MyTripsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import PersonalInfoScreen from '../components/profile/PersonalInfoScreen';
+import TravelPreferencesScreen from '../components/profile/TravelPreferencesScreen';
 import TetouanDetailsScreen from '../screens/TetouanDetailsScreen';
 import TangerDetailsScreen from '../screens/TangerDetailsScreen';
 import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
@@ -15,6 +17,8 @@ import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
 export type RootStackParamList = {
   MainTabs: undefined;
   Itinerary: { id: string };
+  PersonalInfo: undefined;
+  TravelPreferences: undefined;
   TetouanDetails: undefined;
   TangerDetails: undefined;
   ChefchaouenDetails: undefined;
@@ -126,13 +130,23 @@ export default function AppNavigator() {
         component={MainTabs}
         options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="Itinerary" 
+      <Stack.Screen
+        name="Itinerary"
         component={ItineraryScreen}
         options={{ title: 'Itinéraire' }}
       />
-      <Stack.Screen 
-        name="TetouanDetails" 
+      <Stack.Screen
+        name="PersonalInfo"
+        component={PersonalInfoScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TravelPreferences"
+        component={TravelPreferencesScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="TetouanDetails"
         component={TetouanDetailsScreen}
         options={{ headerShown: false }}
       />
