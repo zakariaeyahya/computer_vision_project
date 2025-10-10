@@ -12,9 +12,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
 import { DESTINATIONS, PREFERENCES_BY_DESTINATION, type PreferenceType } from '../../mock';
+import { BudgetSelector } from '../components/common/BudgetSelector';
 import { startTravelStyles as styles } from '../styles/startTravelStyles';
 
-type BudgetType = 'SMALL' | 'MEDIUM' | 'LARGE';
+const MIN_BUDGET = 200;
+const MAX_BUDGET = 10000;
 
 export default function StartTravelScreen() {
   const navigation = useNavigation();
@@ -24,7 +26,7 @@ export default function StartTravelScreen() {
   const [endDate, setEndDate] = useState<Date>(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)); // +7 days
   const [showStartDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  const [budget, setBudget] = useState<BudgetType>('MEDIUM');
+  const [budget, setBudget] = useState<number>(1000);
   const [preferences, setPreferences] = useState<PreferenceType[]>([]);
 
   // Get available preferences based on the selected destination
@@ -237,106 +239,14 @@ export default function StartTravelScreen() {
         {/* Budget */}
         <View style={styles.formSection}>
           <Text style={styles.label}>Budget</Text>
-          <View style={styles.budgetContainer}>
-            <TouchableOpacity
-              style={[
-                styles.budgetOption,
-                budget === 'SMALL' && styles.budgetOptionActive,
-              ]}
-              onPress={() => setBudget('SMALL')}
-            >
-              <Text
-                style={[
-                  styles.budgetEmoji,
-                  budget === 'SMALL' && styles.budgetEmojiActive,
-                ]}
-              >
-                💰
-              </Text>
-              <Text
-                style={[
-                  styles.budgetLabel,
-                  budget === 'SMALL' && styles.budgetLabelActive,
-                ]}
-              >
-                Petit
-              </Text>
-              <Text
-                style={[
-                  styles.budgetAmount,
-                  budget === 'SMALL' && styles.budgetAmountActive,
-                ]}
-              >
-                {'<'}500dh
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.budgetOption,
-                budget === 'MEDIUM' && styles.budgetOptionActive,
-              ]}
-              onPress={() => setBudget('MEDIUM')}
-            >
-              <Text
-                style={[
-                  styles.budgetEmoji,
-                  budget === 'MEDIUM' && styles.budgetEmojiActive,
-                ]}
-              >
-                💰💰
-              </Text>
-              <Text
-                style={[
-                  styles.budgetLabel,
-                  budget === 'MEDIUM' && styles.budgetLabelActive,
-                ]}
-              >
-                Moyen
-              </Text>
-              <Text
-                style={[
-                  styles.budgetAmount,
-                  budget === 'MEDIUM' && styles.budgetAmountActive,
-                ]}
-              >
-                500-1000dh
-              </Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity
-              style={[
-                styles.budgetOption,
-                budget === 'LARGE' && styles.budgetOptionActive,
-              ]}
-              onPress={() => setBudget('LARGE')}
-            >
-              <Text
-                style={[
-                  styles.budgetEmoji,
-                  budget === 'LARGE' && styles.budgetEmojiActive,
-                ]}
-              >
-                💰💰💰
-              </Text>
-              <Text
-                style={[
-                  styles.budgetLabel,
-                  budget === 'LARGE' && styles.budgetLabelActive,
-                ]}
-              >
-                Grand
-              </Text>
-              <Text
-                style={[
-                  styles.budgetAmount,
-                  budget === 'LARGE' && styles.budgetAmountActive,
-                ]}
-              >
-                {'>'}1000dh
-              </Text>
-            </TouchableOpacity>
-          </View>
+          <BudgetSelector
+            value={budget}
+            onChange={setBudget}
+            minBudget={MIN_BUDGET}
+            maxBudget={MAX_BUDGET}
+            step={100}
+            currency="dh"
+          />
         </View>
 
         {/* Preferences */}

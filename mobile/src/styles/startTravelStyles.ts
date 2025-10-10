@@ -112,49 +112,8 @@ export const startTravelStyles = StyleSheet.create({
     marginTop: 20,
   },
   
-  // Budget
-  budgetContainer: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  budgetOption: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 12,
-    alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#E5E7EB',
-  },
-  budgetOptionActive: {
-    borderColor: '#2C5F2D',
-    backgroundColor: '#F0F9FF',
-  },
-  budgetEmoji: {
-    fontSize: 28,
-    marginBottom: 8,
-  },
-  budgetEmojiActive: {
-    transform: [{ scale: 1.1 }],
-  },
-  budgetLabel: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6B7280',
-    marginBottom: 4,
-  },
-  budgetLabelActive: {
-    color: '#2C5F2D',
-  },
-  budgetAmount: {
-    fontSize: 12,
-    color: '#9CA3AF',
-  },
-  budgetAmountActive: {
-    color: '#2C5F2D',
-    fontWeight: '600',
-  },
-  
+  // Budget styles are now in BudgetSelector component
+
   // Checkboxes
   checkbox: {
     backgroundColor: '#FFFFFF',
