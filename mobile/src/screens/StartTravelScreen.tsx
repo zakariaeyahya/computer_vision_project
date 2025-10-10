@@ -11,11 +11,10 @@ import {
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation } from '@react-navigation/native';
-import { DESTINATIONS } from '../../mock';
+import { DESTINATIONS, PREFERENCES_BY_DESTINATION, type PreferenceType } from '../../mock';
 import { startTravelStyles as styles } from '../styles/startTravelStyles';
 
 type BudgetType = 'SMALL' | 'MEDIUM' | 'LARGE';
-type PreferenceType = 'CULTURE' | 'NATURE' | 'GASTRONOMY';
 
 export default function StartTravelScreen() {
   const navigation = useNavigation();
@@ -30,29 +29,7 @@ export default function StartTravelScreen() {
 
   // Get available preferences based on the selected destination
   const getPreferencesForDestination = () => {
-    const selectedDest = DESTINATIONS.find(d => d.name === destination);
-    if (!selectedDest) return [];
-
-    // Map destination features to preferences
-    const preferencesMap: Record<string, { type: PreferenceType; label: string; description: string; emoji: string }[]> = {
-      'Tétouan': [
-        { type: 'CULTURE', label: 'Culture et Histoire', description: 'Médina UNESCO, musées, sites historiques', emoji: '🏛️' },
-        { type: 'NATURE', label: 'Nature et Plages', description: 'Plages de Martil, montagnes du Rif', emoji: '🌊' },
-        { type: 'GASTRONOMY', label: 'Gastronomie', description: 'Cuisine andalouse, restaurants traditionnels', emoji: '🍽️' },
-      ],
-      'Tanger': [
-        { type: 'CULTURE', label: 'Patrimoine et Histoire', description: 'Kasbah, grottes d\'Hercule, médina', emoji: '🏰' },
-        { type: 'NATURE', label: 'Mer et Nature', description: 'Cap Spartel, plages, détroit', emoji: '🌊' },
-        { type: 'GASTRONOMY', label: 'Gastronomie Cosmopolite', description: 'Cuisine internationale, Café Hafa', emoji: '☕' },
-      ],
-      'Chefchaouen': [
-        { type: 'CULTURE', label: 'Photographie et Art', description: 'Ville bleue, médina photogénique', emoji: '📸' },
-        { type: 'NATURE', label: 'Randonnées et Montagnes', description: 'Cascade Akchour, montagnes du Rif', emoji: '⛰️' },
-        { type: 'GASTRONOMY', label: 'Artisanat et Gastronomie', description: 'Tissage local, restaurants de montagne', emoji: '🛍️' },
-      ],
-    };
-
-    return preferencesMap[destination] || preferencesMap['Tétouan'];
+    return PREFERENCES_BY_DESTINATION[destination] || PREFERENCES_BY_DESTINATION['Tétouan'];
   };
 
   const availablePreferences = getPreferencesForDestination();
@@ -93,9 +70,27 @@ export default function StartTravelScreen() {
       return;
     }
 
-    // Navigate to itinerary page
+    // Calculate duration in days
+    const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+
+    // Debug: Log what we're sending
+    console.log('StartTravelScreen - Navigation vers Itinerary avec:', {
+      destination,
+      duration,
+      budget,
+      preferences,
+    });
+
+    // Navigate to itinerary page with selected parameters
     // @ts-expect-error - Navigation typing to be fixed
-    navigation.navigate('Itinerary', { id: '1' });
+    navigation.navigate('Itinerary', {
+      destination,
+      startDate: startDate.toISOString(),
+      endDate: endDate.toISOString(),
+      duration,
+      budget,
+      preferences,
+    });
   };
 
   return (

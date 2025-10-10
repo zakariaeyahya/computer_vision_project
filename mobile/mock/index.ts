@@ -5,4 +5,5 @@ export * from './tangerPlaces';
 export * from './chefchaouenPlaces';
 export * from './trips';
 export * from './itinerary';
+export * from './preferences';
 

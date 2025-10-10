@@ -7,12 +7,26 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import ItineraryHeader from '../components/itinerary/ItineraryHeader';
-import { MOCK_ITINERARY } from '../../mock';
+import { ITINERARIES_BY_DESTINATION } from '../../mock';
 
 export default function ItineraryScreen() {
   const navigation = useNavigation();
+  const route = useRoute();
+
+  // Get parameters from navigation
+  // @ts-expect-error - Navigation typing to be fixed
+  const { destination = 'Tétouan' } = route.params || {};
+
+  // Debug: Log the destination
+  console.log('ItineraryScreen - Destination reçue:', destination);
+  console.log('ItineraryScreen - Destinations disponibles:', Object.keys(ITINERARIES_BY_DESTINATION));
+
+  // Get the itinerary for the selected destination
+  const itinerary = ITINERARIES_BY_DESTINATION[destination] || ITINERARIES_BY_DESTINATION['Tétouan'];
+
+  console.log('ItineraryScreen - Itinéraire chargé pour:', itinerary.destination);
 
   const handleSaveTrip = () => {
     alert('Voyage sauvegardé avec succès !');
@@ -27,9 +41,9 @@ export default function ItineraryScreen() {
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header avec bouton chatbot IA */}
       <ItineraryHeader
-        destination={MOCK_ITINERARY.destination}
-        duration={MOCK_ITINERARY.duration}
-        budget={MOCK_ITINERARY.budget}
+        destination={itinerary.destination}
+        duration={itinerary.duration}
+        budget={itinerary.budget}
       />
 
       <View style={styles.content}>
@@ -42,7 +56,7 @@ export default function ItineraryScreen() {
         </View>
 
         {/* Days List */}
-        {MOCK_ITINERARY.days.map((day, dayIndex) => (
+        {itinerary.days.map((day, dayIndex) => (
           <View key={dayIndex} style={styles.dayContainer}>
             {/* Day Header */}
             <View style={styles.dayHeader}>
