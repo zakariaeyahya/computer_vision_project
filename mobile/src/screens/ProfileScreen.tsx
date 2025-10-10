@@ -21,6 +21,12 @@ export default function ProfileScreen() {
     // @ts-expect-error - Navigation typing to be fixed
     navigation.navigate('TravelPreferences');
   };
+
+  const handleNavigateToStatistics = () => {
+    // @ts-expect-error - Navigation typing to be fixed
+    navigation.navigate('Statistics');
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header Profile */}
@@ -117,7 +123,11 @@ export default function ProfileScreen() {
         </TouchableOpacity>
 
         {/* Statistiques Card */}
-        <TouchableOpacity style={styles.card} activeOpacity={0.7}>
+        <TouchableOpacity
+          style={styles.card}
+          activeOpacity={0.7}
+          onPress={handleNavigateToStatistics}
+        >
           <View style={styles.cardHeader}>
             <View style={styles.cardIconContainer}>
               <Text style={styles.cardIcon}>📊</Text>

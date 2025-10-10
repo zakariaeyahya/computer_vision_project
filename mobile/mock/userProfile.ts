@@ -42,11 +42,47 @@ export interface Interest {
   label: string;
 }
 
+export interface TripHistory {
+  id: string;
+  destination: string;
+  emoji: string;
+  startDate: string;
+  endDate: string;
+  days: number;
+  spent: number;
+  activities: number;
+}
+
+export interface MonthlyStats {
+  month: string;
+  trips: number;
+  spent: number;
+}
+
+export interface DestinationStats {
+  name: string;
+  emoji: string;
+  visits: number;
+  lastVisit: string;
+}
+
 export interface UserStatistics {
   totalTrips: number;
   totalDestinations: number;
   totalDays: number;
   totalSpent?: number;
+  averageSpentPerTrip?: number;
+  averageTripDuration?: number;
+  favoriteDestination?: string;
+  tripHistory?: TripHistory[];
+  monthlyStats?: MonthlyStats[];
+  destinationStats?: DestinationStats[];
+  currentYear: {
+    trips: number;
+    destinations: number;
+    days: number;
+    spent: number;
+  };
 }
 
 export interface UserSettings {
@@ -109,6 +145,71 @@ export const MOCK_USER_PROFILE: UserProfile = {
     totalDestinations: 3,
     totalDays: 15,
     totalSpent: 3500,
+    averageSpentPerTrip: 1750,
+    averageTripDuration: 7.5,
+    favoriteDestination: 'Tétouan',
+    currentYear: {
+      trips: 2,
+      destinations: 3,
+      days: 15,
+      spent: 3500,
+    },
+    tripHistory: [
+      {
+        id: '1',
+        destination: 'Tétouan',
+        emoji: '🏛️',
+        startDate: '2024-08-15',
+        endDate: '2024-08-22',
+        days: 7,
+        spent: 1800,
+        activities: 12,
+      },
+      {
+        id: '2',
+        destination: 'Chefchaouen',
+        emoji: '🔵',
+        startDate: '2024-09-10',
+        endDate: '2024-09-18',
+        days: 8,
+        spent: 1700,
+        activities: 15,
+      },
+    ],
+    monthlyStats: [
+      { month: 'Janvier', trips: 0, spent: 0 },
+      { month: 'Février', trips: 0, spent: 0 },
+      { month: 'Mars', trips: 0, spent: 0 },
+      { month: 'Avril', trips: 0, spent: 0 },
+      { month: 'Mai', trips: 0, spent: 0 },
+      { month: 'Juin', trips: 0, spent: 0 },
+      { month: 'Juillet', trips: 0, spent: 0 },
+      { month: 'Août', trips: 1, spent: 1800 },
+      { month: 'Septembre', trips: 1, spent: 1700 },
+      { month: 'Octobre', trips: 0, spent: 0 },
+      { month: 'Novembre', trips: 0, spent: 0 },
+      { month: 'Décembre', trips: 0, spent: 0 },
+    ],
+    destinationStats: [
+      {
+        name: 'Tétouan',
+        emoji: '🏛️',
+        visits: 1,
+        lastVisit: 'Août 2024',
+      },
+      {
+        name: 'Chefchaouen',
+        emoji: '🔵',
+        visits: 1,
+        lastVisit: 'Septembre 2024',
+      },
+      {
+        name: 'Tanger',
+        emoji: '🌊',
+        visits: 0,
+        lastVisit: 'Jamais visité',
+      },
+    ],
   },
 
   settings: {
