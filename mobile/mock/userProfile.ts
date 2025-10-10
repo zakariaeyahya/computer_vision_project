@@ -85,11 +85,25 @@ export interface UserStatistics {
   };
 }
 
+export interface NotificationSettings {
+  tripReminders: boolean;
+  promotions: boolean;
+  recommendations: boolean;
+  messages: boolean;
+  emailNotifications: boolean;
+  pushNotifications: boolean;
+}
+
 export interface UserSettings {
   notifications: boolean;
   language: string;
   privacy: 'public' | 'private' | 'friends';
   theme: 'light' | 'dark' | 'auto';
+  notificationSettings?: NotificationSettings;
+  dataSharing?: boolean;
+  locationServices?: boolean;
+  offlineMode?: boolean;
+  autoSync?: boolean;
 }
 
 export const MOCK_USER_PROFILE: UserProfile = {
@@ -217,6 +231,18 @@ export const MOCK_USER_PROFILE: UserProfile = {
     language: 'fr',
     privacy: 'private',
     theme: 'auto',
+    notificationSettings: {
+      tripReminders: true,
+      promotions: false,
+      recommendations: true,
+      messages: true,
+      emailNotifications: true,
+      pushNotifications: true,
+    },
+    dataSharing: false,
+    locationServices: true,
+    offlineMode: false,
+    autoSync: true,
   },
 };
 
@@ -303,6 +329,28 @@ export const TRAVEL_STYLES = [
   { id: 'luxury', emoji: '💎', label: 'Luxe' },
   { id: 'eco', emoji: '🌱', label: 'Écologique' },
   { id: 'family', emoji: '👨‍👩‍👧‍👦', label: 'Famille' },
+];
+
+// Language options
+export const LANGUAGE_OPTIONS = [
+  { id: 'fr', label: 'Français', flag: '🇫🇷' },
+  { id: 'ar', label: 'العربية', flag: '🇲🇦' },
+  { id: 'en', label: 'English', flag: '🇬🇧' },
+  { id: 'es', label: 'Español', flag: '🇪🇸' },
+];
+
+// Theme options
+export const THEME_OPTIONS = [
+  { id: 'light', label: 'Clair', emoji: '☀️' },
+  { id: 'dark', label: 'Sombre', emoji: '🌙' },
+  { id: 'auto', label: 'Automatique', emoji: '🔄' },
+];
+
+// Privacy options
+export const PRIVACY_OPTIONS = [
+  { id: 'public', label: 'Public', emoji: '🌍', description: 'Tout le monde peut voir votre profil' },
+  { id: 'friends', label: 'Amis', emoji: '👥', description: 'Seulement vos amis peuvent voir votre profil' },
+  { id: 'private', label: 'Privé', emoji: '🔒', description: 'Votre profil est privé' },
 ];
 
 // App info

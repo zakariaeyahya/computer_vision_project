@@ -10,6 +10,7 @@ import ProfileScreen from '../screens/ProfileScreen';
 import PersonalInfoScreen from '../components/profile/PersonalInfoScreen';
 import TravelPreferencesScreen from '../components/profile/TravelPreferencesScreen';
 import StatisticsScreen from '../components/profile/StatisticsScreen';
+import SettingsScreen from '../components/profile/SettingsScreen';
 import TetouanDetailsScreen from '../screens/TetouanDetailsScreen';
 import TangerDetailsScreen from '../screens/TangerDetailsScreen';
 import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
@@ -21,6 +22,7 @@ export type RootStackParamList = {
   PersonalInfo: undefined;
   TravelPreferences: undefined;
   Statistics: undefined;
+  Settings: undefined;
   TetouanDetails: undefined;
   TangerDetails: undefined;
   ChefchaouenDetails: undefined;
@@ -150,6 +152,11 @@ export default function AppNavigator() {
       <Stack.Screen
         name="Statistics"
         component={StatisticsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Settings"
+        component={SettingsScreen}
         options={{ headerShown: false }}
       />
       <Stack.Screen
