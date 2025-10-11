@@ -1,0 +1,66 @@
+name: CI
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+
+jobs:
+  mobile-lint-and-type-check:
+    name: Mobile - Lint & Type Check
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: 'mobile/package-lock.json'
+
+      - name: Install dependencies
+        working-directory: mobile
+        run: npm ci
+
+      - name: Run ESLint
+        working-directory: mobile
+        run: npm run lint
+
+      - name: Run TypeScript type check
+        working-directory: mobile
+        run: npm run type-check
+
+  backend-lint:
+    name: Backend - Lint
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: backend
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install flake8 black
+
+      - name: Run Black
+        run: black --check .
+        continue-on-error: true
+
+      - name: Run Flake8
+        run: flake8 .
+        continue-on-error: true
+

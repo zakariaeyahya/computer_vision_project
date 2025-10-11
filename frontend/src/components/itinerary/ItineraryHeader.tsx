@@ -1,2 +1,0 @@
-// Itinerary header component
-
