@@ -218,7 +218,13 @@ export default function TangerDetailsScreen() {
         <TouchableOpacity
           style={styles.ctaButton}
           activeOpacity={0.8}
-          onPress={() => navigation.navigate('StartTravel' as never)}
+          onPress={() => {
+            // @ts-expect-error - Navigation typing to be fixed
+            navigation.navigate('MainTabs', {
+              screen: 'StartTravel',
+              params: { preselectedDestination: 'Tanger' }
+            });
+          }}
         >
           <LinearGradient
             colors={['#2C5F2D', '#97BC62']}

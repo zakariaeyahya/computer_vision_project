@@ -5,6 +5,7 @@ import {
   StyleSheet,
   ScrollView,
   TouchableOpacity,
+  Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useRoute } from '@react-navigation/native';
@@ -19,18 +20,12 @@ export default function ItineraryScreen() {
   // @ts-expect-error - Navigation typing to be fixed
   const { destination = 'Tétouan' } = route.params || {};
 
-  // Debug: Log the destination
-  console.log('ItineraryScreen - Destination reçue:', destination);
-  console.log('ItineraryScreen - Destinations disponibles:', Object.keys(ITINERARIES_BY_DESTINATION));
-
   // Get the itinerary for the selected destination
   const itinerary = ITINERARIES_BY_DESTINATION[destination] || ITINERARIES_BY_DESTINATION['Tétouan'];
 
-  console.log('ItineraryScreen - Itinéraire chargé pour:', itinerary.destination);
-
   const handleSaveTrip = () => {
-    alert('Voyage sauvegardé avec succès !');
-    // TODO: Navigation vers "Mes Voyages"
+    Alert.alert('Succès', 'Voyage sauvegardé avec succès !');
+    // TODO: Navigate to "Mes Voyages"
   };
 
   const handleModifyTrip = () => {

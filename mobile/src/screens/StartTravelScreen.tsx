@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
@@ -10,7 +10,7 @@ import {
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { DESTINATIONS, PREFERENCES_BY_DESTINATION, type PreferenceType } from '../../mock';
 import { BudgetSelector } from '../components/common/BudgetSelector';
 import { startTravelStyles as styles } from '../styles/startTravelStyles';
@@ -20,7 +20,13 @@ const MAX_BUDGET = 10000;
 
 export default function StartTravelScreen() {
   const navigation = useNavigation();
-  const [destination, setDestination] = useState(DESTINATIONS[0].name);
+  const route = useRoute();
+  
+  // Get preselected destination from navigation params
+  // @ts-expect-error - Navigation typing to be fixed
+  const { preselectedDestination } = route.params || {};
+  
+  const [destination, setDestination] = useState(preselectedDestination || DESTINATIONS[0].name);
   const [showDestinationPicker, setShowDestinationPicker] = useState(false);
   const [startDate, setStartDate] = useState<Date>(new Date());
   const [endDate, setEndDate] = useState<Date>(new Date(Date.now() + 7 * 24 * 60 * 60 * 1000)); // +7 days
@@ -28,6 +34,14 @@ export default function StartTravelScreen() {
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
   const [budget, setBudget] = useState<number>(1000);
   const [preferences, setPreferences] = useState<PreferenceType[]>([]);
+
+  // Update destination when navigation params change
+  useEffect(() => {
+    if (preselectedDestination && preselectedDestination !== destination) {
+      setDestination(preselectedDestination);
+      setPreferences([]); // Reset preferences when destination changes
+    }
+  }, [preselectedDestination, destination]);
 
   // Get available preferences based on the selected destination
   const getPreferencesForDestination = () => {
@@ -74,14 +88,6 @@ export default function StartTravelScreen() {
 
     // Calculate duration in days
     const duration = Math.ceil((endDate.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-
-    // Debug: Log what we're sending
-    console.log('StartTravelScreen - Navigation vers Itinerary avec:', {
-      destination,
-      duration,
-      budget,
-      preferences,
-    });
 
     // Navigate to itinerary page with selected parameters
     // @ts-expect-error - Navigation typing to be fixed
