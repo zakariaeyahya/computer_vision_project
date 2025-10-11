@@ -36,7 +36,7 @@ export default function SettingsScreen() {
   const userSettings = MOCK_USER_PROFILE.settings;
 
   // State
-  const [language, setLanguage] = useState(userSettings.language);
+  const [language] = useState(userSettings.language);
   const [theme, setTheme] = useState(userSettings.theme);
   const [privacy, setPrivacy] = useState(userSettings.privacy);
   const [notifications, setNotifications] = useState(userSettings.notifications);
@@ -98,14 +98,14 @@ export default function SettingsScreen() {
   /**
    * Get current theme label
    */
-  const getCurrentTheme = () => {
+  const _getCurrentTheme = () => {
     return THEME_OPTIONS.find(t => t.id === theme);
   };
 
   /**
    * Get current privacy label
    */
-  const getCurrentPrivacy = () => {
+  const _getCurrentPrivacy = () => {
     return PRIVACY_OPTIONS.find(p => p.id === privacy);
   };
 
@@ -129,7 +129,7 @@ export default function SettingsScreen() {
 
           <View style={styles.headerTextContainer}>
             <Text style={styles.headerTitle}>Paramètres</Text>
-            <Text style={styles.headerSubtitle}>Configuration de l'app</Text>
+            <Text style={styles.headerSubtitle}>Configuration de l`&apos;app</Text>
           </View>
 
           <View style={styles.headerPlaceholder} />
@@ -269,7 +269,7 @@ export default function SettingsScreen() {
               activeOpacity={0.7}
             >
               <View style={styles.settingInfo}>
-                <Text style={styles.settingLabel}>Langue de l'application</Text>
+                <Text style={styles.settingLabel}>Langue de l`&apos;application</Text>
                 <Text style={styles.settingValue}>
                   {getCurrentLanguage()?.flag} {getCurrentLanguage()?.label}
                 </Text>
@@ -358,7 +358,7 @@ export default function SettingsScreen() {
             <View style={styles.settingRow}>
               <View style={styles.settingInfo}>
                 <Text style={styles.settingLabel}>Partage de données</Text>
-                <Text style={styles.settingDescription}>Aider à améliorer l'application</Text>
+                <Text style={styles.settingDescription}>Aider à améliorer l`&apos;application</Text>
               </View>
               <Switch
                 value={dataSharing}
@@ -474,7 +474,7 @@ export default function SettingsScreen() {
               activeOpacity={0.7}
             >
               <Text style={styles.settingIcon}>📄</Text>
-              <Text style={styles.settingLabel}>Conditions d'utilisation</Text>
+              <Text style={styles.settingLabel}>Conditions d`&apos;utilisation</Text>
               <Text style={styles.settingArrow}>›</Text>
             </TouchableOpacity>
 

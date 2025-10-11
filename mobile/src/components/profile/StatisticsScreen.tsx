@@ -75,7 +75,7 @@ export default function StatisticsScreen() {
       >
         {/* Overview Cards */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Vue d'ensemble</Text>
+          <Text style={styles.sectionTitle}>Vue d`&apos;ensemble</Text>
 
           <View style={styles.overviewGrid}>
             <View style={styles.overviewCard}>

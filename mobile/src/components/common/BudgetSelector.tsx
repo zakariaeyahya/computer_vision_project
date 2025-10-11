@@ -23,6 +23,7 @@ import {
   Platform,
   UIManager,
   Animated,
+  ViewStyle,
 } from 'react-native';
 
 // Enable LayoutAnimation on Android
@@ -50,7 +51,7 @@ interface BudgetSelectorProps {
   currency?: string;
 
   /** Optional custom styles */
-  style?: any;
+  style?: ViewStyle;
 }
 
 export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
@@ -386,7 +387,6 @@ const styles = StyleSheet.create({
   barFill: {
     height: '100%',
     opacity: 0.25,
-    transition: 'width 0.3s ease',
   },
   input: {
     position: 'absolute',

@@ -212,9 +212,9 @@ export default function TravelPreferencesScreen() {
 
         {/* Interests Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>❤️ Centres d'intérêt</Text>
+          <Text style={styles.sectionTitle}>❤️ Centres d`&apos;intérêt</Text>
           <Text style={styles.sectionSubtitle}>
-            Sélectionnez jusqu'à 8 centres d'intérêt ({selectedInterests.length}/8)
+            Sélectionnez jusqu`&apos;à 8 centres d`&apos;intérêt ({selectedInterests.length}/8)
           </Text>
 
           <View style={styles.interestsGrid}>
@@ -274,8 +274,8 @@ export default function TravelPreferencesScreen() {
 
         {/* Accommodation Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>🏨 Type d'hébergement</Text>
-          <Text style={styles.sectionSubtitle}>Votre préférence d'hébergement</Text>
+          <Text style={styles.sectionTitle}>🏨 Type d`&apos;hébergement</Text>
+          <Text style={styles.sectionSubtitle}>Votre préférence d`&apos;hébergement</Text>
 
           <View style={styles.optionsContainer}>
             <TouchableOpacity

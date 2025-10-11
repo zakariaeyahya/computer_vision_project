@@ -274,7 +274,6 @@ const styles = StyleSheet.create({
     borderRadius: 22,
     alignItems: 'center',
     justifyContent: 'center',
-    backdropFilter: 'blur(10px)',
   },
   backButtonText: {
     fontSize: 28,

@@ -154,7 +154,7 @@ export default function StartTravelScreen() {
               </View>
 
               <ScrollView style={styles.destinationList}>
-                {DESTINATIONS.map((dest, index) => (
+                {DESTINATIONS.map((dest) => (
                   <TouchableOpacity
                     key={dest.id}
                     style={[
