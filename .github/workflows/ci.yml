@@ -11,10 +11,6 @@ jobs:
     name: Mobile - Lint & Type Check
     runs-on: ubuntu-latest
     
-    defaults:
-      run:
-        working-directory: mobile
-    
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -24,15 +20,18 @@ jobs:
         with:
           node-version: '20'
           cache: 'npm'
-          cache-dependency-path: mobile/package-lock.json
+          cache-dependency-path: 'mobile/package-lock.json'
 
       - name: Install dependencies
+        working-directory: mobile
         run: npm ci
 
       - name: Run ESLint
+        working-directory: mobile
         run: npm run lint
 
       - name: Run TypeScript type check
+        working-directory: mobile
         run: npm run type-check
 
   backend-lint:
