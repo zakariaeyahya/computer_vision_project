@@ -7,6 +7,7 @@ import StartTravelScreen from '../screens/StartTravelScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
 import MyTripsScreen from '../screens/MyTripsScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import OnboardingScreen from '../screens/OnboardingScreen';
 import PersonalInfoScreen from '../components/profile/PersonalInfoScreen';
 import TravelPreferencesScreen from '../components/profile/TravelPreferencesScreen';
 import StatisticsScreen from '../components/profile/StatisticsScreen';
@@ -17,6 +18,7 @@ import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
 
 // Types for navigation
 export type RootStackParamList = {
+  Onboarding: undefined;
   MainTabs: undefined;
   Itinerary: { id: string };
   PersonalInfo: undefined;
@@ -128,7 +130,12 @@ const ProfileIcon = ({ color, size }: { color: string; size: number }) => (
 // Main Stack Navigator
 export default function AppNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Onboarding">
+      <Stack.Screen 
+        name="Onboarding" 
+        component={OnboardingScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen 
         name="MainTabs" 
         component={MainTabs}
