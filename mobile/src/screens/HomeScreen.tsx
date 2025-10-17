@@ -93,35 +93,40 @@ export default function HomeScreen() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View style={styles.featuredCarouselItem}>
-              <ImageBackground
-                source={item.image}
-                style={styles.featuredCard}
-                imageStyle={styles.featuredCardImage}
+              <TouchableOpacity
+                activeOpacity={0.9}
+                onPress={() => navigation.navigate('DestinationDetails' as never, { destinationName: item.name } as never)}
               >
-                <View style={styles.featuredCardOverlay}>
-                  <View style={styles.featuredCardTop}>
-                    <View style={styles.ratingBadge}>
-                      <Text style={styles.ratingText}>⭐ 4.9</Text>
+                <ImageBackground
+                  source={item.image}
+                  style={styles.featuredCard}
+                  imageStyle={styles.featuredCardImage}
+                >
+                  <View style={styles.featuredCardOverlay}>
+                    <View style={styles.featuredCardTop}>
+                      <View style={styles.ratingBadge}>
+                        <Text style={styles.ratingText}>⭐ 4.9</Text>
+                      </View>
+                      <TouchableOpacity
+                        style={styles.favoriteButton}
+                        onPress={(e) => {
+                          e.stopPropagation();
+                          // TODO: Add to favorites logic
+                        }}
+                      >
+                        <Text style={styles.favoriteIcon}>♡</Text>
+                      </TouchableOpacity>
                     </View>
-                    <TouchableOpacity style={styles.favoriteButton}>
-                      <Text style={styles.favoriteIcon}>♡</Text>
-                    </TouchableOpacity>
-                  </View>
 
-                  <View style={styles.featuredCardBottom}>
-                    <View style={styles.featuredCardInfo}>
-                      <Text style={styles.featuredCardTitle}>{item.name}</Text>
-                      <Text style={styles.featuredCardLocation}>📍 {item.location}</Text>
+                    <View style={styles.featuredCardBottom}>
+                      <View style={styles.featuredCardInfo}>
+                        <Text style={styles.featuredCardTitle}>{item.name}</Text>
+                        <Text style={styles.featuredCardLocation}>📍 {item.location}</Text>
+                      </View>
                     </View>
-                    <TouchableOpacity
-                      style={styles.arrowButtonYellow}
-                      onPress={() => navigation.navigate('DestinationDetails' as never, { destinationName: item.name } as never)}
-                    >
-                      <Text style={styles.arrowButtonText}>→</Text>
-                    </TouchableOpacity>
                   </View>
-                </View>
-              </ImageBackground>
+                </ImageBackground>
+              </TouchableOpacity>
             </View>
           )}
         />
