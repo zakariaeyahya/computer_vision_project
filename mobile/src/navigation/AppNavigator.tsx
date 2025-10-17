@@ -12,9 +12,7 @@ import PersonalInfoScreen from '../components/profile/PersonalInfoScreen';
 import TravelPreferencesScreen from '../components/profile/TravelPreferencesScreen';
 import StatisticsScreen from '../components/profile/StatisticsScreen';
 import SettingsScreen from '../components/profile/SettingsScreen';
-import TetouanDetailsScreen from '../screens/TetouanDetailsScreen';
-import TangerDetailsScreen from '../screens/TangerDetailsScreen';
-import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
+import DestinationDetailsScreen from '../screens/DestinationDetailsScreen';
 
 // Types for navigation
 export type RootStackParamList = {
@@ -25,9 +23,7 @@ export type RootStackParamList = {
   TravelPreferences: undefined;
   Statistics: undefined;
   Settings: undefined;
-  TetouanDetails: undefined;
-  TangerDetails: undefined;
-  ChefchaouenDetails: undefined;
+  DestinationDetails: { destinationName: string };
 };
 
 export type TabParamList = {
@@ -167,18 +163,8 @@ export default function AppNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="TetouanDetails"
-        component={TetouanDetailsScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen 
-        name="TangerDetails" 
-        component={TangerDetailsScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen 
-        name="ChefchaouenDetails" 
-        component={ChefchaouenDetailsScreen}
+        name="DestinationDetails"
+        component={DestinationDetailsScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

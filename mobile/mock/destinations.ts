@@ -26,7 +26,7 @@ export const DESTINATIONS: Destination[] = [
       { icon: '🎨', text: 'Art & Culture' },
       { icon: '🌊', text: 'Proche de la mer' },
     ],
-    route: 'TetouanDetails',
+    route: 'DestinationDetails',
     description: 'Tétouan, surnommée "La Colombe Blanche", est une ville authentique du nord du Maroc. Sa médina, classée au patrimoine mondial de l\'UNESCO, offre une expérience culturelle unique.',
   },
   {
@@ -41,7 +41,7 @@ export const DESTINATIONS: Destination[] = [
       { icon: '🏰', text: 'Kasbah' },
       { icon: '🎭', text: 'Cosmopolite' },
     ],
-    route: 'TangerDetails',
+    route: 'DestinationDetails',
     description: 'Tanger, "La Perle du Détroit", est une ville cosmopolite où se rencontrent l\'Europe et l\'Afrique. Entre mer et océan, elle offre une richesse culturelle et historique exceptionnelle.',
   },
   {
@@ -56,7 +56,7 @@ export const DESTINATIONS: Destination[] = [
       { icon: '⛰️', text: 'Montagnes du Rif' },
       { icon: '📸', text: 'Photogénique' },
     ],
-    route: 'ChefchaouenDetails',
+    route: 'DestinationDetails',
     description: 'Chefchaouen, "La Perle Bleue", est célèbre pour ses ruelles peintes en bleu. Nichée dans les montagnes du Rif, elle offre une atmosphère paisible et des paysages à couper le souffle.',
   },
 ];

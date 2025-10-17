@@ -7,32 +7,150 @@ import {
   TouchableOpacity,
   Image,
   Dimensions,
-  ImageSourcePropType,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { useNavigation } from '@react-navigation/native';
-import { CHEFCHAOUEN_PLACES } from '../../mock';
+import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { DESTINATIONS, TETOUAN_PLACES, TANGER_PLACES, CHEFCHAOUEN_PLACES, Place } from '../../mock';
+import type { RootStackParamList } from '../navigation/AppNavigator';
 
 const { width, height } = Dimensions.get('window');
-const PLACES_TO_VISIT = CHEFCHAOUEN_PLACES;
 
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const chefchaouenImage = require('../../assets/images/destinations/chefchaouen.jpg') as ImageSourcePropType;
+type DestinationDetailsRouteProp = RouteProp<RootStackParamList, 'DestinationDetails'>;
 
-export default function ChefchaouenDetailsScreen() {
+// Mapping des destinations aux lieux et informations pratiques
+const DESTINATION_DATA = {
+  'Tétouan': {
+    places: TETOUAN_PLACES,
+    highlights: [
+      {
+        icon: '🏛️',
+        title: 'Médina UNESCO',
+        description: 'Architecture andalouse préservée',
+        colors: ['#C41E3A', '#8B0000'] as [string, string],
+      },
+      {
+        icon: '🎨',
+        title: 'Art & Artisanat',
+        description: 'Célèbre pour ses zellige et broderies',
+        colors: ['#1E40AF', '#3B82F6'] as [string, string],
+      },
+      {
+        icon: '🌊',
+        title: 'Plages à Proximité',
+        description: 'Martil et M"diq à 10km',
+        colors: ['#059669', '#10B981'] as [string, string],
+      },
+      {
+        icon: '🍽️',
+        title: 'Gastronomie',
+        description: 'Cuisine andalouse authentique',
+        colors: ['#DC2626', '#EF4444'] as [string, string],
+      },
+    ],
+    practicalInfo: [
+      { icon: '🗓️', label: 'Meilleure période', value: 'Mars à Juin, Septembre à Novembre' },
+      { icon: '💰', label: 'Budget moyen/jour', value: '300-500 DH' },
+      { icon: '🚗', label: 'Accès depuis Tanger', value: '1h en voiture (60 km)' },
+      { icon: '🗣️', label: 'Langues', value: 'Arabe, Espagnol, Français' },
+    ],
+  },
+  'Tanger': {
+    places: TANGER_PLACES,
+    highlights: [
+      {
+        icon: '🌊',
+        title: 'Cap Spartel',
+        description: 'Point de rencontre Atlantique-Méditerranée',
+        colors: ['#1E40AF', '#3B82F6'] as [string, string],
+      },
+      {
+        icon: '🏰',
+        title: 'Kasbah',
+        description: 'Quartier historique avec vue panoramique',
+        colors: ['#7C3AED', '#A78BFA'] as [string, string],
+      },
+      {
+        icon: '🎭',
+        title: 'Patrimoine',
+        description: 'Histoire cosmopolite unique',
+        colors: ['#DC2626', '#EF4444'] as [string, string],
+      },
+      {
+        icon: '🏖️',
+        title: 'Plages',
+        description: 'Magnifiques plages urbaines',
+        colors: ['#059669', '#10B981'] as [string, string],
+      },
+    ],
+    practicalInfo: [
+      { icon: '🗓️', label: 'Meilleure période', value: 'Toute l"année, idéal Avril-Octobre' },
+      { icon: '💰', label: 'Budget moyen/jour', value: '400-700 DH' },
+      { icon: '✈️', label: 'Aéroport', value: 'Aéroport Ibn Battouta (15 km du centre)' },
+      { icon: '🗣️', label: 'Langues', value: 'Arabe, Français, Espagnol, Anglais' },
+    ],
+  },
+  'Chefchaouen': {
+    places: CHEFCHAOUEN_PLACES,
+    highlights: [
+      {
+        icon: '🔵',
+        title: 'Ville Bleue',
+        description: 'Ruelles entièrement peintes en bleu',
+        colors: ['#2563EB', '#60A5FA'] as [string, string],
+      },
+      {
+        icon: '⛰️',
+        title: 'Randonnées',
+        description: 'Sentiers dans les montagnes du Rif',
+        colors: ['#059669', '#10B981'] as [string, string],
+      },
+      {
+        icon: '📸',
+        title: 'Photographie',
+        description: 'Paradis des photographes',
+        colors: ['#7C3AED', '#A78BFA'] as [string, string],
+      },
+      {
+        icon: '🛍️',
+        title: 'Artisanat',
+        description: 'Tissage et produits locaux',
+        colors: ['#DC2626', '#EF4444'] as [string, string],
+      },
+    ],
+    practicalInfo: [
+      { icon: '🗓️', label: 'Meilleure période', value: 'Avril-Juin, Septembre-Novembre' },
+      { icon: '💰', label: 'Budget moyen/jour', value: '250-400 DH' },
+      { icon: '🚗', label: 'Accès', value: '2h30 depuis Tanger, 4h depuis Fès' },
+      { icon: '⛰️', label: 'Altitude', value: '600 mètres' },
+    ],
+  },
+};
+
+export default function DestinationDetailsScreen() {
   const navigation = useNavigation();
+  const route = useRoute<DestinationDetailsRouteProp>();
+  const { destinationName } = route.params;
+
+  // Trouver la destination dans le mock
+  const destination = DESTINATIONS.find(d => d.name === destinationName);
+
+  if (!destination) {
+    return null;
+  }
+
+  const destinationData = DESTINATION_DATA[destination.name as keyof typeof DESTINATION_DATA];
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Hero Image avec overlay */}
       <View style={styles.heroContainer}>
         <Image
-          source={chefchaouenImage}
+          source={destination.image}
           style={styles.heroImage}
           resizeMode="cover"
         />
         <LinearGradient
-          colors={['transparent', 'rgba(37, 99, 235, 0.8)', '#2563EB']}
+          colors={['transparent', `${destination.colors[0]}CC`, destination.colors[0]]}
           style={styles.heroOverlay}
         >
           <TouchableOpacity
@@ -45,113 +163,66 @@ export default function ChefchaouenDetailsScreen() {
           <View style={styles.heroContent}>
             <View style={styles.locationBadge}>
               <Text style={styles.locationEmoji}>📍</Text>
-              <Text style={styles.locationText}>Montagnes du Rif</Text>
+              <Text style={styles.locationText}>{destination.location}</Text>
             </View>
-            <Text style={styles.heroTitle}>Chefchaouen</Text>
-            <Text style={styles.heroSubtitle}>La Perle Bleue</Text>
-            
+            <Text style={styles.heroTitle}>{destination.name}</Text>
+            <Text style={styles.heroSubtitle}>{destination.nickname}</Text>
+
             <View style={styles.heroStats}>
-              <View style={styles.statItem}>
-                <Text style={styles.statIcon}>🔵</Text>
-                <Text style={styles.statText}>Ville Bleue</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Text style={styles.statIcon}>⛰️</Text>
-                <Text style={styles.statText}>Montagnes</Text>
-              </View>
-              <View style={styles.statDivider} />
-              <View style={styles.statItem}>
-                <Text style={styles.statIcon}>📸</Text>
-                <Text style={styles.statText}>Photogénique</Text>
-              </View>
+              {destination.features.map((feature, index) => (
+                <React.Fragment key={index}>
+                  <View style={styles.statItem}>
+                    <Text style={styles.statIcon}>{feature.icon}</Text>
+                    <Text style={styles.statText}>{feature.text}</Text>
+                  </View>
+                  {index < destination.features.length - 1 && (
+                    <View style={styles.statDivider} />
+                  )}
+                </React.Fragment>
+              ))}
             </View>
           </View>
         </LinearGradient>
       </View>
 
       <View style={styles.content}>
-        {/* Description */}
+        {/* Why Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Découvrez Chefchaouen</Text>
+          <Text style={styles.sectionTitle}>Why {destination.name}?</Text>
           <Text style={styles.description}>
-            Chefchaouen, la &quot;Perle Bleue&quot;, est célèbre dans le monde entier pour ses ruelles et bâtiments peints en bleu. 
-            Nichée dans les montagnes du Rif à 600m d&quot;altitude, elle offre une atmosphère paisible et des paysages époustouflants.
+            {destination.description}
           </Text>
         </View>
 
         {/* Points forts */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Points Forts</Text>
-          
+
           <View style={styles.highlightsGrid}>
-            <View style={styles.highlightCard}>
-              <LinearGradient
-                colors={['#2563EB', '#60A5FA']}
-                style={styles.highlightGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.highlightIcon}>🔵</Text>
-                <Text style={styles.highlightTitle}>Ville Bleue</Text>
-                <Text style={styles.highlightDescription}>
-                  Ruelles entièrement peintes en bleu
-                </Text>
-              </LinearGradient>
-            </View>
-
-            <View style={styles.highlightCard}>
-              <LinearGradient
-                colors={['#059669', '#10B981']}
-                style={styles.highlightGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.highlightIcon}>⛰️</Text>
-                <Text style={styles.highlightTitle}>Randonnées</Text>
-                <Text style={styles.highlightDescription}>
-                  Sentiers dans les montagnes du Rif
-                </Text>
-              </LinearGradient>
-            </View>
-
-            <View style={styles.highlightCard}>
-              <LinearGradient
-                colors={['#7C3AED', '#A78BFA']}
-                style={styles.highlightGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.highlightIcon}>📸</Text>
-                <Text style={styles.highlightTitle}>Photographie</Text>
-                <Text style={styles.highlightDescription}>
-                  Paradis des photographes
-                </Text>
-              </LinearGradient>
-            </View>
-
-            <View style={styles.highlightCard}>
-              <LinearGradient
-                colors={['#DC2626', '#EF4444']}
-                style={styles.highlightGradient}
-                start={{ x: 0, y: 0 }}
-                end={{ x: 1, y: 1 }}
-              >
-                <Text style={styles.highlightIcon}>🛍️</Text>
-                <Text style={styles.highlightTitle}>Artisanat</Text>
-                <Text style={styles.highlightDescription}>
-                  Tissage et produits locaux
-                </Text>
-              </LinearGradient>
-            </View>
+            {destinationData.highlights.map((highlight, index) => (
+              <View key={index} style={styles.highlightCard}>
+                <LinearGradient
+                  colors={highlight.colors}
+                  style={styles.highlightGradient}
+                  start={{ x: 0, y: 0 }}
+                  end={{ x: 1, y: 1 }}
+                >
+                  <Text style={styles.highlightIcon}>{highlight.icon}</Text>
+                  <Text style={styles.highlightTitle}>{highlight.title}</Text>
+                  <Text style={styles.highlightDescription}>
+                    {highlight.description}
+                  </Text>
+                </LinearGradient>
+              </View>
+            ))}
           </View>
         </View>
 
         {/* Lieux à visiter */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Lieux à Visiter</Text>
-          
-          {PLACES_TO_VISIT.map((place, index) => (
+
+          {destinationData.places.map((place: Place, index: number) => (
             <TouchableOpacity key={index} style={styles.placeCard} activeOpacity={0.8}>
               <View style={styles.placeIconContainer}>
                 <Text style={styles.placeIcon}>{place.icon}</Text>
@@ -172,45 +243,22 @@ export default function ChefchaouenDetailsScreen() {
         {/* Informations pratiques */}
         <View style={styles.section}>
           <Text style={styles.sectionTitle}>Informations Pratiques</Text>
-          
+
           <View style={styles.infoCard}>
-            <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>🗓️</Text>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Meilleure période</Text>
-                <Text style={styles.infoValue}>Avril-Juin, Septembre-Novembre</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoDivider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>💰</Text>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Budget moyen/jour</Text>
-                <Text style={styles.infoValue}>250-400 DH</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoDivider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>🚗</Text>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Accès</Text>
-                <Text style={styles.infoValue}>2h30 depuis Tanger, 4h depuis Fès</Text>
-              </View>
-            </View>
-
-            <View style={styles.infoDivider} />
-
-            <View style={styles.infoRow}>
-              <Text style={styles.infoIcon}>⛰️</Text>
-              <View style={styles.infoTextContainer}>
-                <Text style={styles.infoLabel}>Altitude</Text>
-                <Text style={styles.infoValue}>600 mètres</Text>
-              </View>
-            </View>
+            {destinationData.practicalInfo.map((info, index) => (
+              <React.Fragment key={index}>
+                <View style={styles.infoRow}>
+                  <Text style={styles.infoIcon}>{info.icon}</Text>
+                  <View style={styles.infoTextContainer}>
+                    <Text style={styles.infoLabel}>{info.label}</Text>
+                    <Text style={styles.infoValue}>{info.value}</Text>
+                  </View>
+                </View>
+                {index < destinationData.practicalInfo.length - 1 && (
+                  <View style={styles.infoDivider} />
+                )}
+              </React.Fragment>
+            ))}
           </View>
         </View>
 
@@ -222,7 +270,7 @@ export default function ChefchaouenDetailsScreen() {
             // @ts-expect-error - Navigation typing to be fixed
             navigation.navigate('MainTabs', {
               screen: 'StartTravel',
-              params: { preselectedDestination: 'Chefchaouen' }
+              params: { preselectedDestination: destination.name }
             });
           }}
         >
@@ -233,7 +281,7 @@ export default function ChefchaouenDetailsScreen() {
             end={{ x: 1, y: 0 }}
           >
             <Text style={styles.ctaIcon}>✈️</Text>
-            <Text style={styles.ctaText}>Planifier mon voyage à Chefchaouen</Text>
+            <Text style={styles.ctaText}>Planifier mon voyage à {destination.name}</Text>
           </LinearGradient>
         </TouchableOpacity>
       </View>
@@ -521,4 +569,3 @@ const styles = StyleSheet.create({
     color: '#FFFFFF',
   },
 });
-
