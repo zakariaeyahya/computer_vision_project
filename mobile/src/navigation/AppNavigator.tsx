@@ -15,6 +15,7 @@ import TravelPreferencesScreen from '../components/profile/TravelPreferencesScre
 import StatisticsScreen from '../components/profile/StatisticsScreen';
 import SettingsScreen from '../components/profile/SettingsScreen';
 import DestinationDetailsScreen from '../screens/DestinationDetailsScreen';
+import MapScreen from '../screens/MapScreen';
 
 // Types for navigation
 export type RootStackParamList = {
@@ -26,6 +27,7 @@ export type RootStackParamList = {
   Statistics: undefined;
   Settings: undefined;
   DestinationDetails: { destinationName: string };
+  Map: undefined;
 };
 
 export type TabParamList = {
@@ -199,6 +201,11 @@ export default function AppNavigator() {
       <Stack.Screen
         name="DestinationDetails"
         component={DestinationDetailsScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Map"
+        component={MapScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

@@ -77,9 +77,7 @@ export default function HomeScreen() {
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={[styles.mainButton, styles.exploreButton]}
-              onPress={() =>
-                navigation.navigate('MainTabs' as never, { screen: 'StartTravel' } as never)
-              }
+              onPress={() => navigation.navigate('Map' as never)}
             >
               <Text style={styles.buttonIcon}>◈</Text>
               <Text style={styles.buttonText}>Explorer le{'\n'}Maroc</Text>
