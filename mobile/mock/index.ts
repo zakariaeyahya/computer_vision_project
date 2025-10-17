@@ -3,6 +3,7 @@ export * from './destinations';
 export { TETOUAN_PLACES } from './tetouanPlaces';
 export { TANGER_PLACES } from './tangerPlaces';
 export { CHEFCHAOUEN_PLACES } from './chefchaouenPlaces';
+export * from './destinationDetails';
 export * from './trips';
 export * from './itinerary';
 export * from './preferences';

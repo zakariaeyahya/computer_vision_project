@@ -1,172 +1,214 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, FlatList, TextInput, ImageBackground } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  StyleSheet,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Dimensions,
+  TextInput,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { DESTINATIONS } from '../../mock';
+import { DESTINATIONS } from '../../mock/destinations';
+import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
 
 const { width } = Dimensions.get('window');
 
 const CATEGORIES = [
-  { id: '1', name: 'Beach', emoji: '🏖️' },
-  { id: '2', name: 'Mountain', emoji: '⛰️' },
-  { id: '3', name: 'City', emoji: '🏙️' },
-  { id: '4', name: 'Forest', emoji: '🌲' },
+  { id: '1', name: 'Culture', emoji: '◉', bgColor: '#C1272D', textColor: '#FFFFFF' },
+  { id: '2', name: 'Nature', emoji: '✦', bgColor: '#F4E9D8', textColor: '#1A1A1A' },
+  { id: '3', name: 'Plage', emoji: '◐', bgColor: '#FFF4E6', textColor: '#1A1A1A' },
+  { id: '4', name: 'Montagne', emoji: '△', bgColor: '#E8E4DD', textColor: '#1A1A1A' },
 ];
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const [selectedCategory, setSelectedCategory] = useState('Beach');
-  const flatListRef = useRef<FlatList>(null);
+  const [selectedCategory, setSelectedCategory] = useState('Culture');
+
+  // Fonction pour calculer le prix par nuit
+  const getPricePerNight = (destinationName: string) => {
+    const itinerary = ITINERARIES_BY_DESTINATION[destinationName];
+    if (itinerary) {
+      return Math.round(itinerary.budget / itinerary.duration / 10) * 10;
+    }
+    return 80;
+  };
+
+  // Fonction pour générer un score écologique aléatoire
+  const getEcoScore = () => {
+    return 85 + Math.floor(Math.random() * 10);
+  };
+
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Hero Section */}
-      <View style={styles.hero}>
-        {/* Search Bar */}
+      {/* HEADER */}
+      <View style={styles.header}>
+        <View style={styles.headerContent}>
+          <View style={styles.logoContainer}>
+            <View style={styles.logoIconContainer}>
+              <Text style={styles.logoIcon}>✦</Text>
+            </View>
+            <Text style={styles.logoText}>Smart Travel Guide</Text>
+          </View>
+          <View style={styles.dropdownContainer}>
+            <Text style={styles.dropdownText}>Découvrez le Maroc Durable ▼</Text>
+          </View>
+          <Text style={styles.subtitle}>
+            Votre compagnon IA pour un tourisme responsable
+          </Text>
+        </View>
+      </View>
+
+      <View style={styles.contentContainer}>
+        {/* BARRE DE RECHERCHE */}
         <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>🤖</Text>
+          <Text style={styles.searchIcon}>⌕</Text>
           <TextInput
             style={styles.searchInput}
-            placeholder="Search destinations with AI..."
+            placeholder="Où souhaitez-vous aller ?"
             placeholderTextColor="#9CA3AF"
           />
         </View>
 
-        {/* Category Chips */}
+        {/* BOUTONS PRINCIPAUX */}
+        <View style={styles.buttonsContainer}>
+          {/* Ligne 1: 2 boutons côte à côte */}
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={[styles.mainButton, styles.exploreButton]}
+              onPress={() =>
+                navigation.navigate('MainTabs' as never, { screen: 'StartTravel' } as never)
+              }
+            >
+              <Text style={styles.buttonIcon}>◈</Text>
+              <Text style={styles.buttonText}>Explorer le{'\n'}Maroc</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.mainButton, styles.planButton]}
+              onPress={() =>
+                navigation.navigate('MainTabs' as never, { screen: 'StartTravel' } as never)
+              }
+            >
+              <Text style={styles.buttonIcon}>✧</Text>
+              <Text style={styles.buttonText}>Planifier IA</Text>
+            </TouchableOpacity>
+          </View>
+
+          {/* Ligne 2: 1 bouton pleine largeur */}
+          <TouchableOpacity style={styles.eventsButton}>
+            <Text style={styles.eventsButtonText}>◷ Événements à venir</Text>
+          </TouchableOpacity>
+        </View>
+
+        {/* FILTRES PAR CATÉGORIE */}
         <ScrollView
           horizontal
           showsHorizontalScrollIndicator={false}
           style={styles.categoriesContainer}
           contentContainerStyle={styles.categoriesContent}
         >
-          {CATEGORIES.map((category) => (
-            <TouchableOpacity
-              key={category.id}
-              style={[
-                styles.categoryChip,
-                selectedCategory === category.name && styles.categoryChipActive,
-              ]}
-              onPress={() => setSelectedCategory(category.name)}
-            >
-              <Text style={styles.categoryEmoji}>{category.emoji}</Text>
-              <Text
+          {CATEGORIES.map((category) => {
+            const isActive = selectedCategory === category.name;
+            return (
+              <TouchableOpacity
+                key={category.id}
                 style={[
-                  styles.categoryText,
-                  selectedCategory === category.name && styles.categoryTextActive,
+                  styles.categoryChip,
+                  {
+                    backgroundColor: isActive ? '#C1272D' : category.bgColor,
+                    borderColor: isActive ? '#C1272D' : '#E8DFD0',
+                  },
                 ]}
+                onPress={() => setSelectedCategory(category.name)}
               >
-                {category.name}
-              </Text>
-            </TouchableOpacity>
-          ))}
+                <Text style={styles.categoryEmoji}>{category.emoji}</Text>
+                <Text
+                  style={[
+                    styles.categoryText,
+                    {
+                      color: isActive ? '#FFFFFF' : category.textColor,
+                    },
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
         </ScrollView>
 
-        {/* Section Header */}
-        <View style={styles.recommendedHeader}>
-          <Text style={styles.recommendedTitle}>Recommended for You</Text>
-          <View style={styles.dotsContainer}>
-            {DESTINATIONS.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.dot,
-                  activeIndex === index && styles.dotActive,
-                ]}
-              />
-            ))}
-          </View>
+        {/* SECTION "Destinations Durables" */}
+        <View style={styles.sectionHeader}>
+          <Text style={styles.sectionTitle}>Destinations Durables</Text>
+          <TouchableOpacity>
+            <Text style={styles.viewAllText}>Voir tout ›</Text>
+          </TouchableOpacity>
         </View>
 
-        {/* Featured Destinations Carousel */}
-        <FlatList
-          ref={flatListRef}
-          data={DESTINATIONS}
-          horizontal
-          pagingEnabled
-          showsHorizontalScrollIndicator={false}
-          onScroll={(event) => {
-            const scrollPosition = event.nativeEvent.contentOffset.x;
-            const index = Math.round(scrollPosition / width);
-            setActiveIndex(index);
-          }}
-          scrollEventThrottle={16}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.featuredCarouselItem}>
-              <TouchableOpacity
-                activeOpacity={0.9}
-                onPress={() => navigation.navigate('DestinationDetails' as never, { destinationName: item.name } as never)}
-              >
-                <ImageBackground
-                  source={item.image}
-                  style={styles.featuredCard}
-                  imageStyle={styles.featuredCardImage}
-                >
-                  <View style={styles.featuredCardOverlay}>
-                    <View style={styles.featuredCardTop}>
-                      <View style={styles.ratingBadge}>
-                        <Text style={styles.ratingText}>⭐ 4.9</Text>
-                      </View>
-                      <TouchableOpacity
-                        style={styles.favoriteButton}
-                        onPress={(e) => {
-                          e.stopPropagation();
-                          // TODO: Add to favorites logic
-                        }}
-                      >
-                        <Text style={styles.favoriteIcon}>♡</Text>
-                      </TouchableOpacity>
-                    </View>
+        {/* CARTES DE DESTINATIONS */}
+        {DESTINATIONS.map((destination) => {
+          const pricePerNight = getPricePerNight(destination.name);
+          const ecoScore = getEcoScore();
 
-                    <View style={styles.featuredCardBottom}>
-                      <View style={styles.featuredCardInfo}>
-                        <Text style={styles.featuredCardTitle}>{item.name}</Text>
-                        <Text style={styles.featuredCardLocation}>📍 {item.location}</Text>
-                      </View>
-                    </View>
-                  </View>
-                </ImageBackground>
-              </TouchableOpacity>
-            </View>
-          )}
-        />
+          return (
+            <TouchableOpacity
+              key={destination.id}
+              style={styles.destinationCard}
+              activeOpacity={0.9}
+              onPress={() =>
+                navigation.navigate('DestinationDetails' as never, {
+                  destinationName: destination.name,
+                } as never)
+              }
+            >
+              {/* Image avec overlay */}
+              <View style={styles.imageContainer}>
+                <Image source={destination.image} style={styles.destinationImage} />
 
-        {/* Navigation Arrows */}
-        {DESTINATIONS.length > 1 && (
-          <View style={styles.arrowsContainer}>
-            <TouchableOpacity
-              style={[styles.arrowButton, activeIndex === 0 && styles.arrowDisabled]}
-              onPress={() => {
-                if (activeIndex > 0) {
-                  flatListRef.current?.scrollToIndex({
-                    index: activeIndex - 1,
-                    animated: true,
-                  });
-                }
-              }}
-              disabled={activeIndex === 0}
-            >
-              <Text style={styles.arrowText}>←</Text>
+                {/* Badge écologique */}
+                <View style={styles.ecoBadge}>
+                  <Text style={styles.ecoBadgeText}>✦ {ecoScore}%</Text>
+                </View>
+
+                {/* Rating */}
+                <View style={styles.ratingBadge}>
+                  <Text style={styles.ratingText}>★ 4.8</Text>
+                </View>
+              </View>
+
+              {/* Contenu de la carte */}
+              <View style={styles.cardContent}>
+                {/* Localisation */}
+                <Text style={styles.location}>◉ {destination.location}, Maroc</Text>
+
+                {/* Nom de la destination */}
+                <Text style={styles.destinationName}>{destination.name}</Text>
+
+                {/* Description */}
+                <Text style={styles.description} numberOfLines={3}>
+                  {destination.description}
+                </Text>
+
+                {/* Footer: Prix + Bouton */}
+                <View style={styles.cardFooter}>
+                  <Text style={styles.price}>{pricePerNight}€/nuit</Text>
+                  <TouchableOpacity
+                    style={styles.discoverButton}
+                    onPress={() =>
+                      navigation.navigate('DestinationDetails' as never, {
+                        destinationName: destination.name,
+                      } as never)
+                    }
+                  >
+                    <Text style={styles.discoverButtonText}>Découvrir ›</Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
             </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.arrowButton,
-                activeIndex === DESTINATIONS.length - 1 && styles.arrowDisabled,
-              ]}
-              onPress={() => {
-                if (activeIndex < DESTINATIONS.length - 1) {
-                  flatListRef.current?.scrollToIndex({
-                    index: activeIndex + 1,
-                    animated: true,
-                  });
-                }
-              }}
-              disabled={activeIndex === DESTINATIONS.length - 1}
-            >
-              <Text style={styles.arrowText}>→</Text>
-            </TouchableOpacity>
-          </View>
-        )}
+          );
+        })}
       </View>
     </ScrollView>
   );
@@ -175,40 +217,137 @@ export default function HomeScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#F8F5F0',
   },
-  // Hero Section
-  hero: {
+
+  // HEADER
+  header: {
+    backgroundColor: '#FFFFFF',
     paddingHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 30,
-    backgroundColor: '#F9FAFB',
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#E8DFD0',
   },
-  // Search Bar
+  headerContent: {
+    alignItems: 'flex-start',
+  },
+  logoContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  logoIconContainer: {
+    width: 36,
+    height: 36,
+    borderRadius: 8,
+    backgroundColor: '#C1272D',
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginRight: 10,
+  },
+  logoIcon: {
+    fontSize: 20,
+    color: '#FFFFFF',
+  },
+  logoText: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1A1A1A',
+  },
+  dropdownContainer: {
+    marginBottom: 8,
+  },
+  dropdownText: {
+    fontSize: 16,
+    color: '#6B7280',
+  },
+  subtitle: {
+    fontSize: 14,
+    color: '#6B7280',
+    lineHeight: 20,
+  },
+
+  // CONTENT CONTAINER
+  contentContainer: {
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
+
+  // BARRE DE RECHERCHE
   searchContainer: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#FFFFFF',
     borderRadius: 12,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    paddingHorizontal: 14,
+    paddingVertical: 14,
     marginBottom: 20,
-    elevation: 2,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 3,
+    shadowOpacity: 0.05,
+    shadowRadius: 2,
+    elevation: 1,
   },
   searchIcon: {
-    fontSize: 24,
-    marginRight: 12,
+    fontSize: 20,
+    marginRight: 10,
   },
   searchInput: {
     flex: 1,
-    fontSize: 16,
-    color: '#1F2937',
+    fontSize: 15,
+    color: '#1A1A1A',
   },
-  // Categories
+
+  // BOUTONS PRINCIPAUX
+  buttonsContainer: {
+    marginBottom: 24,
+  },
+  buttonRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    gap: 12,
+    marginBottom: 12,
+  },
+  mainButton: {
+    flex: 1,
+    borderRadius: 16,
+    paddingVertical: 18,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  exploreButton: {
+    backgroundColor: '#C1272D',
+  },
+  planButton: {
+    backgroundColor: '#006233',
+  },
+  buttonIcon: {
+    fontSize: 32,
+    marginBottom: 8,
+  },
+  buttonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
+    textAlign: 'center',
+  },
+  eventsButton: {
+    backgroundColor: '#006233',
+    borderRadius: 16,
+    paddingVertical: 16,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eventsButtonText: {
+    color: '#FFFFFF',
+    fontSize: 15,
+    fontWeight: '600',
+  },
+
+  // FILTRES PAR CATÉGORIE
   categoriesContainer: {
     marginBottom: 24,
   },
@@ -216,176 +355,133 @@ const styles = StyleSheet.create({
     gap: 12,
   },
   categoryChip: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 16,
-    paddingVertical: 10,
     borderRadius: 20,
-    gap: 6,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-  },
-  categoryChipActive: {
-    backgroundColor: '#FFD700',
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    alignItems: 'center',
+    minWidth: 90,
+    borderWidth: 1,
+    borderColor: '#E8DFD0',
   },
   categoryEmoji: {
-    fontSize: 18,
+    fontSize: 20,
+    marginBottom: 4,
+    fontWeight: '300',
   },
   categoryText: {
-    fontSize: 15,
+    fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
   },
-  categoryTextActive: {
-    color: '#1F2937',
-  },
-  // Recommended Section
-  recommendedHeader: {
+
+  // SECTION HEADER
+  sectionHeader: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 16,
   },
-  recommendedTitle: {
+  sectionTitle: {
     fontSize: 22,
-    fontWeight: 'bold',
-    color: '#1F2937',
+    fontWeight: '700',
+    color: '#1A1A1A',
   },
   viewAllText: {
     fontSize: 14,
-    fontWeight: '600',
     color: '#6B7280',
+    fontWeight: '500',
   },
-  // Featured Card
-  featuredCarouselItem: {
-    width: width - 40,
-    paddingHorizontal: 0,
-  },
-  featuredCard: {
-    width: '100%',
-    height: 320,
-    borderRadius: 20,
-    overflow: 'hidden',
-  },
-  featuredCardImage: {
-    borderRadius: 20,
-  },
-  featuredCardOverlay: {
-    flex: 1,
-    padding: 16,
-    justifyContent: 'space-between',
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-  },
-  featuredCardTop: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-  },
-  ratingBadge: {
+
+  // CARTES DE DESTINATIONS
+  destinationCard: {
     backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    marginBottom: 20,
+    overflow: 'hidden',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.08,
+    shadowRadius: 8,
+    elevation: 3,
+  },
+  imageContainer: {
+    position: 'relative',
+    width: '100%',
+    height: 180,
+  },
+  destinationImage: {
+    width: '100%',
+    height: '100%',
+    resizeMode: 'cover',
+  },
+  ecoBadge: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    backgroundColor: 'rgba(0, 98, 51, 0.95)',
+    borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
-    borderRadius: 20,
+  },
+  ecoBadgeText: {
+    color: '#FFFFFF',
+    fontSize: 13,
+    fontWeight: '600',
+    letterSpacing: 0.5,
+  },
+  ratingBadge: {
+    position: 'absolute',
+    bottom: 12,
+    left: 12,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    paddingHorizontal: 10,
+    paddingVertical: 6,
   },
   ratingText: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#1F2937',
+    color: '#1A1A1A',
   },
-  favoriteButton: {
-    width: 40,
-    height: 40,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 20,
-    alignItems: 'center',
-    justifyContent: 'center',
+  cardContent: {
+    padding: 16,
   },
-  favoriteIcon: {
-    fontSize: 22,
-    color: '#EF4444',
+  location: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginBottom: 6,
   },
-  featuredCardBottom: {
+  destinationName: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 8,
+  },
+  description: {
+    fontSize: 14,
+    lineHeight: 20,
+    color: '#6B7280',
+    marginBottom: 16,
+  },
+  cardFooter: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
-  featuredCardInfo: {
-    flex: 1,
-  },
-  featuredCardTitle: {
-    fontSize: 28,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  featuredCardLocation: {
+  price: {
     fontSize: 16,
+    fontWeight: '700',
+    color: '#1A1A1A',
+  },
+  discoverButton: {
+    backgroundColor: '#C1272D',
+    borderRadius: 20,
+    paddingHorizontal: 18,
+    paddingVertical: 10,
+  },
+  discoverButtonText: {
     color: '#FFFFFF',
-    fontWeight: '500',
-  },
-  arrowButtonYellow: {
-    width: 48,
-    height: 48,
-    backgroundColor: '#FFD700',
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  arrowButtonText: {
-    fontSize: 24,
-    color: '#1F2937',
+    fontSize: 14,
     fontWeight: '600',
+    letterSpacing: 0.3,
   },
-
-  // Navigation Arrows
-  arrowsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 16,
-    marginVertical: 20,
-  },
-  arrowButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: '#FFD700',
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 4,
-    shadowColor: '#FFD700',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  arrowDisabled: {
-    backgroundColor: '#D1D5DB',
-    shadowColor: '#9CA3AF',
-  },
-  arrowText: {
-    fontSize: 24,
-    color: '#1F2937',
-    fontWeight: '600',
-  },
-
-  // Dots
-  dotsContainer: {
-    flexDirection: 'row',
-    gap: 8,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#D1D5DB',
-  },
-  dotActive: {
-    backgroundColor: '#FFD700',
-    width: 24,
-  },
-
 });
-

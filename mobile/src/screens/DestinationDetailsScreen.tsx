@@ -1,289 +1,193 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   TouchableOpacity,
   Image,
-  Dimensions,
+  StyleSheet,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
-import { DESTINATIONS, TETOUAN_PLACES, TANGER_PLACES, CHEFCHAOUEN_PLACES, Place } from '../../mock';
+import {
+  DESTINATIONS,
+  ITINERARIES_BY_DESTINATION,
+} from '../../mock';
 import type { RootStackParamList } from '../navigation/AppNavigator';
-
-const { width, height } = Dimensions.get('window');
+import type { Activity } from '../../mock/itinerary';
 
 type DestinationDetailsRouteProp = RouteProp<RootStackParamList, 'DestinationDetails'>;
 
-// Mapping des destinations aux lieux et informations pratiques
-const DESTINATION_DATA = {
-  'Tétouan': {
-    places: TETOUAN_PLACES,
-    highlights: [
-      {
-        icon: '🏛️',
-        title: 'Médina UNESCO',
-        description: 'Architecture andalouse préservée',
-        colors: ['#C41E3A', '#8B0000'] as [string, string],
-      },
-      {
-        icon: '🎨',
-        title: 'Art & Artisanat',
-        description: 'Célèbre pour ses zellige et broderies',
-        colors: ['#1E40AF', '#3B82F6'] as [string, string],
-      },
-      {
-        icon: '🌊',
-        title: 'Plages à Proximité',
-        description: 'Martil et M"diq à 10km',
-        colors: ['#059669', '#10B981'] as [string, string],
-      },
-      {
-        icon: '🍽️',
-        title: 'Gastronomie',
-        description: 'Cuisine andalouse authentique',
-        colors: ['#DC2626', '#EF4444'] as [string, string],
-      },
-    ],
-    practicalInfo: [
-      { icon: '🗓️', label: 'Meilleure période', value: 'Mars à Juin, Septembre à Novembre' },
-      { icon: '💰', label: 'Budget moyen/jour', value: '300-500 DH' },
-      { icon: '🚗', label: 'Accès depuis Tanger', value: '1h en voiture (60 km)' },
-      { icon: '🗣️', label: 'Langues', value: 'Arabe, Espagnol, Français' },
-    ],
-  },
-  'Tanger': {
-    places: TANGER_PLACES,
-    highlights: [
-      {
-        icon: '🌊',
-        title: 'Cap Spartel',
-        description: 'Point de rencontre Atlantique-Méditerranée',
-        colors: ['#1E40AF', '#3B82F6'] as [string, string],
-      },
-      {
-        icon: '🏰',
-        title: 'Kasbah',
-        description: 'Quartier historique avec vue panoramique',
-        colors: ['#7C3AED', '#A78BFA'] as [string, string],
-      },
-      {
-        icon: '🎭',
-        title: 'Patrimoine',
-        description: 'Histoire cosmopolite unique',
-        colors: ['#DC2626', '#EF4444'] as [string, string],
-      },
-      {
-        icon: '🏖️',
-        title: 'Plages',
-        description: 'Magnifiques plages urbaines',
-        colors: ['#059669', '#10B981'] as [string, string],
-      },
-    ],
-    practicalInfo: [
-      { icon: '🗓️', label: 'Meilleure période', value: 'Toute l"année, idéal Avril-Octobre' },
-      { icon: '💰', label: 'Budget moyen/jour', value: '400-700 DH' },
-      { icon: '✈️', label: 'Aéroport', value: 'Aéroport Ibn Battouta (15 km du centre)' },
-      { icon: '🗣️', label: 'Langues', value: 'Arabe, Français, Espagnol, Anglais' },
-    ],
-  },
-  'Chefchaouen': {
-    places: CHEFCHAOUEN_PLACES,
-    highlights: [
-      {
-        icon: '🔵',
-        title: 'Ville Bleue',
-        description: 'Ruelles entièrement peintes en bleu',
-        colors: ['#2563EB', '#60A5FA'] as [string, string],
-      },
-      {
-        icon: '⛰️',
-        title: 'Randonnées',
-        description: 'Sentiers dans les montagnes du Rif',
-        colors: ['#059669', '#10B981'] as [string, string],
-      },
-      {
-        icon: '📸',
-        title: 'Photographie',
-        description: 'Paradis des photographes',
-        colors: ['#7C3AED', '#A78BFA'] as [string, string],
-      },
-      {
-        icon: '🛍️',
-        title: 'Artisanat',
-        description: 'Tissage et produits locaux',
-        colors: ['#DC2626', '#EF4444'] as [string, string],
-      },
-    ],
-    practicalInfo: [
-      { icon: '🗓️', label: 'Meilleure période', value: 'Avril-Juin, Septembre-Novembre' },
-      { icon: '💰', label: 'Budget moyen/jour', value: '250-400 DH' },
-      { icon: '🚗', label: 'Accès', value: '2h30 depuis Tanger, 4h depuis Fès' },
-      { icon: '⛰️', label: 'Altitude', value: '600 mètres' },
-    ],
-  },
+// Expert mock data
+const EXPERT = {
+  name: 'Elena Papadopoulos',
+  title: 'Verified Local Expert',
+  rating: 4.9,
+  reviews: 2847,
 };
 
 export default function DestinationDetailsScreen() {
   const navigation = useNavigation();
   const route = useRoute<DestinationDetailsRouteProp>();
   const { destinationName } = route.params;
+  const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
 
-  // Trouver la destination dans le mock
+  // Find destination in mock data
   const destination = DESTINATIONS.find(d => d.name === destinationName);
-
+  
   if (!destination) {
     return null;
   }
 
-  const destinationData = DESTINATION_DATA[destination.name as keyof typeof DESTINATION_DATA];
+  // Get itinerary for this destination
+  const itinerary = ITINERARIES_BY_DESTINATION[destination.name];
+  
+  // Get recommended activities from first day of itinerary
+  const recommendedActivities: Activity[] = itinerary?.days[0]?.activities || [];
+
+  // Calculate price per person (example pricing)
+  const pricePerPerson = itinerary?.budget ? Math.round(itinerary.budget / 2) : 299;
+
+  const toggleActivity = (activityName: string) => {
+    setSelectedActivities(prev => 
+      prev.includes(activityName) 
+        ? prev.filter(name => name !== activityName)
+        : [...prev, activityName]
+    );
+  };
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Hero Image avec overlay */}
-      <View style={styles.heroContainer}>
+      {/* Header Image */}
+      <View style={styles.headerContainer}>
         <Image
           source={destination.image}
-          style={styles.heroImage}
+          style={styles.headerImage}
           resizeMode="cover"
         />
-        <LinearGradient
-          colors={['transparent', `${destination.colors[0]}CC`, destination.colors[0]]}
-          style={styles.heroOverlay}
-        >
-          <TouchableOpacity
-            style={styles.backButton}
+        
+        {/* Header Buttons */}
+        <View style={styles.headerButtons}>
+          <TouchableOpacity 
+            style={styles.headerButton}
             onPress={() => navigation.goBack()}
           >
-            <Text style={styles.backButtonText}>←</Text>
+            <Text style={styles.headerButtonText}>←</Text>
           </TouchableOpacity>
+          
+          <TouchableOpacity style={styles.headerButton}>
+            <Text style={styles.headerButtonText}>⋯</Text>
+          </TouchableOpacity>
+        </View>
 
-          <View style={styles.heroContent}>
-            <View style={styles.locationBadge}>
-              <Text style={styles.locationEmoji}>📍</Text>
-              <Text style={styles.locationText}>{destination.location}</Text>
-            </View>
-            <Text style={styles.heroTitle}>{destination.name}</Text>
-            <Text style={styles.heroSubtitle}>{destination.nickname}</Text>
-
-            <View style={styles.heroStats}>
-              {destination.features.map((feature, index) => (
-                <React.Fragment key={index}>
-                  <View style={styles.statItem}>
-                    <Text style={styles.statIcon}>{feature.icon}</Text>
-                    <Text style={styles.statText}>{feature.text}</Text>
-                  </View>
-                  {index < destination.features.length - 1 && (
-                    <View style={styles.statDivider} />
-                  )}
-                </React.Fragment>
-              ))}
-            </View>
-          </View>
-        </LinearGradient>
-      </View>
-
-      <View style={styles.content}>
-        {/* Why Section */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Why {destination.name}?</Text>
-          <Text style={styles.description}>
-            {destination.description}
+        {/* Destination Info Overlay */}
+        <View style={styles.destinationInfoOverlay}>
+          <Text style={styles.destinationName}>{destination.name}</Text>
+          <Text style={styles.priceText}>
+            ${pricePerPerson} <Text style={styles.priceSubtext}>/person</Text>
           </Text>
         </View>
+      </View>
 
-        {/* Points forts */}
+      {/* Content */}
+      <View style={styles.content}>
+        {/* Expert Info */}
+        <View style={styles.expertSection}>
+          <View style={styles.expertAvatar}>
+            <Text style={styles.avatarText}>EP</Text>
+          </View>
+          <View style={styles.expertInfo}>
+            <Text style={styles.expertName}>{EXPERT.name}</Text>
+            <Text style={styles.expertTitle}>{EXPERT.title}</Text>
+          </View>
+          <View style={styles.ratingContainer}>
+            <Text style={styles.starIcon}>⭐</Text>
+            <Text style={styles.ratingText}>
+              {EXPERT.rating} <Text style={styles.reviewsText}>({EXPERT.reviews} reviews)</Text>
+            </Text>
+          </View>
+        </View>
+
+        {/* About Section */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Points Forts</Text>
-
-          <View style={styles.highlightsGrid}>
-            {destinationData.highlights.map((highlight, index) => (
-              <View key={index} style={styles.highlightCard}>
-                <LinearGradient
-                  colors={highlight.colors}
-                  style={styles.highlightGradient}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                >
-                  <Text style={styles.highlightIcon}>{highlight.icon}</Text>
-                  <Text style={styles.highlightTitle}>{highlight.title}</Text>
-                  <Text style={styles.highlightDescription}>
-                    {highlight.description}
-                  </Text>
-                </LinearGradient>
+          <Text style={styles.sectionTitle}>About</Text>
+          <Text style={styles.aboutText}>{destination.description}</Text>
+          
+          {/* Highlights */}
+          <View style={styles.highlightsList}>
+            {destination.features.slice(0, 5).map((feature, index) => (
+              <View key={index} style={styles.highlightItem}>
+                <Text style={styles.checkIcon}>✓</Text>
+                <Text style={styles.highlightText}>{feature.text}</Text>
               </View>
             ))}
           </View>
         </View>
 
-        {/* Lieux à visiter */}
+        {/* Recommended Activities */}
         <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Lieux à Visiter</Text>
-
-          {destinationData.places.map((place: Place, index: number) => (
-            <TouchableOpacity key={index} style={styles.placeCard} activeOpacity={0.8}>
-              <View style={styles.placeIconContainer}>
-                <Text style={styles.placeIcon}>{place.icon}</Text>
-              </View>
-              <View style={styles.placeContent}>
-                <Text style={styles.placeTitle}>{place.name}</Text>
-                <Text style={styles.placeDescription}>{place.description}</Text>
-                <View style={styles.placeMeta}>
-                  <Text style={styles.placeMetaText}>⏱️ {place.duration}</Text>
-                  <Text style={styles.placeMetaText}>💰 {place.price}</Text>
+          <Text style={styles.sectionTitle}>Recommended Activities</Text>
+          
+          {recommendedActivities.map((activity, index) => {
+            const isSelected = selectedActivities.includes(activity.name);
+            const activityPrice = index === 0 ? 45 : index === 1 ? 65 : 85;
+            
+            return (
+              <View key={index} style={styles.activityCard}>
+                <View style={styles.activityHeader}>
+                  <Text style={styles.activityName}>{activity.name}</Text>
+                  <Text style={styles.activityPrice}>${activityPrice}</Text>
                 </View>
-              </View>
-              <Text style={styles.placeArrow}>›</Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-
-        {/* Informations pratiques */}
-        <View style={styles.section}>
-          <Text style={styles.sectionTitle}>Informations Pratiques</Text>
-
-          <View style={styles.infoCard}>
-            {destinationData.practicalInfo.map((info, index) => (
-              <React.Fragment key={index}>
-                <View style={styles.infoRow}>
-                  <Text style={styles.infoIcon}>{info.icon}</Text>
-                  <View style={styles.infoTextContainer}>
-                    <Text style={styles.infoLabel}>{info.label}</Text>
-                    <Text style={styles.infoValue}>{info.value}</Text>
+                
+                <View style={styles.activityMeta}>
+                  <View style={styles.activityMetaItem}>
+                    <Text style={styles.metaIcon}>⏱</Text>
+                    <Text style={styles.metaText}>{activity.duration}</Text>
+                  </View>
+                  <View style={styles.activityMetaItem}>
+                    <Text style={styles.metaIcon}>👥</Text>
+                    <Text style={styles.metaText}>Small group</Text>
                   </View>
                 </View>
-                {index < destinationData.practicalInfo.length - 1 && (
-                  <View style={styles.infoDivider} />
-                )}
-              </React.Fragment>
-            ))}
-          </View>
-        </View>
 
-        {/* Call to Action */}
-        <TouchableOpacity
-          style={styles.ctaButton}
-          activeOpacity={0.8}
-          onPress={() => {
-            // @ts-expect-error - Navigation typing to be fixed
-            navigation.navigate('MainTabs', {
-              screen: 'StartTravel',
-              params: { preselectedDestination: destination.name }
-            });
-          }}
-        >
-          <LinearGradient
-            colors={['#2C5F2D', '#97BC62']}
-            style={styles.ctaGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <Text style={styles.ctaIcon}>✈️</Text>
-            <Text style={styles.ctaText}>Planifier mon voyage à {destination.name}</Text>
-          </LinearGradient>
-        </TouchableOpacity>
+                {index === 1 && (
+                  <View style={styles.ecoBadge}>
+                    <Text style={styles.ecoBadgeText}>ECO</Text>
+                  </View>
+                )}
+
+                {index === 2 && (
+                  <View style={styles.ecoBadge}>
+                    <Text style={styles.ecoBadgeText}>ECO</Text>
+                  </View>
+                )}
+
+                <View style={styles.activityFooter}>
+                  <View style={styles.ratingSmall}>
+                    <Text style={styles.starIconSmall}>⭐</Text>
+                    <Text style={styles.ratingSmallText}>
+                      {(4.7 + index * 0.1).toFixed(1)}
+                    </Text>
+                  </View>
+                  
+                  <TouchableOpacity 
+                    style={[
+                      styles.addButton,
+                      isSelected && styles.addButtonSelected
+                    ]}
+                    onPress={() => toggleActivity(activity.name)}
+                  >
+                    <Text style={[
+                      styles.addButtonText,
+                      isSelected && styles.addButtonTextSelected
+                    ]}>
+                      {isSelected ? '✓ Added' : '+ Add to Trip'}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              </View>
+            );
+          })}
+        </View>
       </View>
     </ScrollView>
   );
@@ -292,280 +196,252 @@ export default function DestinationDetailsScreen() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#FFFFFF',
   },
-
-  // Hero
-  heroContainer: {
-    height: height * 0.5,
+  headerContainer: {
     position: 'relative',
+    height: 300,
   },
-  heroImage: {
+  headerImage: {
     width: '100%',
     height: '100%',
   },
-  heroOverlay: {
+  headerButtons: {
     position: 'absolute',
-    bottom: 0,
+    top: 50,
     left: 0,
     right: 0,
-    height: '100%',
+    flexDirection: 'row',
     justifyContent: 'space-between',
-    paddingTop: 50,
-    paddingBottom: 30,
-    paddingHorizontal: 24,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backButtonText: {
-    fontSize: 28,
-    color: '#FFFFFF',
-    fontWeight: '300',
-  },
-  heroContent: {
-    alignItems: 'flex-start',
-  },
-  locationBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-    gap: 6,
-    marginBottom: 16,
-  },
-  locationEmoji: {
-    fontSize: 16,
-  },
-  locationText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  heroTitle: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  heroSubtitle: {
-    fontSize: 22,
-    color: '#FFFFFF',
-    opacity: 0.95,
-    marginBottom: 24,
-    fontStyle: 'italic',
-  },
-  heroStats: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 30,
-    gap: 12,
   },
-  statItem: {
-    flexDirection: 'row',
+  headerButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    justifyContent: 'center',
     alignItems: 'center',
-    gap: 6,
-  },
-  statIcon: {
-    fontSize: 18,
-  },
-  statText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  statDivider: {
-    width: 1,
-    height: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-  },
-
-  // Content
-  content: {
-    padding: 20,
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 16,
-  },
-  description: {
-    fontSize: 16,
-    color: '#6B7280',
-    lineHeight: 26,
-  },
-
-  // Highlights
-  highlightsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  highlightCard: {
-    width: (width - 52) / 2,
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-  },
-  highlightGradient: {
-    padding: 20,
-    minHeight: 140,
-  },
-  highlightIcon: {
-    fontSize: 40,
-    marginBottom: 12,
-  },
-  highlightTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 6,
-  },
-  highlightDescription: {
-    fontSize: 13,
-    color: '#FFFFFF',
-    opacity: 0.95,
-    lineHeight: 18,
-  },
-
-  // Places
-  placeCard: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
     shadowRadius: 4,
+    elevation: 3,
   },
-  placeIconContainer: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
+  headerButtonText: {
+    fontSize: 20,
+    color: '#1A1A1A',
+    fontWeight: '600',
   },
-  placeIcon: {
+  destinationInfoOverlay: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
+  destinationName: {
     fontSize: 32,
-  },
-  placeContent: {
-    flex: 1,
-  },
-  placeTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: '#1F2937',
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  placeDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 8,
-    lineHeight: 20,
-  },
-  placeMeta: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  placeMetaText: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    fontWeight: '500',
-  },
-  placeArrow: {
-    fontSize: 28,
-    color: '#D1D5DB',
-    marginLeft: 8,
-  },
-
-  // Info Card
-  infoCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 16,
-  },
-  infoIcon: {
+  priceText: {
     fontSize: 24,
-    marginTop: 2,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  infoTextContainer: {
+  priceSubtext: {
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  content: {
+    padding: 20,
+  },
+  expertSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  expertAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#E8F4E8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  avatarText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#2C5F2D',
+  },
+  expertInfo: {
     flex: 1,
   },
-  infoLabel: {
+  expertName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 2,
+  },
+  expertTitle: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIcon: {
+    fontSize: 16,
+    marginRight: 4,
+  },
+  ratingText: {
     fontSize: 14,
     fontWeight: '600',
+    color: '#1A1A1A',
+  },
+  reviewsText: {
+    fontSize: 12,
+    fontWeight: '400',
     color: '#6B7280',
-    marginBottom: 4,
   },
-  infoValue: {
+  section: {
+    marginBottom: 28,
+  },
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 12,
+  },
+  aboutText: {
+    fontSize: 15,
+    lineHeight: 24,
+    color: '#4B5563',
+    marginBottom: 16,
+  },
+  highlightsList: {
+    marginTop: 8,
+  },
+  highlightItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  checkIcon: {
     fontSize: 16,
-    color: '#1F2937',
-    fontWeight: '500',
+    color: '#2C5F2D',
+    marginRight: 10,
+    marginTop: 2,
   },
-  infoDivider: {
-    height: 1,
-    backgroundColor: '#E5E7EB',
-    marginVertical: 16,
+  highlightText: {
+    fontSize: 14,
+    color: '#4B5563',
+    flex: 1,
+    lineHeight: 20,
   },
-
-  // CTA
-  ctaButton: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    marginBottom: 40,
-    elevation: 4,
-    shadowColor: '#2C5F2D',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+  activityCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    position: 'relative',
   },
-  ctaGradient: {
+  activityHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  activityName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    flex: 1,
+    marginRight: 12,
+  },
+  activityPrice: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1A1A1A',
+  },
+  activityMeta: {
+    flexDirection: 'row',
+    marginBottom: 14,
+  },
+  activityMetaItem: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20,
-    gap: 12,
+    marginRight: 16,
   },
-  ctaIcon: {
-    fontSize: 24,
+  metaIcon: {
+    fontSize: 14,
+    marginRight: 4,
   },
-  ctaText: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+  metaText: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
+  ecoBadge: {
+    position: 'absolute',
+    top: 16,
+    right: 60,
+    backgroundColor: '#D1FAE5',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  ecoBadgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#059669',
+  },
+  activityFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ratingSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIconSmall: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  ratingSmallText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1A1A1A',
+  },
+  addButton: {
+    backgroundColor: '#FEF08A',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  addButtonSelected: {
+    backgroundColor: '#D1FAE5',
+  },
+  addButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1A1A1A',
+  },
+  addButtonTextSelected: {
+    color: '#059669',
   },
 });
