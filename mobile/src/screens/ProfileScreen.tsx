@@ -4,6 +4,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useNavigation } from '@react-navigation/native';
 import { MOCK_USER_PROFILE, SETTINGS_OPTIONS, APP_INFO } from '../../mock';
 import { profileStyles as styles } from '../styles/profileStyles';
+import { ThemeToggle } from '../components/common';
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const profileImage = require('../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg') as ImageSourcePropType;
@@ -164,6 +165,23 @@ export default function ProfileScreen() {
             </View>
           </View>
         </TouchableOpacity>
+
+        {/* Theme Toggle Card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <View style={styles.cardIconContainer}>
+              <Text style={styles.cardIcon}>🎨</Text>
+            </View>
+            <View style={styles.cardHeaderText}>
+              <Text style={styles.cardTitle}>Thème</Text>
+              <Text style={styles.cardSubtitle}>Apparence de l&apos;application</Text>
+            </View>
+          </View>
+          <View style={styles.cardDivider} />
+          <View style={styles.cardContent}>
+            <ThemeToggle />
+          </View>
+        </View>
 
         {/* Paramètres Card */}
         <TouchableOpacity

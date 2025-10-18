@@ -10,8 +10,10 @@ import {
   TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { Feather } from '@expo/vector-icons';
 import { DESTINATIONS } from '../../mock/destinations';
 import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
+import { useTheme } from '../context';
 
 const { width } = Dimensions.get('window');
 
@@ -24,6 +26,7 @@ const CATEGORIES = [
 
 export default function HomeScreen() {
   const navigation = useNavigation();
+  const { colors, isDark, theme, setTheme } = useTheme();
   const [selectedCategory, setSelectedCategory] = useState('Culture');
 
   // Fonction pour calculer le prix par nuit
@@ -40,18 +43,37 @@ export default function HomeScreen() {
     return 85 + Math.floor(Math.random() * 10);
   };
 
+  // Fonction pour basculer le thème
+  const toggleTheme = () => {
+    setTheme(isDark ? 'light' : 'dark');
+  };
+
   return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
       {/* HEADER */}
-      <View style={styles.header}>
+      <View style={[styles.header, { backgroundColor: colors.primary }]}>
         <View style={styles.headerContent}>
           <View style={styles.logoContainer}>
-            <View style={styles.logoIconContainer}>
+            <View style={[styles.logoIconContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.3)' }]}>
               <Text style={styles.logoIcon}>✦</Text>
             </View>
             <Text style={styles.logoText}>Smart Travel Guide</Text>
           </View>
-          <View style={styles.dropdownContainer}>
+          
+          {/* Theme Toggle Button */}
+          <TouchableOpacity 
+            style={styles.themeToggle}
+            onPress={toggleTheme}
+            activeOpacity={0.7}
+          >
+            <Feather 
+              name={isDark ? 'sun' : 'moon'} 
+              size={20} 
+              color="#FFFFFF" 
+            />
+          </TouchableOpacity>
+
+          <View style={[styles.dropdownContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.25)' }]}>
             <Text style={styles.dropdownText}>Découvrez le Maroc Durable ▼</Text>
           </View>
           <Text style={styles.subtitle}>
@@ -62,12 +84,12 @@ export default function HomeScreen() {
 
       <View style={styles.contentContainer}>
         {/* BARRE DE RECHERCHE */}
-        <View style={styles.searchContainer}>
-          <Text style={styles.searchIcon}>⌕</Text>
+        <View style={[styles.searchContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <Text style={[styles.searchIcon, { color: colors.textSecondary }]}>⌕</Text>
           <TextInput
-            style={styles.searchInput}
+            style={[styles.searchInput, { color: colors.text }]}
             placeholder="Où souhaitez-vous aller ?"
-            placeholderTextColor="#9CA3AF"
+            placeholderTextColor={colors.textSecondary}
           />
         </View>
 
@@ -139,9 +161,9 @@ export default function HomeScreen() {
 
         {/* SECTION "Destinations Durables" */}
         <View style={styles.sectionHeader}>
-          <Text style={styles.sectionTitle}>Destinations Durables</Text>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Destinations Durables</Text>
           <TouchableOpacity>
-            <Text style={styles.viewAllText}>Voir tout ›</Text>
+            <Text style={[styles.viewAllText, { color: colors.primary }]}>Voir tout ›</Text>
           </TouchableOpacity>
         </View>
 
@@ -153,7 +175,7 @@ export default function HomeScreen() {
           return (
             <TouchableOpacity
               key={destination.id}
-              style={styles.destinationCard}
+              style={[styles.destinationCard, { backgroundColor: colors.card, borderColor: colors.border }]}
               activeOpacity={0.9}
               onPress={() =>
                 navigation.navigate('DestinationDetails' as never, {
@@ -166,7 +188,7 @@ export default function HomeScreen() {
                 <Image source={destination.image} style={styles.destinationImage} />
 
                 {/* Badge écologique */}
-                <View style={styles.ecoBadge}>
+                <View style={[styles.ecoBadge, { backgroundColor: colors.success }]}>
                   <Text style={styles.ecoBadgeText}>✦ {ecoScore}%</Text>
                 </View>
 
@@ -179,28 +201,28 @@ export default function HomeScreen() {
               {/* Contenu de la carte */}
               <View style={styles.cardContent}>
                 {/* Localisation */}
-                <Text style={styles.location}>◉ {destination.location}, Maroc</Text>
+                <Text style={[styles.location, { color: colors.textSecondary }]}>◉ {destination.location}, Maroc</Text>
 
                 {/* Nom de la destination */}
-                <Text style={styles.destinationName}>{destination.name}</Text>
+                <Text style={[styles.destinationName, { color: colors.text }]}>{destination.name}</Text>
 
                 {/* Description */}
-                <Text style={styles.description} numberOfLines={3}>
+                <Text style={[styles.description, { color: colors.textSecondary }]} numberOfLines={3}>
                   {destination.description}
                 </Text>
 
                 {/* Footer: Prix + Bouton */}
                 <View style={styles.cardFooter}>
-                  <Text style={styles.price}>{pricePerNight}€/nuit</Text>
+                  <Text style={[styles.price, { color: colors.text }]}>{pricePerNight}€/nuit</Text>
                   <TouchableOpacity
-                    style={styles.discoverButton}
+                    style={[styles.discoverButton, { backgroundColor: colors.accent }]}
                     onPress={() =>
                       navigation.navigate('DestinationDetails' as never, {
                         destinationName: destination.name,
                       } as never)
                     }
                   >
-                    <Text style={styles.discoverButtonText}>Découvrir ›</Text>
+                    <Text style={[styles.discoverButtonText, { color: isDark ? '#1A1A1A' : '#1A1A1A' }]}>Découvrir ›</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -251,19 +273,35 @@ const styles = StyleSheet.create({
   logoText: {
     fontSize: 20,
     fontWeight: '700',
-    color: '#1A1A1A',
+    color: '#FFFFFF',
+  },
+  themeToggle: {
+    position: 'absolute',
+    top: 12,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+    zIndex: 10,
   },
   dropdownContainer: {
     marginBottom: 8,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 20,
   },
   dropdownText: {
-    fontSize: 16,
-    color: '#6B7280',
+    fontSize: 14,
+    color: '#FFFFFF',
+    fontWeight: '500',
   },
   subtitle: {
-    fontSize: 14,
-    color: '#6B7280',
-    lineHeight: 20,
+    fontSize: 13,
+    color: 'rgba(255, 255, 255, 0.9)',
+    lineHeight: 18,
   },
 
   // CONTENT CONTAINER

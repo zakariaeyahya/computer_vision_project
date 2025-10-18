@@ -5,3 +5,4 @@
  */
 
 export { BudgetSelector } from './BudgetSelector';
+export { default as ThemeToggle } from './ThemeToggle';
