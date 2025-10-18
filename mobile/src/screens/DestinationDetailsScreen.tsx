@@ -14,6 +14,7 @@ import {
 } from '../../mock';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import type { Activity } from '../../mock/itinerary';
+import ActivityDetailModal from '../components/travel/ActivityDetailModal';
 
 type DestinationDetailsRouteProp = RouteProp<RootStackParamList, 'DestinationDetails'>;
 
@@ -30,6 +31,8 @@ export default function DestinationDetailsScreen() {
   const route = useRoute<DestinationDetailsRouteProp>();
   const { destinationName } = route.params;
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Find destination in mock data
   const destination = DESTINATIONS.find(d => d.name === destinationName);
@@ -53,6 +56,29 @@ export default function DestinationDetailsScreen() {
         ? prev.filter(name => name !== activityName)
         : [...prev, activityName]
     );
+  };
+
+  const handleActivityPress = (activity: Activity) => {
+    setSelectedActivity(activity);
+    setIsModalVisible(true);
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setTimeout(() => setSelectedActivity(null), 300);
+  };
+
+  const handleAddToItinerary = () => {
+    if (selectedActivity) {
+      toggleActivity(selectedActivity.name);
+      handleCloseModal();
+    }
+  };
+
+  const handleGetDirections = () => {
+    // TODO: Implémenter la navigation/directions
+    console.log('Get directions to:', selectedActivity?.name);
+    handleCloseModal();
   };
 
   return (
@@ -132,7 +158,12 @@ export default function DestinationDetailsScreen() {
             const activityPrice = index === 0 ? 45 : index === 1 ? 65 : 85;
             
             return (
-              <View key={index} style={styles.activityCard}>
+              <TouchableOpacity 
+                key={index} 
+                style={styles.activityCard}
+                activeOpacity={0.7}
+                onPress={() => handleActivityPress(activity)}
+              >
                 <View style={styles.activityHeader}>
                   <Text style={styles.activityName}>{activity.name}</Text>
                   <Text style={styles.activityPrice}>${activityPrice}</Text>
@@ -174,7 +205,10 @@ export default function DestinationDetailsScreen() {
                       styles.addButton,
                       isSelected && styles.addButtonSelected
                     ]}
-                    onPress={() => toggleActivity(activity.name)}
+                    onPress={(e) => {
+                      e.stopPropagation();
+                      toggleActivity(activity.name);
+                    }}
                   >
                     <Text style={[
                       styles.addButtonText,
@@ -184,11 +218,31 @@ export default function DestinationDetailsScreen() {
                     </Text>
                   </TouchableOpacity>
                 </View>
-              </View>
+              </TouchableOpacity>
             );
           })}
         </View>
       </View>
+
+      {/* Activity Detail Modal */}
+      <ActivityDetailModal
+        visible={isModalVisible}
+        activity={selectedActivity}
+        onClose={handleCloseModal}
+        onAddToItinerary={handleAddToItinerary}
+        onGetDirections={handleGetDirections}
+        cityName={destination.name}
+        activityPrice={selectedActivity ? 
+          (recommendedActivities.indexOf(selectedActivity) === 0 ? 45 : 
+           recommendedActivities.indexOf(selectedActivity) === 1 ? 65 : 85) 
+          : 45
+        }
+        ecoScore={selectedActivity ? 
+          (recommendedActivities.indexOf(selectedActivity) === 1 || 
+           recommendedActivities.indexOf(selectedActivity) === 2 ? 5 : undefined) 
+          : undefined
+        }
+      />
     </ScrollView>
   );
 }

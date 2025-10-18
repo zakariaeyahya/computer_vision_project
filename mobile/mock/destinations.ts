@@ -22,9 +22,9 @@ export const DESTINATIONS: Destination[] = [
     colors: ['#C41E3A', '#8B0000'],
     image: require('../assets/images/destinations/tetouan.jpg') as ImageSourcePropType,
     features: [
-      { icon: '🏛️', text: 'Médina UNESCO' },
+      { icon: '🏛️', text: 'UNESCO Medina' },
       { icon: '🎨', text: 'Art & Culture' },
-      { icon: '🌊', text: 'Proche de la mer' },
+      { icon: '🌊', text: 'Close to the Sea' },
     ],
     route: 'DestinationDetails',
     description: 'Tétouan, surnommée "La Colombe Blanche", est une ville authentique du nord du Maroc. Sa médina, classée au patrimoine mondial de l\'UNESCO, offre une expérience culturelle unique.',
@@ -39,7 +39,7 @@ export const DESTINATIONS: Destination[] = [
     features: [
       { icon: '🌊', text: 'Cap Spartel' },
       { icon: '🏰', text: 'Kasbah' },
-      { icon: '🎭', text: 'Cosmopolite' },
+      { icon: '🎭', text: 'Cosmopolitan' },
     ],
     route: 'DestinationDetails',
     description: 'Tanger, "La Perle du Détroit", est une ville cosmopolite où se rencontrent l\'Europe et l\'Afrique. Entre mer et océan, elle offre une richesse culturelle et historique exceptionnelle.',
@@ -48,17 +48,16 @@ export const DESTINATIONS: Destination[] = [
     id: '3',
     name: 'Chefchaouen',
     nickname: 'La Perle Bleue',
-    location: 'Montagnes du Rif',
+    location: 'Rif Mountains',
     colors: ['#2563EB', '#60A5FA'],
     image: require('../assets/images/destinations/chefchaouen.jpg') as ImageSourcePropType,
     features: [
-      { icon: '🔵', text: 'Ville bleue' },
-      { icon: '⛰️', text: 'Montagnes du Rif' },
-      { icon: '📸', text: 'Photogénique' },
+      { icon: '🔵', text: 'Blue City' },
+      { icon: '⛰️', text: 'Rif Mountains' },
+      { icon: '📸', text: 'Photogenic' },
     ],
     route: 'DestinationDetails',
     description: 'Chefchaouen, "La Perle Bleue", est célèbre pour ses ruelles peintes en bleu. Nichée dans les montagnes du Rif, elle offre une atmosphère paisible et des paysages à couper le souffle.',
   },
 ];
 /* eslint-enable @typescript-eslint/no-require-imports */
-
