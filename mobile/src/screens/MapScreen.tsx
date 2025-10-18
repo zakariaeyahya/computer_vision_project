@@ -11,23 +11,34 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 import { DESTINATIONS } from '../../mock/destinations';
+import { TETOUAN_PLACES } from '../../mock/tetouanPlaces';
+import { TANGER_PLACES } from '../../mock/tangerPlaces';
+import { CHEFCHAOUEN_PLACES } from '../../mock/chefchaouenPlaces';
 
 const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
-// Coordonnées des villes marocaines
-const CITY_COORDINATES = {
-  'Tétouan': {
-    lat: 35.5889,
-    lng: -5.3626,
-  },
-  'Tanger': {
-    lat: 35.7595,
-    lng: -5.8340,
-  },
-  'Chefchaouen': {
-    lat: 35.1711,
-    lng: -5.2636,
-  },
+// Coordonnées GPS des lieux/activités dans chaque ville
+const PLACES_COORDINATES: Record<string, { lat: number; lng: number; city: string; icon: string }> = {
+  // TÉTOUAN - 5 lieux
+  'Médina de Tétouan': { lat: 35.5689, lng: -5.3689, city: 'Tétouan', icon: '🕌' },
+  'Musée d\'Art Marocain': { lat: 35.5719, lng: -5.3656, city: 'Tétouan', icon: '🎨' },
+  'Place Hassan II': { lat: 35.5734, lng: -5.3619, city: 'Tétouan', icon: '🏛️' },
+  'Souk Artisanal': { lat: 35.5699, lng: -5.3640, city: 'Tétouan', icon: '🛍️' },
+  'Plage de Martil': { lat: 35.6167, lng: -5.2800, city: 'Tétouan', icon: '🌊' },
+  
+  // TANGER - 5 lieux
+  'Kasbah de Tanger': { lat: 35.7889, lng: -5.8102, city: 'Tanger', icon: '🏰' },
+  'Cap Spartel': { lat: 35.7931, lng: -5.9243, city: 'Tanger', icon: '🌊' },
+  'Médina de Tanger': { lat: 35.7785, lng: -5.8099, city: 'Tanger', icon: '🕌' },
+  'Grottes d\'Hercule': { lat: 35.7926, lng: -5.9384, city: 'Tanger', icon: '🏛️' },
+  'Café Hafa': { lat: 35.7836, lng: -5.8232, city: 'Tanger', icon: '☕' },
+  
+  // CHEFCHAOUEN - 5 lieux
+  'Médina Bleue': { lat: 35.1711, lng: -5.2636, city: 'Chefchaouen', icon: '🔵' },
+  'Place Outa el Hammam': { lat: 35.1692, lng: -5.2691, city: 'Chefchaouen', icon: '🕌' },
+  'Kasbah et Musée': { lat: 35.1698, lng: -5.2684, city: 'Chefchaouen', icon: '🏰' },
+  'Cascade d\'Akchour': { lat: 35.1083, lng: -5.1797, city: 'Chefchaouen', icon: '💧' },
+  'Mosquée Espagnole': { lat: 35.1750, lng: -5.2630, city: 'Chefchaouen', icon: '⛰️' },
 };
 
 export default function MapScreen() {
@@ -39,41 +50,63 @@ export default function MapScreen() {
     navigation.goBack();
   };
 
-  // Générer les marqueurs pour Leaflet
+  // Récupérer la couleur de la ville
+  const getCityColor = (cityName: string): string => {
+    const city = DESTINATIONS.find(d => d.name === cityName);
+    return city ? city.colors[0] : '#6B7280';
+  };
+
+  // Générer les marqueurs pour tous les lieux
   const generateMarkersHTML = () => {
-    return DESTINATIONS.map((destination) => {
-      const coords = CITY_COORDINATES[destination.name as keyof typeof CITY_COORDINATES];
-      if (!coords) return '';
+    return Object.entries(PLACES_COORDINATES).map(([placeName, placeData], index) => {
+      const { lat, lng, city, icon } = placeData;
+      const color = getCityColor(city);
       
-      const color = destination.colors[0];
+      // Récupérer les détails du lieu depuis les mock
+      const allPlaces = [...TETOUAN_PLACES, ...TANGER_PLACES, ...CHEFCHAOUEN_PLACES];
+      const placeDetails = allPlaces.find(p => p.name === placeName);
+      const description = placeDetails?.description || '';
+      const duration = placeDetails?.duration || '';
+      const price = placeDetails?.price || '';
       
       return `
-        var marker${destination.id} = L.circleMarker([${coords.lat}, ${coords.lng}], {
+        var marker${index} = L.circleMarker([${lat}, ${lng}], {
           color: 'white',
           fillColor: '${color}',
-          fillOpacity: 1,
-          radius: 12,
-          weight: 3
+          fillOpacity: 0.9,
+          radius: 8,
+          weight: 2
         }).addTo(map);
         
-        marker${destination.id}.bindPopup(\`
-          <div style="text-align: center; padding: 8px;">
-            <h3 style="margin: 0 0 8px 0; color: ${color}; font-size: 16px; font-weight: 600;">${destination.name}</h3>
-            <p style="margin: 0 0 8px 0; color: #6B7280; font-size: 12px;">${destination.nickname}</p>
+        marker${index}.bindPopup(\`
+          <div style="padding: 12px; min-width: 220px;">
+            <div style="display: flex; align-items: center; margin-bottom: 8px;">
+              <span style="font-size: 24px; margin-right: 8px;">${icon}</span>
+              <h3 style="margin: 0; color: ${color}; font-size: 15px; font-weight: 700;">${placeName}</h3>
+            </div>
+            <p style="margin: 0 0 8px 0; color: #4B5563; font-size: 12px; line-height: 1.4;">${description}</p>
+            <div style="display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 11px; color: #6B7280;">
+              <span>⏱️ ${duration}</span>
+              <span>💰 ${price}</span>
+            </div>
+            <div style="text-align: center; padding: 6px; background: #F3F4F6; border-radius: 6px; font-size: 11px; color: #6B7280; margin-bottom: 8px;">
+              📍 ${city}
+            </div>
             <button 
-              onclick="window.ReactNativeWebView.postMessage('${destination.name}')"
+              onclick="window.ReactNativeWebView.postMessage('${city}')"
               style="
+                width: 100%;
                 background: ${color};
                 color: white;
                 border: none;
-                padding: 8px 16px;
+                padding: 8px 12px;
                 border-radius: 8px;
                 font-weight: 600;
                 cursor: pointer;
-                font-size: 13px;
+                font-size: 12px;
               "
             >
-              Découvrir →
+              Plus d'infos sur ${city} →
             </button>
           </div>
         \`);
@@ -167,19 +200,16 @@ export default function MapScreen() {
 
       {/* Legend */}
       <View style={[styles.legend, { bottom: insets.bottom + 20 }]}>
-        <Text style={styles.legendTitle}>Destinations</Text>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: '#C41E3A' }]} />
-          <Text style={styles.legendText}>Tétouan</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: '#1E40AF' }]} />
-          <Text style={styles.legendText}>Tanger</Text>
-        </View>
-        <View style={styles.legendItem}>
-          <View style={[styles.legendDot, { backgroundColor: '#2563EB' }]} />
-          <Text style={styles.legendText}>Chefchaouen</Text>
-        </View>
+        <Text style={styles.legendTitle}>📍 {Object.keys(PLACES_COORDINATES).length} Lieux</Text>
+        {DESTINATIONS.map((destination) => (
+          <View key={destination.id} style={styles.legendItem}>
+            <View style={[styles.legendDot, { backgroundColor: destination.colors[0] }]} />
+            <Text style={styles.legendText}>{destination.name}</Text>
+          </View>
+        ))}
+        <Text style={styles.legendSubtitle}>
+          Activités et sites touristiques
+        </Text>
       </View>
     </View>
   );
@@ -275,5 +305,11 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     color: '#1A1A1A',
   },
+  legendSubtitle: {
+    fontSize: 10,
+    fontWeight: '400',
+    color: '#9CA3AF',
+    marginTop: 8,
+    fontStyle: 'italic',
+  },
 });
-
