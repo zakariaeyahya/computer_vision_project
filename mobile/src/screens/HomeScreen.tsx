@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import {
   View,
   Text,
-  StyleSheet,
   ScrollView,
   Image,
   TouchableOpacity,
@@ -14,6 +13,7 @@ import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { DESTINATIONS } from '../../mock/destinations';
 import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
 import { useTheme } from '../context';
+import { homeScreenStyles as styles } from '../styles/homeScreenStyles';
 
 const { width } = Dimensions.get('window');
 
@@ -27,7 +27,13 @@ const CATEGORIES = [
 export default function HomeScreen() {
   const navigation = useNavigation();
   const { colors, isDark, theme, setTheme } = useTheme();
-  const [selectedCategory, setSelectedCategory] = useState('Culture');
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(['Culture']);
+
+  // Helper non typé pour éviter les erreurs TS avec navigate tuples
+  const navigateTo = (name: string, params?: unknown) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (navigation as any).navigate(name, params as any);
+  };
 
   // Fonction pour calculer le prix par nuit
   const getPricePerNight = (destinationName: string) => {
@@ -64,7 +70,7 @@ export default function HomeScreen() {
           <TouchableOpacity 
             style={styles.themeToggle}
             onPress={toggleTheme}
-            activeOpacity={0.7}
+            activeOpacity={0.9}
           >
             <Feather 
               name={isDark ? 'sun' : 'moon'} 
@@ -72,10 +78,6 @@ export default function HomeScreen() {
               color="#FFFFFF" 
             />
           </TouchableOpacity>
-
-          <View style={[styles.dropdownContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.15)' : 'rgba(255,255,255,0.25)' }]}>
-            <Text style={styles.dropdownText}>Découvrez le Maroc Durable ▼</Text>
-          </View>
           <Text style={styles.subtitle}>
             Votre compagnon IA pour un tourisme responsable
           </Text>
@@ -99,7 +101,7 @@ export default function HomeScreen() {
           <View style={styles.buttonRow}>
             <TouchableOpacity
               style={[styles.mainButton, styles.exploreButton]}
-              onPress={() => navigation.navigate('Map' as never)}
+              onPress={() => navigateTo('Map')}
             >
               <Text style={styles.buttonIcon}>◈</Text>
               <Text style={styles.buttonText}>Explorer le{'\n'}Maroc</Text>
@@ -107,9 +109,7 @@ export default function HomeScreen() {
 
             <TouchableOpacity
               style={[styles.mainButton, styles.planButton]}
-              onPress={() =>
-                navigation.navigate('MainTabs' as never, { screen: 'StartTravel' } as never)
-              }
+              onPress={() => navigateTo('MainTabs', { screen: 'StartTravel' })}
             >
               <Text style={styles.buttonIcon}>✧</Text>
               <Text style={styles.buttonText}>Planifier IA</Text>
@@ -130,7 +130,7 @@ export default function HomeScreen() {
           contentContainerStyle={styles.categoriesContent}
         >
           {CATEGORIES.map((category) => {
-            const isActive = selectedCategory === category.name;
+            const isActive = selectedCategories.includes(category.name);
             return (
               <TouchableOpacity
                 key={category.id}
@@ -141,13 +141,24 @@ export default function HomeScreen() {
                     borderColor: isActive ? '#C1272D' : '#E8DFD0',
                   },
                 ]}
-                onPress={() => setSelectedCategory(category.name)}
+                onPress={() => {
+                  setSelectedCategories((prev) =>
+                    prev.includes(category.name)
+                      ? prev.filter((c) => c !== category.name)
+                      : [...prev, category.name]
+                  );
+                }}
               >
                 <MaterialCommunityIcons 
                   name={category.icon as any} 
                   size={18} 
                   color={isActive ? '#FFFFFF' : category.textColor} 
                 />
+                {isActive && (
+                  <View style={styles.categoryCheck}>
+                    <Feather name="check" size={10} color="#FFFFFF" />
+                  </View>
+                )}
                 <Text
                   style={[
                     styles.categoryText,
@@ -165,360 +176,76 @@ export default function HomeScreen() {
 
         {/* SECTION "Destinations Durables" */}
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Destinations Durables</Text>
-          <TouchableOpacity>
-            <Text style={[styles.viewAllText, { color: colors.primary }]}>Voir tout ›</Text>
-          </TouchableOpacity>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Destinations Populaires</Text>
         </View>
 
-        {/* CARTES DE DESTINATIONS */}
-        {DESTINATIONS.map((destination) => {
-          const pricePerNight = getPricePerNight(destination.name);
-          const ecoScore = getEcoScore();
+        {/* CARTES DE DESTINATIONS - Carrousel horizontal */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.destinationsRow}
+        >
+          {DESTINATIONS.map((destination, index) => {
+            const pricePerNight = getPricePerNight(destination.name);
+            const ecoScore = getEcoScore();
 
-          return (
-            <TouchableOpacity
-              key={destination.id}
-              style={[styles.destinationCard, { backgroundColor: colors.card, borderColor: colors.border }]}
-              activeOpacity={0.9}
-              onPress={() =>
-                navigation.navigate('DestinationDetails' as never, {
-                  destinationName: destination.name,
-                } as never)
-              }
-            >
-              {/* Image avec overlay */}
-              <View style={styles.imageContainer}>
-                <Image source={destination.image} style={styles.destinationImage} />
+            return (
+              <TouchableOpacity
+                key={destination.id}
+                style={[
+                  styles.destinationCardHorizontal,
+                  { backgroundColor: colors.card, borderColor: colors.border },
+                  index === DESTINATIONS.length - 1 ? { marginRight: 20 } : null,
+                ]}
+                activeOpacity={0.9}
+                onPress={() => navigateTo('DestinationDetails', { destinationName: destination.name })}
+              >
+                {/* Image avec overlay */}
+                <View style={styles.imageContainer}>
+                  <Image source={destination.image} style={styles.destinationImage} />
 
-                {/* Badge écologique */}
-                <View style={[styles.ecoBadge, { backgroundColor: colors.success }]}>
-                  <MaterialCommunityIcons name="leaf" size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
-                  <Text style={styles.ecoBadgeText}>{ecoScore}%</Text>
+                  {/* Badge écologique */}
+                  <View style={[styles.ecoBadge, { backgroundColor: colors.success }]}>
+                    <MaterialCommunityIcons name="leaf" size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
+                    <Text style={styles.ecoBadgeText}>{ecoScore}%</Text>
+                  </View>
+
+                  {/* Rating */}
+                  <View style={styles.ratingBadge}>
+                    <Text style={styles.ratingText}>★ 4.8</Text>
+                  </View>
                 </View>
 
-                {/* Rating */}
-                <View style={styles.ratingBadge}>
-                  <Text style={styles.ratingText}>★ 4.8</Text>
+                {/* Contenu de la carte */}
+                <View style={styles.cardContent}>
+                  {/* Localisation */}
+                  <Text style={[styles.location, { color: colors.textSecondary }]}>◉ {destination.location}, Maroc</Text>
+
+                  {/* Nom de la destination */}
+                  <Text style={[styles.destinationName, { color: colors.text }]}>{destination.name}</Text>
+
+                  {/* Description */}
+                  <Text style={[styles.description, { color: colors.textSecondary }]} numberOfLines={3}>
+                    {destination.description}
+                  </Text>
+
+                  {/* Footer: Prix + Bouton */}
+                  <View style={styles.cardFooter}>
+                    <Text style={[styles.price, { color: colors.text }]}>{pricePerNight}€/nuit</Text>
+                    <TouchableOpacity
+                      style={[styles.discoverButton, { backgroundColor: colors.accent }]}
+                      onPress={() => navigateTo('DestinationDetails', { destinationName: destination.name })}
+                    >
+                      <Text style={[styles.discoverButtonText, { color: isDark ? '#1A1A1A' : '#1A1A1A' }]}>Découvrir ›</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-
-              {/* Contenu de la carte */}
-              <View style={styles.cardContent}>
-                {/* Localisation */}
-                <Text style={[styles.location, { color: colors.textSecondary }]}>◉ {destination.location}, Maroc</Text>
-
-                {/* Nom de la destination */}
-                <Text style={[styles.destinationName, { color: colors.text }]}>{destination.name}</Text>
-
-                {/* Description */}
-                <Text style={[styles.description, { color: colors.textSecondary }]} numberOfLines={3}>
-                  {destination.description}
-                </Text>
-
-                {/* Footer: Prix + Bouton */}
-                <View style={styles.cardFooter}>
-                  <Text style={[styles.price, { color: colors.text }]}>{pricePerNight}€/nuit</Text>
-                  <TouchableOpacity
-                    style={[styles.discoverButton, { backgroundColor: colors.accent }]}
-                    onPress={() =>
-                      navigation.navigate('DestinationDetails' as never, {
-                        destinationName: destination.name,
-                      } as never)
-                    }
-                  >
-                    <Text style={[styles.discoverButtonText, { color: isDark ? '#1A1A1A' : '#1A1A1A' }]}>Découvrir ›</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            </TouchableOpacity>
-          );
-        })}
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
       </View>
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F8F5F0',
-  },
-
-  // HEADER
-  header: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 20,
-    paddingTop: 60,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#E8DFD0',
-  },
-  headerContent: {
-    alignItems: 'flex-start',
-  },
-  logoContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  logoIconContainer: {
-    width: 36,
-    height: 36,
-    borderRadius: 8,
-    backgroundColor: '#C1272D',
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 10,
-  },
-  logoText: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#FFFFFF',
-  },
-  themeToggle: {
-    position: 'absolute',
-    top: 12,
-    right: 20,
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    zIndex: 10,
-  },
-  dropdownContainer: {
-    marginBottom: 8,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-  },
-  dropdownText: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    fontWeight: '500',
-  },
-  subtitle: {
-    fontSize: 13,
-    color: 'rgba(255, 255, 255, 0.9)',
-    lineHeight: 18,
-  },
-
-  // CONTENT CONTAINER
-  contentContainer: {
-    paddingHorizontal: 20,
-    paddingTop: 20,
-  },
-
-  // BARRE DE RECHERCHE
-  searchContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    paddingHorizontal: 14,
-    paddingVertical: 14,
-    marginBottom: 20,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.05,
-    shadowRadius: 2,
-    elevation: 1,
-  },
-  searchIcon: {
-    fontSize: 20,
-    marginRight: 10,
-  },
-  searchInput: {
-    flex: 1,
-    fontSize: 15,
-    color: '#1A1A1A',
-  },
-
-  // BOUTONS PRINCIPAUX
-  buttonsContainer: {
-    marginBottom: 24,
-  },
-  buttonRow: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    gap: 12,
-    marginBottom: 12,
-  },
-  mainButton: {
-    flex: 1,
-    borderRadius: 16,
-    paddingVertical: 18,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  exploreButton: {
-    backgroundColor: '#C1272D',
-  },
-  planButton: {
-    backgroundColor: '#006233',
-  },
-  buttonIcon: {
-    fontSize: 32,
-    marginBottom: 8,
-  },
-  buttonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  eventsButton: {
-    backgroundColor: '#006233',
-    borderRadius: 16,
-    paddingVertical: 16,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  eventsButtonText: {
-    color: '#FFFFFF',
-    fontSize: 15,
-    fontWeight: '600',
-  },
-
-  // FILTRES PAR CATÉGORIE
-  categoriesContainer: {
-    marginBottom: 24,
-  },
-  categoriesContent: {
-    gap: 12,
-  },
-  categoryChip: {
-    borderRadius: 20,
-    paddingHorizontal: 16,
-    paddingVertical: 12,
-    alignItems: 'center',
-    minWidth: 90,
-    borderWidth: 1,
-    borderColor: '#E8DFD0',
-  },
-  categoryEmoji: {
-    marginBottom: 4,
-  },
-  categoryText: {
-    fontSize: 13,
-    fontWeight: '600',
-  },
-
-  // SECTION HEADER
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 16,
-  },
-  sectionTitle: {
-    fontSize: 22,
-    fontWeight: '700',
-    color: '#1A1A1A',
-  },
-  viewAllText: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontWeight: '500',
-  },
-
-  // CARTES DE DESTINATIONS
-  destinationCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    marginBottom: 20,
-    overflow: 'hidden',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.08,
-    shadowRadius: 8,
-    elevation: 3,
-  },
-  imageContainer: {
-    position: 'relative',
-    width: '100%',
-    height: 180,
-  },
-  destinationImage: {
-    width: '100%',
-    height: '100%',
-    resizeMode: 'cover',
-  },
-  ecoBadge: {
-    position: 'absolute',
-    top: 12,
-    right: 12,
-    backgroundColor: 'rgba(0, 98, 51, 0.95)',
-    borderRadius: 20,
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  ecoBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: '600',
-    letterSpacing: 0.5,
-  },
-  ratingBadge: {
-    position: 'absolute',
-    bottom: 12,
-    left: 12,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    paddingHorizontal: 10,
-    paddingVertical: 6,
-  },
-  ratingText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
-  },
-  cardContent: {
-    padding: 16,
-  },
-  location: {
-    fontSize: 13,
-    color: '#6B7280',
-    marginBottom: 6,
-  },
-  destinationName: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1A1A1A',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 14,
-    lineHeight: 20,
-    color: '#6B7280',
-    marginBottom: 16,
-  },
-  cardFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  price: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: '#1A1A1A',
-  },
-  discoverButton: {
-    backgroundColor: '#C1272D',
-    borderRadius: 20,
-    paddingHorizontal: 18,
-    paddingVertical: 10,
-  },
-  discoverButtonText: {
-    color: '#FFFFFF',
-    fontSize: 14,
-    fontWeight: '600',
-    letterSpacing: 0.3,
-  },
-});
