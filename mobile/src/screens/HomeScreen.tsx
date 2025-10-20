@@ -10,7 +10,7 @@ import {
   TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { Feather } from '@expo/vector-icons';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { DESTINATIONS } from '../../mock/destinations';
 import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
 import { useTheme } from '../context';
@@ -18,10 +18,10 @@ import { useTheme } from '../context';
 const { width } = Dimensions.get('window');
 
 const CATEGORIES = [
-  { id: '1', name: 'Culture', emoji: '◉', bgColor: '#C1272D', textColor: '#FFFFFF' },
-  { id: '2', name: 'Nature', emoji: '✦', bgColor: '#F4E9D8', textColor: '#1A1A1A' },
-  { id: '3', name: 'Plage', emoji: '◐', bgColor: '#FFF4E6', textColor: '#1A1A1A' },
-  { id: '4', name: 'Montagne', emoji: '△', bgColor: '#E8E4DD', textColor: '#1A1A1A' },
+  { id: '1', name: 'Culture', icon: 'bank', bgColor: '#C1272D', textColor: '#FFFFFF' },
+  { id: '2', name: 'Nature', icon: 'nature', bgColor: '#F4E9D8', textColor: '#1A1A1A' },
+  { id: '3', name: 'Plage', icon: 'beach', bgColor: '#FFF4E6', textColor: '#1A1A1A' },
+  { id: '4', name: 'Montagne', icon: 'image-filter-hdr', bgColor: '#E8E4DD', textColor: '#1A1A1A' },
 ];
 
 export default function HomeScreen() {
@@ -55,7 +55,7 @@ export default function HomeScreen() {
         <View style={styles.headerContent}>
           <View style={styles.logoContainer}>
             <View style={[styles.logoIconContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.3)' }]}>
-              <Text style={styles.logoIcon}>✦</Text>
+              <MaterialCommunityIcons name="star-four-points" size={20} color="#FFFFFF" />
             </View>
             <Text style={styles.logoText}>Smart Travel Guide</Text>
           </View>
@@ -143,7 +143,11 @@ export default function HomeScreen() {
                 ]}
                 onPress={() => setSelectedCategory(category.name)}
               >
-                <Text style={styles.categoryEmoji}>{category.emoji}</Text>
+                <MaterialCommunityIcons 
+                  name={category.icon as any} 
+                  size={18} 
+                  color={isActive ? '#FFFFFF' : category.textColor} 
+                />
                 <Text
                   style={[
                     styles.categoryText,
@@ -189,7 +193,8 @@ export default function HomeScreen() {
 
                 {/* Badge écologique */}
                 <View style={[styles.ecoBadge, { backgroundColor: colors.success }]}>
-                  <Text style={styles.ecoBadgeText}>✦ {ecoScore}%</Text>
+                  <MaterialCommunityIcons name="leaf" size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
+                  <Text style={styles.ecoBadgeText}>{ecoScore}%</Text>
                 </View>
 
                 {/* Rating */}
@@ -265,10 +270,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 10,
-  },
-  logoIcon: {
-    fontSize: 20,
-    color: '#FFFFFF',
   },
   logoText: {
     fontSize: 20,
@@ -400,9 +401,7 @@ const styles = StyleSheet.create({
     borderColor: '#E8DFD0',
   },
   categoryEmoji: {
-    fontSize: 20,
     marginBottom: 4,
-    fontWeight: '300',
   },
   categoryText: {
     fontSize: 13,
@@ -457,6 +456,8 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     paddingHorizontal: 12,
     paddingVertical: 6,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   ecoBadgeText: {
     color: '#FFFFFF',

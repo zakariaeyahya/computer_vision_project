@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, ScrollView } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 
 interface ItineraryHeaderProps {
   destination: string;
@@ -61,19 +62,19 @@ const ItineraryHeader: React.FC<ItineraryHeaderProps> = ({
           onPress={() => setShowChatModal(true)}
           activeOpacity={0.8}
         >
-          <Text style={styles.aiButtonEmoji}>🤖</Text>
+          <MaterialCommunityIcons name="robot" size={28} color="#FFFFFF" />
         </TouchableOpacity>
 
-        <Text style={styles.headerEmoji}>✨</Text>
+        <MaterialCommunityIcons name="star-four-points" size={50} color="#FFFFFF" style={styles.headerEmoji} />
         <Text style={styles.headerTitle}>Votre itinéraire à {destination}</Text>
         <View style={styles.headerInfo}>
           <View style={styles.headerInfoItem}>
-            <Text style={styles.headerInfoIcon}>📅</Text>
+            <MaterialCommunityIcons name="calendar-range" size={18} color="#FFFFFF" />
             <Text style={styles.headerInfoText}>{duration} jours</Text>
           </View>
           <View style={styles.headerDivider} />
           <View style={styles.headerInfoItem}>
-            <Text style={styles.headerInfoIcon}>💰</Text>
+            <MaterialCommunityIcons name="cash-multiple" size={18} color="#FFFFFF" />
             <Text style={styles.headerInfoText}>{budget} dh</Text>
           </View>
         </View>
@@ -96,7 +97,7 @@ const ItineraryHeader: React.FC<ItineraryHeaderProps> = ({
           >
             <View style={styles.chatHeaderContent}>
               <View style={styles.chatHeaderLeft}>
-                <Text style={styles.chatHeaderEmoji}>🤖</Text>
+                <MaterialCommunityIcons name="robot" size={40} color="#FFFFFF" />
                 <View>
                   <Text style={styles.chatHeaderTitle}>Assistant IA</Text>
                   <Text style={styles.chatHeaderSubtitle}>En ligne</Text>
@@ -106,7 +107,7 @@ const ItineraryHeader: React.FC<ItineraryHeaderProps> = ({
                 style={styles.closeButton}
                 onPress={() => setShowChatModal(false)}
               >
-                <Text style={styles.closeButtonText}>✕</Text>
+                <Feather name="x" size={24} color="#FFFFFF" />
               </TouchableOpacity>
             </View>
           </LinearGradient>
@@ -122,7 +123,7 @@ const ItineraryHeader: React.FC<ItineraryHeaderProps> = ({
                 ]}
               >
                 {msg.sender === 'ai' && (
-                  <Text style={styles.messageEmoji}>🤖</Text>
+                  <MaterialCommunityIcons name="robot" size={24} color="#2C5F2D" style={styles.messageEmoji} />
                 )}
                 <View
                   style={[
@@ -158,7 +159,7 @@ const ItineraryHeader: React.FC<ItineraryHeaderProps> = ({
               onPress={handleSendMessage}
               activeOpacity={0.8}
             >
-              <Text style={styles.sendButtonText}>➤</Text>
+              <MaterialCommunityIcons name="send" size={20} color="#FFFFFF" />
             </TouchableOpacity>
           </View>
         </View>
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
     position: 'relative',
   },
   headerEmoji: {
-    fontSize: 50,
     marginBottom: 16,
   },
   headerTitle: {
@@ -199,9 +199,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
-  },
-  headerInfoIcon: {
-    fontSize: 18,
   },
   headerInfoText: {
     fontSize: 16,
@@ -233,9 +230,6 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 4,
   },
-  aiButtonEmoji: {
-    fontSize: 28,
-  },
 
   // Chat Modal
   chatContainer: {
@@ -257,9 +251,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 12,
   },
-  chatHeaderEmoji: {
-    fontSize: 40,
-  },
   chatHeaderTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -277,11 +268,6 @@ const styles = StyleSheet.create({
     borderRadius: 18,
     alignItems: 'center',
     justifyContent: 'center',
-  },
-  closeButtonText: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    fontWeight: '300',
   },
 
   // Chat Messages
@@ -307,7 +293,6 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-start',
   },
   messageEmoji: {
-    fontSize: 24,
     marginTop: 8,
   },
   messageBubble: {
@@ -371,10 +356,6 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.3,
     shadowRadius: 4,
-  },
-  sendButtonText: {
-    fontSize: 20,
-    color: '#FFFFFF',
   },
 });
 

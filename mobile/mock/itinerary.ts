@@ -32,7 +32,7 @@ export const MOCK_ITINERARY: Itinerary = {
       activities: [
         {
           period: 'Matin',
-          icon: '🌅',
+          icon: 'weather-sunset-up',
           time: '09:00',
           name: 'Médina de Tétouan',
           description: 'Explorez la médina historique, classée UNESCO',
@@ -41,7 +41,7 @@ export const MOCK_ITINERARY: Itinerary = {
         },
         {
           period: 'Après-midi',
-          icon: '☀️',
+          icon: 'weather-sunny',
           time: '14:00',
           name: 'Musée d\'Art Marocain',
           description: 'Découvrez l\'art traditionnel de Tétouan',
@@ -50,7 +50,7 @@ export const MOCK_ITINERARY: Itinerary = {
         },
         {
           period: 'Soir',
-          icon: '🌙',
+          icon: 'weather-night',
           time: '19:30',
           name: 'Restaurant Al Mandari',
           description: 'Dîner traditionnel marocain',
@@ -65,7 +65,7 @@ export const MOCK_ITINERARY: Itinerary = {
       activities: [
         {
           period: 'Matin',
-          icon: '🌅',
+          icon: 'weather-sunset-up',
           time: '10:00',
           name: 'Place Hassan II',
           description: 'Centre-ville animé et marchés locaux',
@@ -74,7 +74,7 @@ export const MOCK_ITINERARY: Itinerary = {
         },
         {
           period: 'Après-midi',
-          icon: '☀️',
+          icon: 'weather-sunny',
           time: '15:00',
           name: 'Souk Artisanal',
           description: 'Shopping d\'artisanat local',
@@ -97,7 +97,7 @@ export const MOCK_ITINERARY_TANGER: Itinerary = {
       activities: [
         {
           period: 'Matin',
-          icon: '🌅',
+          icon: 'weather-sunset-up',
           time: '09:00',
           name: 'Kasbah de Tanger',
           description: 'Découvrez la forteresse historique avec vue sur le détroit',
@@ -106,7 +106,7 @@ export const MOCK_ITINERARY_TANGER: Itinerary = {
         },
         {
           period: 'Après-midi',
-          icon: '☀️',
+          icon: 'weather-sunny',
           time: '14:00',
           name: 'Grottes d\'Hercule',
           description: 'Visitez les grottes mythiques au Cap Spartel',
@@ -115,7 +115,7 @@ export const MOCK_ITINERARY_TANGER: Itinerary = {
         },
         {
           period: 'Soir',
-          icon: '🌙',
+          icon: 'weather-night',
           time: '19:00',
           name: 'Café Hafa',
           description: 'Thé avec vue panoramique sur l\'océan',
@@ -130,7 +130,7 @@ export const MOCK_ITINERARY_TANGER: Itinerary = {
       activities: [
         {
           period: 'Matin',
-          icon: '🌅',
+          icon: 'weather-sunset-up',
           time: '09:30',
           name: 'Médina de Tanger',
           description: 'Promenade dans la vieille ville animée',
@@ -139,7 +139,7 @@ export const MOCK_ITINERARY_TANGER: Itinerary = {
         },
         {
           period: 'Après-midi',
-          icon: '☀️',
+          icon: 'weather-sunny',
           time: '15:00',
           name: 'Cap Spartel',
           description: 'Point de rencontre entre Atlantique et Méditerranée',
@@ -162,7 +162,7 @@ export const MOCK_ITINERARY_CHEFCHAOUEN: Itinerary = {
       activities: [
         {
           period: 'Matin',
-          icon: '🌅',
+          icon: 'weather-sunset-up',
           time: '09:00',
           name: 'Médina Bleue',
           description: 'Explorez les ruelles bleues photogéniques',
@@ -171,7 +171,7 @@ export const MOCK_ITINERARY_CHEFCHAOUEN: Itinerary = {
         },
         {
           period: 'Après-midi',
-          icon: '☀️',
+          icon: 'weather-sunny',
           time: '14:30',
           name: 'Place Outa el Hammam',
           description: 'Centre-ville avec cafés et boutiques d\'artisanat',
@@ -180,7 +180,7 @@ export const MOCK_ITINERARY_CHEFCHAOUEN: Itinerary = {
         },
         {
           period: 'Soir',
-          icon: '🌙',
+          icon: 'weather-night',
           time: '19:00',
           name: 'Restaurant Casa Hassan',
           description: 'Cuisine traditionnelle de montagne',
@@ -195,7 +195,7 @@ export const MOCK_ITINERARY_CHEFCHAOUEN: Itinerary = {
       activities: [
         {
           period: 'Matin',
-          icon: '🌅',
+          icon: 'weather-sunset-up',
           time: '08:00',
           name: 'Cascade d\'Akchour',
           description: 'Randonnée vers les cascades spectaculaires',
@@ -204,7 +204,7 @@ export const MOCK_ITINERARY_CHEFCHAOUEN: Itinerary = {
         },
         {
           period: 'Après-midi',
-          icon: '☀️',
+          icon: 'weather-sunny',
           time: '15:00',
           name: 'Souk d\'Artisanat',
           description: 'Shopping de tissages et produits locaux',

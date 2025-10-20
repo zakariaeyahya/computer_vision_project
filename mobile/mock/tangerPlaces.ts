@@ -23,7 +23,7 @@ export interface Place {
 
 export const TANGER_PLACES: Place[] = [
   {
-    icon: '🏰',
+    icon: 'castle',
     name: 'Kasbah de Tanger',
     description: 'Quartier fortifié avec vues spectaculaires sur le détroit',
     duration: '2-3h',
@@ -54,7 +54,7 @@ export const TANGER_PLACES: Place[] = [
     tags: ['History', 'Architecture', 'Museum', 'Views', 'Photography'],
   },
   {
-    icon: '🌊',
+    icon: 'lighthouse',
     name: 'Cap Spartel',
     description: 'Point de rencontre entre Atlantique et Méditerranée',
     duration: 'Demi-journée',
@@ -85,7 +85,7 @@ export const TANGER_PLACES: Place[] = [
     tags: ['Nature', 'Views', 'Lighthouse', 'Photography', 'Sunset'],
   },
   {
-    icon: '🕌',
+    icon: 'city-variant',
     name: 'Médina de Tanger',
     description: 'Ancien quartier avec souks et architecture traditionnelle',
     duration: '3-4h',
@@ -116,7 +116,7 @@ export const TANGER_PLACES: Place[] = [
     tags: ['Shopping', 'Culture', 'History', 'Food', 'Walking Tour'],
   },
   {
-    icon: '🏛️',
+    icon: 'cave',
     name: 'Grottes d\'Hercule',
     description: 'Grottes légendaires avec ouverture sur l\'océan',
     duration: '1-2h',
@@ -147,7 +147,7 @@ export const TANGER_PLACES: Place[] = [
     tags: ['Nature', 'History', 'Mythology', 'Photography', 'Geology'],
   },
   {
-    icon: '☕',
+    icon: 'coffee',
     name: 'Café Hafa',
     description: 'Café historique avec vue panoramique',
     duration: '1h',

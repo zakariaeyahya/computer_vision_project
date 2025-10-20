@@ -130,22 +130,22 @@ export const MOCK_USER_PROFILE: UserProfile = {
     interests: [
       {
         id: '1',
-        emoji: '⚽',
+        emoji: 'soccer',
         label: 'Football',
       },
       {
         id: '2',
-        emoji: '🍽️',
+        emoji: 'silverware-fork-knife',
         label: 'Gastronomie',
       },
       {
         id: '3',
-        emoji: '🏛️',
+        emoji: 'bank',
         label: 'Culture',
       },
       {
         id: '4',
-        emoji: '🏞️',
+        emoji: 'nature',
         label: 'Nature',
       },
     ],
@@ -172,7 +172,7 @@ export const MOCK_USER_PROFILE: UserProfile = {
       {
         id: '1',
         destination: 'Tétouan',
-        emoji: '🏛️',
+        emoji: 'bank',
         startDate: '2024-08-15',
         endDate: '2024-08-22',
         days: 7,
@@ -182,7 +182,7 @@ export const MOCK_USER_PROFILE: UserProfile = {
       {
         id: '2',
         destination: 'Chefchaouen',
-        emoji: '🔵',
+        emoji: 'water',
         startDate: '2024-09-10',
         endDate: '2024-09-18',
         days: 8,
@@ -207,19 +207,19 @@ export const MOCK_USER_PROFILE: UserProfile = {
     destinationStats: [
       {
         name: 'Tétouan',
-        emoji: '🏛️',
+        emoji: 'bank',
         visits: 1,
         lastVisit: 'Août 2024',
       },
       {
         name: 'Chefchaouen',
-        emoji: '🔵',
+        emoji: 'water',
         visits: 1,
         lastVisit: 'Septembre 2024',
       },
       {
         name: 'Tanger',
-        emoji: '🌊',
+        emoji: 'waves',
         visits: 0,
         lastVisit: 'Jamais visité',
       },
@@ -250,17 +250,17 @@ export const MOCK_USER_PROFILE: UserProfile = {
 export const BUDGET_LEVELS = {
   SMALL: {
     label: 'Petit',
-    emoji: '💰',
+    emoji: 'cash',
     range: '< 500 dh',
   },
   MEDIUM: {
     label: 'Moyen',
-    emoji: '💰💰',
+    emoji: 'cash-multiple',
     range: '500-1000 dh',
   },
   LARGE: {
     label: 'Grand',
-    emoji: '💰💰💰',
+    emoji: 'wallet',
     range: '> 1000 dh',
   },
 };
@@ -301,34 +301,34 @@ export const SETTINGS_OPTIONS = [
 
 // Available interests for selection
 export const AVAILABLE_INTERESTS: Interest[] = [
-  { id: '1', emoji: '⚽', label: 'Football' },
-  { id: '2', emoji: '🍽️', label: 'Gastronomie' },
-  { id: '3', emoji: '🏛️', label: 'Culture' },
-  { id: '4', emoji: '🏞️', label: 'Nature' },
-  { id: '5', emoji: '🏖️', label: 'Plage' },
-  { id: '6', emoji: '⛰️', label: 'Montagne' },
-  { id: '7', emoji: '🎨', label: 'Art' },
-  { id: '8', emoji: '🎭', label: 'Théâtre' },
-  { id: '9', emoji: '🎵', label: 'Musique' },
-  { id: '10', emoji: '📸', label: 'Photographie' },
-  { id: '11', emoji: '🛍️', label: 'Shopping' },
-  { id: '12', emoji: '🏃', label: 'Sport' },
-  { id: '13', emoji: '🧘', label: 'Bien-être' },
-  { id: '14', emoji: '🍷', label: 'Oenologie' },
-  { id: '15', emoji: '🎪', label: 'Festivals' },
-  { id: '16', emoji: '🏰', label: 'Histoire' },
-  { id: '17', emoji: '🐾', label: 'Animaux' },
-  { id: '18', emoji: '🌅', label: 'Paysages' },
+  { id: '1', emoji: 'soccer', label: 'Football' },
+  { id: '2', emoji: 'silverware-fork-knife', label: 'Gastronomie' },
+  { id: '3', emoji: 'bank', label: 'Culture' },
+  { id: '4', emoji: 'nature', label: 'Nature' },
+  { id: '5', emoji: 'beach', label: 'Plage' },
+  { id: '6', emoji: 'image-filter-hdr', label: 'Montagne' },
+  { id: '7', emoji: 'palette', label: 'Art' },
+  { id: '8', emoji: 'theater', label: 'Théâtre' },
+  { id: '9', emoji: 'music', label: 'Musique' },
+  { id: '10', emoji: 'camera', label: 'Photographie' },
+  { id: '11', emoji: 'shopping', label: 'Shopping' },
+  { id: '12', emoji: 'run', label: 'Sport' },
+  { id: '13', emoji: 'meditation', label: 'Bien-être' },
+  { id: '14', emoji: 'glass-wine', label: 'Oenologie' },
+  { id: '15', emoji: 'party-popper', label: 'Festivals' },
+  { id: '16', emoji: 'castle', label: 'Histoire' },
+  { id: '17', emoji: 'paw', label: 'Animaux' },
+  { id: '18', emoji: 'image-filter-hdr', label: 'Paysages' },
 ];
 
 // Travel styles for preferences
 export const TRAVEL_STYLES = [
-  { id: 'adventure', emoji: '🏕️', label: 'Aventurier' },
-  { id: 'relaxation', emoji: '😌', label: 'Détente' },
-  { id: 'cultural', emoji: '🎭', label: 'Culturel' },
-  { id: 'luxury', emoji: '💎', label: 'Luxe' },
-  { id: 'eco', emoji: '🌱', label: 'Écologique' },
-  { id: 'family', emoji: '👨‍👩‍👧‍👦', label: 'Famille' },
+  { id: 'adventure', emoji: 'tent', label: 'Aventurier' },
+  { id: 'relaxation', emoji: 'spa', label: 'Détente' },
+  { id: 'cultural', emoji: 'theater', label: 'Culturel' },
+  { id: 'luxury', emoji: 'diamond', label: 'Luxe' },
+  { id: 'eco', emoji: 'leaf', label: 'Écologique' },
+  { id: 'family', emoji: 'account-group', label: 'Famille' },
 ];
 
 // Language options
@@ -341,16 +341,16 @@ export const LANGUAGE_OPTIONS = [
 
 // Theme options
 export const THEME_OPTIONS = [
-  { id: 'light', label: 'Clair', emoji: '☀️' },
-  { id: 'dark', label: 'Sombre', emoji: '🌙' },
-  { id: 'auto', label: 'Automatique', emoji: '🔄' },
+  { id: 'light', label: 'Clair', emoji: 'weather-sunny' },
+  { id: 'dark', label: 'Sombre', emoji: 'weather-night' },
+  { id: 'auto', label: 'Automatique', emoji: 'theme-light-dark' },
 ];
 
 // Privacy options
 export const PRIVACY_OPTIONS = [
-  { id: 'public', label: 'Public', emoji: '🌍', description: 'Tout le monde peut voir votre profil' },
-  { id: 'friends', label: 'Amis', emoji: '👥', description: 'Seulement vos amis peuvent voir votre profil' },
-  { id: 'private', label: 'Privé', emoji: '🔒', description: 'Votre profil est privé' },
+  { id: 'public', label: 'Public', emoji: 'earth', description: 'Tout le monde peut voir votre profil' },
+  { id: 'friends', label: 'Amis', emoji: 'account-group', description: 'Seulement vos amis peuvent voir votre profil' },
+  { id: 'private', label: 'Privé', emoji: 'lock', description: 'Votre profil est privé' },
 ];
 
 // App info

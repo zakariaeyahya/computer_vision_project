@@ -14,19 +14,19 @@ export const PREFERENCES_BY_DESTINATION: Record<string, Preference[]> = {
       type: 'CULTURE',
       label: 'Culture et Histoire',
       description: 'Médina UNESCO, musées, sites historiques',
-      emoji: '🏛️'
+      emoji: 'bank'
     },
     {
       type: 'NATURE',
       label: 'Nature et Plages',
       description: 'Plages de Martil, montagnes du Rif',
-      emoji: '🌊'
+      emoji: 'waves'
     },
     {
       type: 'GASTRONOMY',
       label: 'Gastronomie',
       description: 'Cuisine andalouse, restaurants traditionnels',
-      emoji: '🍽️'
+      emoji: 'silverware-fork-knife'
     },
   ],
   'Tanger': [
@@ -34,19 +34,19 @@ export const PREFERENCES_BY_DESTINATION: Record<string, Preference[]> = {
       type: 'CULTURE',
       label: 'Patrimoine et Histoire',
       description: 'Kasbah, grottes d\'Hercule, médina',
-      emoji: '🏰'
+      emoji: 'castle'
     },
     {
       type: 'NATURE',
       label: 'Mer et Nature',
       description: 'Cap Spartel, plages, détroit',
-      emoji: '🌊'
+      emoji: 'waves'
     },
     {
       type: 'GASTRONOMY',
       label: 'Gastronomie Cosmopolite',
       description: 'Cuisine internationale, Café Hafa',
-      emoji: '☕'
+      emoji: 'coffee'
     },
   ],
   'Chefchaouen': [
@@ -54,19 +54,19 @@ export const PREFERENCES_BY_DESTINATION: Record<string, Preference[]> = {
       type: 'CULTURE',
       label: 'Photographie et Art',
       description: 'Ville bleue, médina photogénique',
-      emoji: '📸'
+      emoji: 'camera'
     },
     {
       type: 'NATURE',
       label: 'Randonnées et Montagnes',
       description: 'Cascade Akchour, montagnes du Rif',
-      emoji: '⛰️'
+      emoji: 'image-filter-hdr'
     },
     {
       type: 'GASTRONOMY',
       label: 'Artisanat et Gastronomie',
       description: 'Tissage local, restaurants de montagne',
-      emoji: '🛍️'
+      emoji: 'shopping'
     },
   ],
 };

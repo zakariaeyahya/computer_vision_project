@@ -23,7 +23,7 @@ export interface Place {
 
 export const TETOUAN_PLACES: Place[] = [
   {
-    icon: '🕌',
+    icon: 'city',
     name: 'Médina de Tétouan',
     description: 'Patrimoine UNESCO, architecture andalouse unique',
     duration: '3-4h',
@@ -55,7 +55,7 @@ export const TETOUAN_PLACES: Place[] = [
     tags: ['UNESCO', 'History', 'Culture', 'Photography', 'Walking Tour'],
   },
   {
-    icon: '🎨',
+    icon: 'palette',
     name: 'Musée d\'Art Marocain',
     description: 'Collection d\'artisanat et arts traditionnels',
     duration: '1-2h',
@@ -86,7 +86,7 @@ export const TETOUAN_PLACES: Place[] = [
     tags: ['Art', 'Culture', 'Museum', 'Crafts', 'Indoor'],
   },
   {
-    icon: '🏛️',
+    icon: 'bank',
     name: 'Place Hassan II',
     description: 'Centre névralgique de la ville moderne',
     duration: '1h',
@@ -116,7 +116,7 @@ export const TETOUAN_PLACES: Place[] = [
     tags: ['Public Space', 'Photography', 'Cafes', 'Architecture'],
   },
   {
-    icon: '🛍️',
+    icon: 'shopping',
     name: 'Souk Artisanal',
     description: 'Artisanat local, zellige, broderies, bijoux',
     duration: '2-3h',
@@ -147,7 +147,7 @@ export const TETOUAN_PLACES: Place[] = [
     tags: ['Shopping', 'Crafts', 'Souvenirs', 'Traditional', 'Local'],
   },
   {
-    icon: '🌊',
+    icon: 'beach',
     name: 'Plage de Martil',
     description: 'Station balnéaire à 10 km de Tétouan',
     duration: 'Demi-journée',

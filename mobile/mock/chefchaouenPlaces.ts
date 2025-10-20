@@ -23,7 +23,7 @@ export interface Place {
 
 export const CHEFCHAOUEN_PLACES: Place[] = [
   {
-    icon: '🔵',
+    icon: 'water',
     name: 'Médina Bleue',
     description: 'Dédale de ruelles peintes en bleu indigo',
     duration: '3-4h',
@@ -55,7 +55,7 @@ export const CHEFCHAOUEN_PLACES: Place[] = [
     tags: ['Photography', 'Architecture', 'Culture', 'Shopping', 'Walking Tour'],
   },
   {
-    icon: '🕌',
+    icon: 'town-hall',
     name: 'Place Outa el Hammam',
     description: 'Place centrale avec cafés et restaurants',
     duration: '1-2h',
@@ -86,7 +86,7 @@ export const CHEFCHAOUEN_PLACES: Place[] = [
     tags: ['Public Space', 'Cafes', 'Food', 'Social', 'Relaxation'],
   },
   {
-    icon: '🏰',
+    icon: 'fortress',
     name: 'Kasbah et Musée',
     description: 'Forteresse du 15ème siècle avec musée ethnographique',
     duration: '1-2h',
@@ -117,7 +117,7 @@ export const CHEFCHAOUEN_PLACES: Place[] = [
     tags: ['History', 'Museum', 'Architecture', 'Views', 'Gardens'],
   },
   {
-    icon: '💧',
+    icon: 'waterfall',
     name: 'Cascade d\'Akchour',
     description: 'Magnifique cascade accessible par randonnée',
     duration: 'Journée complète',
@@ -148,7 +148,7 @@ export const CHEFCHAOUEN_PLACES: Place[] = [
     tags: ['Hiking', 'Nature', 'Waterfall', 'Swimming', 'Adventure'],
   },
   {
-    icon: '⛰️',
+    icon: 'image-filter-hdr',
     name: 'Mosquée Espagnole',
     description: 'Vue panoramique sur la ville bleue',
     duration: '2h (randonnée)',
