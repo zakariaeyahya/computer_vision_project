@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import VoiceModal from './VoiceModal';
 
 interface HeaderCardProps {
   onProfilePress: () => void;
@@ -13,15 +14,16 @@ export default function HeaderCard({
   onProfilePress, 
   onNotificationPress, 
   onSearchChange, 
-  searchValue 
+  searchValue
 }: HeaderCardProps) {
+  const [voiceModalVisible, setVoiceModalVisible] = useState(false);
   return (
     <View style={styles.container}>
       {/* Header Section */}
       <View style={styles.headerSection}>
         <View style={styles.logoContainer}>
           <View style={styles.logoIconContainer}>
-            <MaterialCommunityIcons name="map-marker" size={20} color="#1A1A1A" />
+            <Text style={styles.logoEmoji}>✈️</Text>
           </View>
           <View style={styles.logoTextContainer}>
             <Text style={styles.logoText}>AtlasGo</Text>
@@ -52,7 +54,10 @@ export default function HeaderCard({
           value={searchValue}
           onChangeText={onSearchChange}
         />
-        <TouchableOpacity style={styles.microphoneButton}>
+        <TouchableOpacity 
+          style={styles.microphoneButton}
+          onPress={() => setVoiceModalVisible(true)}
+        >
           <Feather name="mic" size={18} color="#FFFFFF" />
         </TouchableOpacity>
       </View>
@@ -62,6 +67,14 @@ export default function HeaderCard({
         <MaterialCommunityIcons name="map-marker" size={16} color="#F59E0B" />
         <Text style={styles.locationText}>Casablanca, Morocco</Text>
       </View>
+
+      {/* Voice Modal */}
+      <VoiceModal
+        visible={voiceModalVisible}
+        onClose={() => setVoiceModalVisible(false)}
+        onStart={() => console.log('Voice recording started')}
+        onStop={(duration) => console.log(`Voice recording stopped after ${duration} seconds`)}
+      />
     </View>
   );
 }
@@ -96,6 +109,9 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginRight: 12,
+  },
+  logoEmoji: {
+    fontSize: 20,
   },
   logoTextContainer: {
     flexDirection: 'column',
