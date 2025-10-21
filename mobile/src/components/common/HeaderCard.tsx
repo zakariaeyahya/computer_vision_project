@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import VoiceModal from './VoiceModal';
+import profileImage from '../../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg';
 
 interface HeaderCardProps {
   onProfilePress: () => void;
@@ -37,7 +38,7 @@ export default function HeaderCard({
           </TouchableOpacity>
           <TouchableOpacity style={styles.profileButton} onPress={onProfilePress}>
             <Image 
-              source={require('../../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg')}
+source={profileImage}
               style={styles.profileImage}
             />
           </TouchableOpacity>

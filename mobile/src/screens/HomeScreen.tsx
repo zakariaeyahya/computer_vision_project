@@ -5,8 +5,6 @@ import {
   ScrollView,
   Image,
   TouchableOpacity,
-  Dimensions,
-  TextInput,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
@@ -27,7 +25,7 @@ const CATEGORIES = [
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const { colors, isDark, theme, setTheme } = useTheme();
+  const { colors, isDark} = useTheme();
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Culture']);
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -51,10 +49,6 @@ export default function HomeScreen() {
     return 85 + Math.floor(Math.random() * 10);
   };
 
-  // Fonction pour basculer le thème
-  const toggleTheme = () => {
-    setTheme(isDark ? 'light' : 'dark');
-  };
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
@@ -123,8 +117,8 @@ export default function HomeScreen() {
                 }}
               >
                 <MaterialCommunityIcons 
-                  name={category.icon as any} 
-                  size={18} 
+  name={category.icon}
+  size={18} 
                   color={isActive ? '#FFFFFF' : category.textColor} 
                 />
                 {isActive && (

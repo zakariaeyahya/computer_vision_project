@@ -11,7 +11,6 @@ import {
   Dimensions,
   TouchableOpacity,
   FlatList,
-  Image,
   ImageBackground,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';

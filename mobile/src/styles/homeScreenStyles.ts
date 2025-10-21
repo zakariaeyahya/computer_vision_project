@@ -79,11 +79,6 @@ export const homeScreenStyles = StyleSheet.create({
     color: '#FFFFFF',
     fontWeight: '500',
   },
-  subtitle: {
-    fontSize: 13,
-    color: 'rgba(255, 255, 255, 0.9)',
-    lineHeight: 18,
-  },
 
   // CONTENT CONTAINER
   contentContainer: {

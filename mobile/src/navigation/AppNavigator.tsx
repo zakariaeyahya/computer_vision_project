@@ -7,8 +7,6 @@ import { Feather } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import StartTravelScreen from '../screens/StartTravelScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
-import MyTripsScreen from '../screens/MyTripsScreen';
-import ProfileScreen from '../screens/ProfileScreen';
 import OnboardingScreen from '../screens/OnboardingScreen';
 import PersonalInfoScreen from '../components/profile/PersonalInfoScreen';
 import TravelPreferencesScreen from '../components/profile/TravelPreferencesScreen';
@@ -16,6 +14,7 @@ import StatisticsScreen from '../components/profile/StatisticsScreen';
 import SettingsScreen from '../components/profile/SettingsScreen';
 import DestinationDetailsScreen from '../screens/DestinationDetailsScreen';
 import MapScreen from '../screens/MapScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 // Types for navigation
 export type RootStackParamList = {

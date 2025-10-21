@@ -52,6 +52,16 @@ interface BudgetSelectorProps {
 
   /** Optional custom styles */
   style?: ViewStyle;
+
+  /** Theme colors for dark/light mode */
+  colors?: {
+    background: string;
+    surface: string;
+    text: string;
+    textSecondary: string;
+    primary: string;
+    border: string;
+  };
 }
 
 
@@ -63,6 +73,7 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
   step = 100,
   currency = 'dh',
   style,
+  colors,
 }) => {
   const [isFocused, setIsFocused] = useState(false);
   const inputRef = useRef<TextInput>(null);
@@ -168,13 +179,38 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
   const percentage = getBudgetPercentage();
   const categoryColor = getCategoryColor();
 
+  // Default colors if not provided
+  const defaultColors = {
+    background: '#FFFFFF',
+    surface: '#F8F9FA',
+    text: '#1F2937',
+    textSecondary: '#6B7280',
+    primary: '#2C5F2D',
+    border: '#E5E7EB',
+  };
+
+  const themeColors = colors || defaultColors;
+
   return (
-    <View style={[styles.container, style]}>
+    <View style={[
+      styles.container, 
+      { 
+        backgroundColor: themeColors.surface,
+        borderColor: themeColors.border,
+      }, 
+      style
+    ]}>
       {/* Header: Budget Display */}
       <View style={styles.header}>
         <Text style={styles.emoji}>💰</Text>
         <View style={styles.headerContent}>
-          <Animated.Text style={[styles.budgetValue, { transform: [{ scale: scaleAnim }] }]}>
+          <Animated.Text style={[
+            styles.budgetValue, 
+            { 
+              transform: [{ scale: scaleAnim }],
+              color: themeColors.text,
+            }
+          ]}>
             {formatBudget(value)} {currency}
           </Animated.Text>
           <Text style={[styles.categoryLabel, { color: categoryColor }]}>
@@ -189,6 +225,10 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
         <TouchableOpacity
           style={[
             styles.controlButton,
+            { 
+              backgroundColor: themeColors.surface,
+              borderColor: themeColors.border,
+            },
             value <= minBudget && styles.controlButtonDisabled,
           ]}
           onPress={handleDecrement}
@@ -197,6 +237,7 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
         >
           <Text style={[
             styles.controlButtonText,
+            { color: themeColors.primary },
             value <= minBudget && styles.controlButtonTextDisabled,
           ]}>
             −
@@ -206,7 +247,13 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
         {/* Budget Bar with Input */}
         <View style={styles.barContainer}>
           {/* Progress Bar Background */}
-          <View style={styles.barBackground}>
+          <View style={[
+            styles.barBackground,
+            { 
+              backgroundColor: themeColors.surface,
+              borderColor: themeColors.border,
+            }
+          ]}>
             <View
               style={[
                 styles.barFill,
@@ -223,7 +270,8 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
             ref={inputRef}
             style={[
               styles.input,
-              isFocused && styles.inputFocused,
+              { color: themeColors.text },
+              isFocused && { backgroundColor: themeColors.primary + '10' },
             ]}
             value={formatBudget(value)}
             onChangeText={handleTextChange}
@@ -239,6 +287,10 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
         <TouchableOpacity
           style={[
             styles.controlButton,
+            { 
+              backgroundColor: themeColors.surface,
+              borderColor: themeColors.border,
+            },
             value >= maxBudget && styles.controlButtonDisabled,
           ]}
           onPress={handleIncrement}
@@ -247,6 +299,7 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
         >
           <Text style={[
             styles.controlButtonText,
+            { color: themeColors.primary },
             value >= maxBudget && styles.controlButtonTextDisabled,
           ]}>
             +
@@ -256,23 +309,27 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
 
       {/* Range Labels */}
       <View style={styles.rangeContainer}>
-        <Text style={styles.rangeText}>
+        <Text style={[styles.rangeText, { color: themeColors.textSecondary }]}>
           {formatBudget(minBudget)} {currency}
         </Text>
-        <Text style={styles.rangeText}>
+        <Text style={[styles.rangeText, { color: themeColors.textSecondary }]}>
           {formatBudget(maxBudget)} {currency}
         </Text>
       </View>
 
       {/* Quick Selection Buttons */}
-      <View style={styles.quickSelectContainer}>
-        <Text style={styles.quickSelectLabel}>Choix rapide:</Text>
+      <View style={[styles.quickSelectContainer, { borderTopColor: themeColors.border }]}>
+        <Text style={[styles.quickSelectLabel, { color: themeColors.textSecondary }]}>Choix rapide:</Text>
         <View style={styles.quickSelectButtons}>
           {[500, 1000, 2000, 5000].map((amount) => (
             <TouchableOpacity
               key={amount}
               style={[
                 styles.quickSelectButton,
+                { 
+                  backgroundColor: themeColors.surface,
+                  borderColor: themeColors.border,
+                },
                 value === amount && styles.quickSelectButtonActive,
               ]}
               onPress={() => {
@@ -284,6 +341,7 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
               <Text
                 style={[
                   styles.quickSelectButtonText,
+                  { color: themeColors.textSecondary },
                   value === amount && styles.quickSelectButtonTextActive,
                 ]}
               >
@@ -299,11 +357,9 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#FFFFFF',
     padding: 20,
     borderRadius: 16,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.05,
@@ -328,7 +384,6 @@ const styles = StyleSheet.create({
   budgetValue: {
     fontSize: 32,
     fontWeight: 'bold',
-    color: '#1F2937',
   },
   categoryLabel: {
     fontSize: 14,
@@ -346,12 +401,10 @@ const styles = StyleSheet.create({
   controlButton: {
     width: 48,
     height: 48,
-    backgroundColor: '#F3F4F6',
     borderRadius: 24,
     alignItems: 'center',
     justifyContent: 'center',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
     shadowColor: '#2C5F2D',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
@@ -365,7 +418,6 @@ const styles = StyleSheet.create({
   controlButtonText: {
     fontSize: 28,
     fontWeight: 'bold',
-    color: '#2C5F2D',
   },
   controlButtonTextDisabled: {
     color: '#9CA3AF',
@@ -379,11 +431,9 @@ const styles = StyleSheet.create({
   },
   barBackground: {
     height: '100%',
-    backgroundColor: '#F3F4F6',
     borderRadius: 24,
     overflow: 'hidden',
     borderWidth: 2,
-    borderColor: '#E5E7EB',
   },
   barFill: {
     height: '100%',
@@ -398,11 +448,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#1F2937',
     backgroundColor: 'transparent',
-  },
-  inputFocused: {
-    backgroundColor: 'rgba(44, 95, 45, 0.05)',
   },
 
   // Range
@@ -413,7 +459,6 @@ const styles = StyleSheet.create({
   },
   rangeText: {
     fontSize: 13,
-    color: '#6B7280',
     fontWeight: '500',
   },
 
@@ -421,12 +466,10 @@ const styles = StyleSheet.create({
   quickSelectContainer: {
     paddingTop: 16,
     borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
   },
   quickSelectLabel: {
     fontSize: 14,
     fontWeight: '600',
-    color: '#6B7280',
     marginBottom: 12,
   },
   quickSelectButtons: {
@@ -437,10 +480,8 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 10,
     paddingHorizontal: 12,
-    backgroundColor: '#F9FAFB',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
     alignItems: 'center',
   },
   quickSelectButtonActive: {
@@ -450,7 +491,6 @@ const styles = StyleSheet.create({
   quickSelectButtonText: {
     fontSize: 13,
     fontWeight: '600',
-    color: '#6B7280',
   },
   quickSelectButtonTextActive: {
     color: '#FFFFFF',

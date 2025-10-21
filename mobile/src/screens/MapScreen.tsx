@@ -4,9 +4,8 @@ import {
   Text,
   TouchableOpacity,
   StyleSheet,
-  Dimensions,
 } from 'react-native';
-import { WebView } from 'react-native-webview';
+import { WebView, WebViewMessageEvent } from 'react-native-webview';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useNavigation } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
@@ -114,11 +113,10 @@ export default function MapScreen() {
     }).join('\n');
   };
 
-  const handleMessage = (event: any) => {
+  const handleMessage = (event: WebViewMessageEvent) => {
     const destinationName = event.nativeEvent.data;
-    navigation.navigate('DestinationDetails' as never, {
-      destinationName: destinationName,
-    } as never);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (navigation as any).navigate('DestinationDetails', { destinationName });
   };
 
   const htmlContent = `
