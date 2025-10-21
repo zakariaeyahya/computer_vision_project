@@ -14,6 +14,7 @@ import { DESTINATIONS } from '../../mock/destinations';
 import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
 import { useTheme } from '../context';
 import { homeScreenStyles as styles } from '../styles/homeScreenStyles';
+import { HeaderCard } from '../components/common';
 
 // const { width } = Dimensions.get('window');
 
@@ -28,6 +29,7 @@ export default function HomeScreen() {
   const navigation = useNavigation();
   const { colors, isDark, theme, setTheme } = useTheme();
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Culture']);
+  const [searchValue, setSearchValue] = useState<string>('');
 
   // Helper non typé pour éviter les erreurs TS avec navigate tuples
   const navigateTo = (name: string, params?: unknown) => {
@@ -56,44 +58,15 @@ export default function HomeScreen() {
 
   return (
     <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
-      {/* HEADER */}
-      <View style={[styles.header, { backgroundColor: colors.primary }]}>
-        <View style={styles.headerContent}>
-          <View style={styles.logoContainer}>
-            <View style={[styles.logoIconContainer, { backgroundColor: isDark ? 'rgba(255,255,255,0.2)' : 'rgba(255,255,255,0.3)' }]}>
-              <MaterialCommunityIcons name="star-four-points" size={20} color="#FFFFFF" />
-            </View>
-            <Text style={styles.logoText}>Smart Travel Guide</Text>
-          </View>
-          
-          {/* Theme Toggle Button */}
-          <TouchableOpacity 
-            style={styles.themeToggle}
-            onPress={toggleTheme}
-            activeOpacity={0.9}
-          >
-            <Feather 
-              name={isDark ? 'sun' : 'moon'} 
-              size={20} 
-              color="#FFFFFF" 
-            />
-          </TouchableOpacity>
-          <Text style={styles.subtitle}>
-            Votre compagnon IA pour un tourisme responsable
-          </Text>
-        </View>
-      </View>
+      {/* HEADER CARD */}
+      <HeaderCard
+        onProfilePress={() => navigateTo('Profile')}
+        onNotificationPress={() => console.log('Notification pressed')}
+        onSearchChange={setSearchValue}
+        searchValue={searchValue}
+      />
 
       <View style={styles.contentContainer}>
-        {/* BARRE DE RECHERCHE */}
-        <View style={[styles.searchContainer, { backgroundColor: colors.surface, borderColor: colors.border }]}>
-          <Text style={[styles.searchIcon, { color: colors.textSecondary }]}>⌕</Text>
-          <TextInput
-            style={[styles.searchInput, { color: colors.text }]}
-            placeholder="Où souhaitez-vous aller ?"
-            placeholderTextColor={colors.textSecondary}
-          />
-        </View>
 
         {/* BOUTONS PRINCIPAUX */}
         <View style={styles.buttonsContainer}>

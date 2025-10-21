@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Smart Travel Guide",
-    "slug": "smart-travel-guide",
+    "name": "AtlasGo",
+    "slug": "atlasgo",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
@@ -14,10 +14,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smarttravelguide.app"
+      "bundleIdentifier": "com.atlasgo.app"
     },
     "android": {
-      "package": "com.smarttravelguide.app"
+      "package": "com.atlasgo.app"
     }
   }
 }
