@@ -105,9 +105,9 @@ function MainTabs() {
       />
       <Tab.Screen 
         name="MyTrips" 
-        component={MyTripsScreen}
+        component={MapScreen}
         options={{ 
-          title: 'Mes Voyages',
+          title: 'Explorer',
           tabBarIcon: ({ focused }) => (
             <View
               style={[

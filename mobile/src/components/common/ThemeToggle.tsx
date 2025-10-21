@@ -4,7 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { useTheme } from '../../context';
 
 export default function ThemeToggle() {
-  const { theme, setTheme, colors, isDark } = useTheme();
+  const { setTheme, colors, isDark } = useTheme();
 
   const toggleTheme = () => {
     setTheme(isDark ? 'light' : 'dark');

@@ -3,6 +3,12 @@
  */
 
 import { ImageSourcePropType } from 'react-native';
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const bg1 = require('../assets/images/how-to-plan-a-road-trip-6.jpg') as ImageSourcePropType;
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const bg2 = require('../assets/images/destination-paragraph-tetouan-linstaspot-a-ne-pas-manquer-1747213963.png') as ImageSourcePropType;
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const bg3 = require('../assets/images/plaza-espana-seville-andalousie-villes-espagne-euroipe-travel-for-you.jpg') as ImageSourcePropType;
 
 export interface OnboardingSlide {
   id: string;
@@ -22,7 +28,7 @@ export const onboardingSlides: OnboardingSlide[] = [
     description: 'Get personalized suggestions for destinations, restaurants, and activities based on your preferences.',
     image: '',
     backgroundColor: 'transparent',
-    backgroundImage: require('../assets/images/how-to-plan-a-road-trip-6.jpg'),
+    backgroundImage: bg1,
     textColor: '#000000',
     contentPosition: 'center',
   },
@@ -32,7 +38,7 @@ export const onboardingSlides: OnboardingSlide[] = [
     description: 'Explore destinations with our interactive map and get real-time directions to your favorite spots.',
     image: '',
     backgroundColor: 'transparent',
-    backgroundImage: require('../assets/images/destination-paragraph-tetouan-linstaspot-a-ne-pas-manquer-1747213963.png'),
+    backgroundImage: bg2,
     textColor: '#FFFFFF',
     contentPosition: 'center',
   },
@@ -42,7 +48,7 @@ export const onboardingSlides: OnboardingSlide[] = [
     description: 'Organize your trips, book experiences, and discover eco-friendly activities all in one place.',
     image: '',
     backgroundColor: 'transparent',
-    backgroundImage: require('../assets/images/plaza-espana-seville-andalousie-villes-espagne-euroipe-travel-for-you.jpg'),
+    backgroundImage: bg3,
     textColor: '#FFFFFF',
     contentPosition: 'bottom',
   },

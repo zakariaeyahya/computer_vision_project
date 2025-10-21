@@ -8,7 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
-import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ItineraryHeader from '../components/itinerary/ItineraryHeader';
 import { ITINERARIES_BY_DESTINATION } from '../../mock';

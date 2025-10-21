@@ -15,7 +15,7 @@ import { TETOUAN_PLACES } from '../../mock/tetouanPlaces';
 import { TANGER_PLACES } from '../../mock/tangerPlaces';
 import { CHEFCHAOUEN_PLACES } from '../../mock/chefchaouenPlaces';
 
-const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
+// const { width: screenWidth, height: screenHeight } = Dimensions.get('window');
 
 // Coordonnées GPS des lieux/activités dans chaque ville
 const PLACES_COORDINATES: Record<string, { lat: number; lng: number; city: string; icon: string }> = {
@@ -57,7 +57,7 @@ export default function MapScreen() {
   };
 
   // Générer les marqueurs pour tous les lieux
-  const generateMarkersHTML = () => {
+  const generateMarkersHTML = (): string => {
     return Object.entries(PLACES_COORDINATES).map(([placeName, placeData], index) => {
       const { lat, lng, city, icon } = placeData;
       const color = getCityColor(city);

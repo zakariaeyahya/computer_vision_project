@@ -166,6 +166,31 @@ export default function ProfileScreen() {
           </View>
         </TouchableOpacity>
 
+        {/* Historique de voyages Card */}
+        <View style={styles.card}>
+          <View style={styles.cardHeader}>
+            <View style={styles.cardIconContainer}>
+              <Text style={styles.cardIcon}>📋</Text>
+            </View>
+            <View style={styles.cardHeaderText}>
+              <Text style={styles.cardTitle}>Historique de voyages</Text>
+              <Text style={styles.cardSubtitle}>Vos derniers voyages</Text>
+            </View>
+          </View>
+          <View style={styles.cardDivider} />
+          <View style={styles.cardContent}>
+            {[1,2,3].map((i) => (
+              <View key={i} style={styles.tripHistoryItem}>
+                <View style={styles.tripInfo}>
+                  <Text style={styles.tripTitle}>Voyage #{i}</Text>
+                  <Text style={styles.tripDetails}>2 jours • Budget 800 DH • Tétouan</Text>
+                </View>
+                <Text style={styles.tripArrow}>›</Text>
+              </View>
+            ))}
+          </View>
+        </View>
+
         {/* Theme Toggle Card */}
         <View style={styles.card}>
           <View style={styles.cardHeader}>

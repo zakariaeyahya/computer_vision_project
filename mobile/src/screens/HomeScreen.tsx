@@ -15,7 +15,7 @@ import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
 import { useTheme } from '../context';
 import { homeScreenStyles as styles } from '../styles/homeScreenStyles';
 
-const { width } = Dimensions.get('window');
+// const { width } = Dimensions.get('window');
 
 const CATEGORIES = [
   { id: '1', name: 'Culture', icon: 'bank', bgColor: '#C1272D', textColor: '#FFFFFF' },
@@ -174,7 +174,7 @@ export default function HomeScreen() {
           })}
         </ScrollView>
 
-        {/* SECTION "Destinations Durables" */}
+        {/* SECTION "Destinations Populaires" */}
         <View style={styles.sectionHeader}>
           <Text style={[styles.sectionTitle, { color: colors.text }]}>Destinations Populaires</Text>
         </View>
@@ -244,6 +244,7 @@ export default function HomeScreen() {
             );
           })}
         </ScrollView>
+
       </View>
     </ScrollView>
   );

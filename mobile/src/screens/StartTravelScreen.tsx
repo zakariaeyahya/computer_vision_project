@@ -347,7 +347,7 @@ export default function StartTravelScreen() {
                 onPress={() => setBudgetCategory(cat.value)}
               >
                 <MaterialCommunityIcons 
-                  name={cat.icon as any} 
+                  name={cat.icon as unknown as import('@expo/vector-icons/build/createIconSet').IconName} 
                   size={24} 
                   color={budgetCategory === cat.value ? colors.primary : colors.textSecondary} 
                 />
@@ -407,7 +407,7 @@ export default function StartTravelScreen() {
                 onPress={() => setTransport(opt.value)}
               >
                 <MaterialCommunityIcons 
-                  name={opt.icon as any} 
+                  name={opt.icon as unknown as import('@expo/vector-icons/build/createIconSet').IconName} 
                   size={28} 
                   color={transport === opt.value ? colors.primary : colors.textSecondary} 
                 />
@@ -426,7 +426,7 @@ export default function StartTravelScreen() {
         <View style={localStyles.formSection}>
           <View style={localStyles.labelContainer}>
             <MaterialCommunityIcons name="heart-multiple" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[localStyles.label, { color: colors.text }]}>Centres d'intérêt</Text>
+            <Text style={[localStyles.label, { color: colors.text }]}>Centres d&apos;intérêt</Text>
           </View>
           <Text style={[localStyles.sublabel, { color: colors.textSecondary }]}>
             Sélectionnez vos préférences pour {destination}
@@ -450,7 +450,7 @@ export default function StartTravelScreen() {
                 >
                   <View style={localStyles.preferenceHeader}>
                     <MaterialCommunityIcons 
-                      name={pref.emoji as any} 
+                      name={pref.emoji as unknown as import('@expo/vector-icons/build/createIconSet').IconName} 
                       size={28} 
                       color={isSelected ? colors.primary : colors.textSecondary} 
                     />
