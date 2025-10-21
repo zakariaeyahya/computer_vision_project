@@ -1,11 +1,13 @@
 {
   "expo": {
-    "name": "Smart Travel Guide",
-    "slug": "smart-travel-guide",
+    "name": "AtlasGo",
+    "slug": "atlasgo",
     "version": "1.0.0",
     "orientation": "portrait",
     "userInterfaceStyle": "light",
+    "icon": "./assets/images/ATLASGO.png",
     "splash": {
+      "image": "./assets/images/ATLASGO.png",
       "resizeMode": "contain",
       "backgroundColor": "#2C5F2D"
     },
@@ -14,11 +16,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.smarttravelguide.app"
+      "bundleIdentifier": "com.atlasgo.app"
     },
     "android": {
-      "package": "com.smarttravelguide.app"
+      "package": "com.atlasgo.app"
     }
   }
 }
-

@@ -1,409 +1,219 @@
-import React, { useRef, useState } from 'react';
-import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity, Dimensions, FlatList } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import React, { useState } from 'react';
+import {
+  View,
+  Text,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { DESTINATIONS } from '../../mock';
+import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { DESTINATIONS } from '../../mock/destinations';
+import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
+import { useTheme } from '../context';
+import { homeScreenStyles as styles } from '../styles/homeScreenStyles';
+import { HeaderCard } from '../components/common';
 
-const { width } = Dimensions.get('window');
+// const { width } = Dimensions.get('window');
+
+const CATEGORIES = [
+  { id: '1', name: 'Culture', icon: 'bank', bgColor: '#C1272D', textColor: '#FFFFFF' },
+  { id: '2', name: 'Nature', icon: 'nature', bgColor: '#F4E9D8', textColor: '#1A1A1A' },
+  { id: '3', name: 'Plage', icon: 'beach', bgColor: '#FFF4E6', textColor: '#1A1A1A' },
+  { id: '4', name: 'Montagne', icon: 'image-filter-hdr', bgColor: '#E8E4DD', textColor: '#1A1A1A' },
+];
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const [activeIndex, setActiveIndex] = useState(0);
-  const flatListRef = useRef<FlatList>(null);
-  return (
-    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-      {/* Hero Section */}
-      <LinearGradient
-        colors={['#2C5F2D', '#97BC62']}
-        style={styles.hero}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <Text style={styles.heroEmoji}>🕌</Text>
-        <Text style={styles.title}>Smart Travel Guide</Text>
-        <Text style={styles.subtitle}>Découvrez le Maroc Autrement</Text>
-        <Text style={styles.description}>
-          Planifiez votre voyage intelligent et durable
-        </Text>
-        <TouchableOpacity style={styles.heroButton}>
-          <Text style={styles.heroButtonText}>Commencer un voyage</Text>
-        </TouchableOpacity>
-      </LinearGradient>
+  const { colors, isDark} = useTheme();
+  const [selectedCategories, setSelectedCategories] = useState<string[]>(['Culture']);
+  const [searchValue, setSearchValue] = useState<string>('');
 
-      {/* Destinations Section */}
-      <View style={styles.section}>
-        <View style={styles.sectionHeader}>
-          <View>
-            <Text style={styles.sectionTitle}>Destinations Populaires</Text>
-            <Text style={styles.sectionSubtitle}>Explorez les perles du nord du Maroc</Text>
+  // Helper non typé pour éviter les erreurs TS avec navigate tuples
+  const navigateTo = (name: string, params?: unknown) => {
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (navigation as any).navigate(name, params as any);
+  };
+
+  // Fonction pour calculer le prix par nuit
+  const getPricePerNight = (destinationName: string) => {
+    const itinerary = ITINERARIES_BY_DESTINATION[destinationName];
+    if (itinerary) {
+      return Math.round(itinerary.budget / itinerary.duration / 10) * 10;
+    }
+    return 80;
+  };
+
+  // Fonction pour générer un score écologique aléatoire
+  const getEcoScore = () => {
+    return 85 + Math.floor(Math.random() * 10);
+  };
+
+
+  return (
+    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
+      {/* HEADER CARD */}
+      <HeaderCard
+        onProfilePress={() => navigateTo('Profile')}
+        onNotificationPress={() => console.log('Notification pressed')}
+        onSearchChange={setSearchValue}
+        searchValue={searchValue}
+      />
+
+      <View style={styles.contentContainer}>
+
+        {/* BOUTONS PRINCIPAUX */}
+        <View style={styles.buttonsContainer}>
+          {/* Ligne 1: 2 boutons côte à côte */}
+          <View style={styles.buttonRow}>
+            <TouchableOpacity
+              style={[styles.mainButton, styles.exploreButton]}
+              onPress={() => navigateTo('Map')}
+            >
+              <Text style={styles.buttonIcon}>◈</Text>
+              <Text style={styles.buttonText}>Explorer le{'\n'}Maroc</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={[styles.mainButton, styles.planButton]}
+              onPress={() => navigateTo('MainTabs', { screen: 'StartTravel' })}
+            >
+              <Text style={styles.buttonIcon}>✧</Text>
+              <Text style={styles.buttonText}>Planifier IA</Text>
+            </TouchableOpacity>
           </View>
-          <View style={styles.dotsContainer}>
-            {DESTINATIONS.map((_, index) => (
-              <View
-                key={index}
-                style={[
-                  styles.dot,
-                  activeIndex === index && styles.dotActive,
-                ]}
-              />
-            ))}
-          </View>
+
+          {/* Ligne 2: 1 bouton pleine largeur */}
+          <TouchableOpacity style={styles.eventsButton}>
+            <Text style={styles.eventsButtonText}>◷ Événements à venir</Text>
+          </TouchableOpacity>
         </View>
-        
-        {/* Carrousel de destinations */}
-        <FlatList
-          ref={flatListRef}
-          data={DESTINATIONS}
+
+        {/* FILTRES PAR CATÉGORIE */}
+        <ScrollView
           horizontal
-          pagingEnabled
           showsHorizontalScrollIndicator={false}
-          onScroll={(event) => {
-            const scrollPosition = event.nativeEvent.contentOffset.x;
-            const index = Math.round(scrollPosition / (width - 40));
-            setActiveIndex(index);
-          }}
-          scrollEventThrottle={16}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View style={styles.carouselItem}>
-              <TouchableOpacity style={styles.destinationCard} activeOpacity={0.9}>
-                <LinearGradient
-                  colors={item.colors}
-                  style={styles.destinationGradient}
-                  start={{ x: 0, y: 0 }}
-                  end={{ x: 1, y: 1 }}
-                >
-                  <View style={styles.imageContainer}>
-                    <Image
-                      source={item.image}
-                      style={styles.destinationImage}
-                      resizeMode="cover"
-                    />
-                    <LinearGradient
-                      colors={['transparent', `${item.colors[0]}E6`]}
-                      style={styles.imageOverlay}
-                    />
+          style={styles.categoriesContainer}
+          contentContainerStyle={styles.categoriesContent}
+        >
+          {CATEGORIES.map((category) => {
+            const isActive = selectedCategories.includes(category.name);
+            return (
+              <TouchableOpacity
+                key={category.id}
+                style={[
+                  styles.categoryChip,
+                  {
+                    backgroundColor: isActive ? '#C1272D' : category.bgColor,
+                    borderColor: isActive ? '#C1272D' : '#E8DFD0',
+                  },
+                ]}
+                onPress={() => {
+                  setSelectedCategories((prev) =>
+                    prev.includes(category.name)
+                      ? prev.filter((c) => c !== category.name)
+                      : [...prev, category.name]
+                  );
+                }}
+              >
+                <MaterialCommunityIcons 
+  name={category.icon}
+  size={18} 
+                  color={isActive ? '#FFFFFF' : category.textColor} 
+                />
+                {isActive && (
+                  <View style={styles.categoryCheck}>
+                    <Feather name="check" size={10} color="#FFFFFF" />
                   </View>
-                  
-                  <View style={styles.cardContent}>
-                    <View style={styles.cityBadge}>
-                      <Text style={styles.cityBadgeText}>📍 {item.location}</Text>
-                    </View>
-                    
-                    <Text style={styles.cityName}>{item.name}</Text>
-                    <Text style={styles.cityNickname}>{item.nickname}</Text>
-                    
-                    <View style={styles.cityFeatures}>
-                      {item.features.map((feature: { icon: string; text: string }, index: number) => (
-                        <View key={index} style={styles.feature}>
-                          <Text style={styles.featureIcon}>{feature.icon}</Text>
-                          <Text style={styles.featureText}>{feature.text}</Text>
-                        </View>
-                      ))}
-                    </View>
-                    
-                    <TouchableOpacity 
-                      style={styles.exploreButton}
-                      onPress={() => navigation.navigate(item.route as never)}
+                )}
+                <Text
+                  style={[
+                    styles.categoryText,
+                    {
+                      color: isActive ? '#FFFFFF' : category.textColor,
+                    },
+                  ]}
+                >
+                  {category.name}
+                </Text>
+              </TouchableOpacity>
+            );
+          })}
+        </ScrollView>
+
+        {/* SECTION "Destinations Populaires" */}
+        <View style={styles.sectionHeader}>
+          <Text style={[styles.sectionTitle, { color: colors.text }]}>Destinations Populaires</Text>
+        </View>
+
+        {/* CARTES DE DESTINATIONS - Carrousel horizontal */}
+        <ScrollView
+          horizontal
+          showsHorizontalScrollIndicator={false}
+          contentContainerStyle={styles.destinationsRow}
+        >
+          {DESTINATIONS.map((destination, index) => {
+            const pricePerNight = getPricePerNight(destination.name);
+            const ecoScore = getEcoScore();
+
+            return (
+              <TouchableOpacity
+                key={destination.id}
+                style={[
+                  styles.destinationCardHorizontal,
+                  { backgroundColor: colors.card, borderColor: colors.border },
+                  index === DESTINATIONS.length - 1 ? { marginRight: 20 } : null,
+                ]}
+                activeOpacity={0.9}
+                onPress={() => navigateTo('DestinationDetails', { destinationName: destination.name })}
+              >
+                {/* Image avec overlay */}
+                <View style={styles.imageContainer}>
+                  <Image source={destination.image} style={styles.destinationImage} />
+
+                  {/* Badge écologique */}
+                  <View style={[styles.ecoBadge, { backgroundColor: colors.success }]}>
+                    <MaterialCommunityIcons name="leaf" size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
+                    <Text style={styles.ecoBadgeText}>{ecoScore}%</Text>
+                  </View>
+
+                  {/* Rating */}
+                  <View style={styles.ratingBadge}>
+                    <Text style={styles.ratingText}>★ 4.8</Text>
+                  </View>
+                </View>
+
+                {/* Contenu de la carte */}
+                <View style={styles.cardContent}>
+                  {/* Localisation */}
+                  <Text style={[styles.location, { color: colors.textSecondary }]}>◉ {destination.location}, Maroc</Text>
+
+                  {/* Nom de la destination */}
+                  <Text style={[styles.destinationName, { color: colors.text }]}>{destination.name}</Text>
+
+                  {/* Description */}
+                  <Text style={[styles.description, { color: colors.textSecondary }]} numberOfLines={3}>
+                    {destination.description}
+                  </Text>
+
+                  {/* Footer: Prix + Bouton */}
+                  <View style={styles.cardFooter}>
+                    <Text style={[styles.price, { color: colors.text }]}>{pricePerNight}€/nuit</Text>
+                    <TouchableOpacity
+                      style={[styles.discoverButton, { backgroundColor: colors.accent }]}
+                      onPress={() => navigateTo('DestinationDetails', { destinationName: destination.name })}
                     >
-                      <Text style={styles.exploreButtonText}>Explorer {item.name}</Text>
-                      <Text style={styles.exploreButtonIcon}>→</Text>
+                      <Text style={[styles.discoverButtonText, { color: isDark ? '#1A1A1A' : '#1A1A1A' }]}>Découvrir ›</Text>
                     </TouchableOpacity>
                   </View>
-                </LinearGradient>
+                </View>
               </TouchableOpacity>
-            </View>
-          )}
-        />
+            );
+          })}
+        </ScrollView>
 
-        {/* Navigation Arrows */}
-        {DESTINATIONS.length > 1 && (
-          <View style={styles.arrowsContainer}>
-            <TouchableOpacity
-              style={[styles.arrowButton, activeIndex === 0 && styles.arrowDisabled]}
-              onPress={() => {
-                if (activeIndex > 0) {
-                  flatListRef.current?.scrollToIndex({
-                    index: activeIndex - 1,
-                    animated: true,
-                  });
-                }
-              }}
-              disabled={activeIndex === 0}
-            >
-              <Text style={styles.arrowText}>←</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              style={[
-                styles.arrowButton,
-                activeIndex === DESTINATIONS.length - 1 && styles.arrowDisabled,
-              ]}
-              onPress={() => {
-                if (activeIndex < DESTINATIONS.length - 1) {
-                  flatListRef.current?.scrollToIndex({
-                    index: activeIndex + 1,
-                    animated: true,
-                  });
-                }
-              }}
-              disabled={activeIndex === DESTINATIONS.length - 1}
-            >
-              <Text style={styles.arrowText}>→</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-
-        {/* Info Section dynamique */}
-        <View style={styles.infoSection}>
-          <Text style={styles.infoTitle}>Pourquoi {DESTINATIONS[activeIndex].name} ?</Text>
-          <Text style={styles.infoText}>
-            {DESTINATIONS[activeIndex].description}
-          </Text>
-        </View>
       </View>
     </ScrollView>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  // Hero Section
-  hero: {
-    padding: 32,
-    paddingTop: 60,
-    paddingBottom: 50,
-    alignItems: 'center',
-  },
-  heroEmoji: {
-    fontSize: 60,
-    marginBottom: 20,
-  },
-  title: {
-    fontSize: 32,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: 12,
-  },
-  subtitle: {
-    fontSize: 22,
-    fontWeight: '600',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: 8,
-  },
-  description: {
-    fontSize: 16,
-    color: '#FFFFFF',
-    textAlign: 'center',
-    opacity: 0.9,
-    marginBottom: 24,
-  },
-  heroButton: {
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 32,
-    paddingVertical: 14,
-    borderRadius: 30,
-    marginTop: 10,
-  },
-  heroButtonText: {
-    color: '#2C5F2D',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  
-  // Section
-  section: {
-    padding: 20,
-  },
-  sectionHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 20,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 8,
-  },
-  sectionSubtitle: {
-    fontSize: 16,
-    color: '#6B7280',
-  },
-  dotsContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    marginTop: 8,
-  },
-  dot: {
-    width: 8,
-    height: 8,
-    borderRadius: 4,
-    backgroundColor: '#D1D5DB',
-  },
-  dotActive: {
-    backgroundColor: '#2C5F2D',
-    width: 24,
-  },
-  
-  // Carrousel
-  carouselItem: {
-    width: width - 40,
-    paddingHorizontal: 0,
-  },
-  destinationCard: {
-    borderRadius: 24,
-    overflow: 'hidden',
-    marginBottom: 16,
-    elevation: 8,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 12,
-  },
-  destinationGradient: {
-    minHeight: 500,
-  },
-  imageContainer: {
-    width: '100%',
-    height: 250,
-    position: 'relative',
-  },
-  destinationImage: {
-    width: '100%',
-    height: '100%',
-  },
-  imageOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '50%',
-  },
-  cardContent: {
-    padding: 20,
-  },
-  cityBadge: {
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    alignSelf: 'flex-start',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 20,
-    marginBottom: 12,
-  },
-  cityBadgeText: {
-    color: '#FFFFFF',
-    fontSize: 13,
-    fontWeight: '600',
-  },
-  cityName: {
-    fontSize: 36,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 4,
-  },
-  cityNickname: {
-    fontSize: 18,
-    color: '#FFFFFF',
-    opacity: 0.9,
-    marginBottom: 20,
-    fontStyle: 'italic',
-  },
-  cityFeatures: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 24,
-  },
-  feature: {
-    flex: 1,
-    alignItems: 'center',
-  },
-  featureIcon: {
-    fontSize: 28,
-    marginBottom: 6,
-  },
-  featureText: {
-    color: '#FFFFFF',
-    fontSize: 12,
-    fontWeight: '600',
-    textAlign: 'center',
-  },
-  exploreButton: {
-    backgroundColor: '#FFFFFF',
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 14,
-    borderRadius: 30,
-    gap: 8,
-  },
-  exploreButtonText: {
-    color: '#C41E3A',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  exploreButtonIcon: {
-    color: '#C41E3A',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-
-  // Navigation Arrows
-  arrowsContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    gap: 16,
-    marginBottom: 24,
-  },
-  arrowButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: '#2C5F2D',
-    borderRadius: 24,
-    alignItems: 'center',
-    justifyContent: 'center',
-    elevation: 4,
-    shadowColor: '#2C5F2D',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  arrowDisabled: {
-    backgroundColor: '#D1D5DB',
-    shadowColor: '#9CA3AF',
-  },
-  arrowText: {
-    fontSize: 24,
-    color: '#FFFFFF',
-    fontWeight: '300',
-  },
-  
-  // Info Section
-  infoSection: {
-    backgroundColor: '#FFFFFF',
-    padding: 20,
-    borderRadius: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  infoTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 12,
-  },
-  infoText: {
-    fontSize: 15,
-    color: '#6B7280',
-    lineHeight: 22,
-  },
-});
 

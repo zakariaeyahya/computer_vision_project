@@ -1,31 +1,32 @@
 import React from 'react';
-import { Text } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Feather } from '@expo/vector-icons';
 import HomeScreen from '../screens/HomeScreen';
 import StartTravelScreen from '../screens/StartTravelScreen';
 import ItineraryScreen from '../screens/ItineraryScreen';
-import MyTripsScreen from '../screens/MyTripsScreen';
-import ProfileScreen from '../screens/ProfileScreen';
+import OnboardingScreen from '../screens/OnboardingScreen';
 import PersonalInfoScreen from '../components/profile/PersonalInfoScreen';
 import TravelPreferencesScreen from '../components/profile/TravelPreferencesScreen';
 import StatisticsScreen from '../components/profile/StatisticsScreen';
 import SettingsScreen from '../components/profile/SettingsScreen';
-import TetouanDetailsScreen from '../screens/TetouanDetailsScreen';
-import TangerDetailsScreen from '../screens/TangerDetailsScreen';
-import ChefchaouenDetailsScreen from '../screens/ChefchaouenDetailsScreen';
+import DestinationDetailsScreen from '../screens/DestinationDetailsScreen';
+import MapScreen from '../screens/MapScreen';
+import ProfileScreen from '../screens/ProfileScreen';
 
 // Types for navigation
 export type RootStackParamList = {
+  Onboarding: undefined;
   MainTabs: undefined;
   Itinerary: { id: string };
   PersonalInfo: undefined;
   TravelPreferences: undefined;
   Statistics: undefined;
   Settings: undefined;
-  TetouanDetails: undefined;
-  TangerDetails: undefined;
-  ChefchaouenDetails: undefined;
+  DestinationDetails: { destinationName: string };
+  Map: undefined;
 };
 
 export type TabParamList = {
@@ -40,28 +41,23 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 // Bottom Tab Navigator
 function MainTabs() {
+  const insets = useSafeAreaInsets();
+
   return (
     <Tab.Navigator
       screenOptions={{
         headerShown: false,
-        tabBarActiveTintColor: '#2C5F2D',
-        tabBarInactiveTintColor: '#6B7280',
         tabBarStyle: {
-          height: 78,
-          paddingBottom: 28,
-          paddingTop: 0,
           backgroundColor: '#FFFFFF',
           borderTopWidth: 1,
           borderTopColor: '#E5E7EB',
+          paddingBottom: insets.bottom > 0 ? insets.bottom : 8,
+          paddingTop: 12,
+          height: 60 + (insets.bottom > 0 ? insets.bottom : 8),
         },
-        tabBarLabelStyle: {
-          fontSize: 12,
-          fontWeight: '600',
-          marginTop: 2,
-        },
-        tabBarIconStyle: {
-          marginTop: 3,
-        },
+        tabBarShowLabel: false,
+        tabBarActiveTintColor: '#2C5F2D',
+        tabBarInactiveTintColor: '#9CA3AF',
       }}
     >
       <Tab.Screen 
@@ -69,8 +65,19 @@ function MainTabs() {
         component={HomeScreen}
         options={{ 
           title: 'Accueil',
-          tabBarIcon: ({ color, size }) => (
-            <HomeIcon color={color} size={size} />
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={[
+                styles.iconContainer,
+                focused && { backgroundColor: '#2C5F2D' },
+              ]}
+            >
+              <Feather
+                name="home"
+                size={24}
+                color={focused ? '#FFFFFF' : '#9CA3AF'}
+              />
+            </View>
           ),
         }}
       />
@@ -78,19 +85,41 @@ function MainTabs() {
         name="StartTravel" 
         component={StartTravelScreen}
         options={{ 
-          title: 'Voyage',
-          tabBarIcon: ({ color, size }) => (
-            <TravelIcon color={color} size={size} />
+          title: 'Planificateur IA',
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={[
+                styles.iconContainer,
+                focused && { backgroundColor: '#2C5F2D' },
+              ]}
+            >
+              <Feather
+                name="compass"
+                size={24}
+                color={focused ? '#FFFFFF' : '#9CA3AF'}
+              />
+            </View>
           ),
         }}
       />
       <Tab.Screen 
         name="MyTrips" 
-        component={MyTripsScreen}
+        component={MapScreen}
         options={{ 
-          title: 'Mes Voyages',
-          tabBarIcon: ({ color, size }) => (
-            <TripsIcon color={color} size={size} />
+          title: 'Explorer',
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={[
+                styles.iconContainer,
+                focused && { backgroundColor: '#2C5F2D' },
+              ]}
+            >
+              <Feather
+                name="map-pin"
+                size={24}
+                color={focused ? '#FFFFFF' : '#9CA3AF'}
+              />
+            </View>
           ),
         }}
       />
@@ -99,8 +128,19 @@ function MainTabs() {
         component={ProfileScreen}
         options={{ 
           title: 'Profil',
-          tabBarIcon: ({ color, size }) => (
-            <ProfileIcon color={color} size={size} />
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={[
+                styles.iconContainer,
+                focused && { backgroundColor: '#2C5F2D' },
+              ]}
+            >
+              <Feather
+                name="user"
+                size={24}
+                color={focused ? '#FFFFFF' : '#9CA3AF'}
+              />
+            </View>
           ),
         }}
       />
@@ -108,27 +148,25 @@ function MainTabs() {
   );
 }
 
-// Simple icon components using emojis
-const HomeIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size, color }}>🏠</Text>
-);
-
-const TravelIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size, color }}>✈️</Text>
-);
-
-const TripsIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size, color }}>🧳</Text>
-);
-
-const ProfileIcon = ({ color, size }: { color: string; size: number }) => (
-  <Text style={{ fontSize: size, color }}>👤</Text>
-);
+const styles = StyleSheet.create({
+  iconContainer: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+});
 
 // Main Stack Navigator
 export default function AppNavigator() {
   return (
-    <Stack.Navigator>
+    <Stack.Navigator initialRouteName="Onboarding">
+      <Stack.Screen 
+        name="Onboarding" 
+        component={OnboardingScreen}
+        options={{ headerShown: false }}
+      />
       <Stack.Screen 
         name="MainTabs" 
         component={MainTabs}
@@ -160,18 +198,13 @@ export default function AppNavigator() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
-        name="TetouanDetails"
-        component={TetouanDetailsScreen}
+        name="DestinationDetails"
+        component={DestinationDetailsScreen}
         options={{ headerShown: false }}
       />
-      <Stack.Screen 
-        name="TangerDetails" 
-        component={TangerDetailsScreen}
-        options={{ headerShown: false }}
-      />
-      <Stack.Screen 
-        name="ChefchaouenDetails" 
-        component={ChefchaouenDetailsScreen}
+      <Stack.Screen
+        name="Map"
+        component={MapScreen}
         options={{ headerShown: false }}
       />
     </Stack.Navigator>

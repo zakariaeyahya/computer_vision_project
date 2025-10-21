@@ -221,6 +221,34 @@ export const profileStyles = StyleSheet.create({
     fontWeight: '500',
   },
 
+  // Trip History
+  tripHistoryItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    paddingVertical: 12,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  tripInfo: {
+    flex: 1,
+  },
+  tripTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1F2937',
+    marginBottom: 4,
+  },
+  tripDetails: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  tripArrow: {
+    fontSize: 18,
+    color: '#9CA3AF',
+    fontWeight: '300',
+  },
+
   // Logout Button
   logoutButton: {
     flexDirection: 'row',

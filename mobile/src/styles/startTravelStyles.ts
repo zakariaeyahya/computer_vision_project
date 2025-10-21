@@ -3,279 +3,349 @@ import { StyleSheet } from 'react-native';
 export const startTravelStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
   },
-  
-  // Header
   header: {
-    padding: 32,
+    paddingHorizontal: 20,
     paddingTop: 60,
-    paddingBottom: 40,
-    alignItems: 'center',
+    paddingBottom: 32,
+    position: 'relative',
   },
-  headerEmoji: {
-    fontSize: 50,
-    marginBottom: 16,
+  headerContent: {
+    alignItems: 'center',
   },
   headerTitle: {
     fontSize: 28,
-    fontWeight: 'bold',
+    fontWeight: '700',
     color: '#FFFFFF',
-    textAlign: 'center',
+    marginTop: 12,
     marginBottom: 8,
   },
   headerSubtitle: {
-    fontSize: 16,
-    color: '#FFFFFF',
+    fontSize: 15,
+    color: 'rgba(255, 255, 255, 0.9)',
     textAlign: 'center',
-    opacity: 0.9,
   },
-  
-  // Form Container
+  themeToggle: {
+    position: 'absolute',
+    top: 16,
+    right: 20,
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: 'rgba(255, 255, 255, 0.2)',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
   formContainer: {
     padding: 20,
-    paddingBottom: 40,
   },
   formSection: {
     marginBottom: 28,
   },
-  label: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 12,
-  },
-  sublabel: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 12,
-    marginTop: -8,
-  },
-  
-  // Dropdown
-  dropdown: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 12,
+  labelContainer: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
-    borderWidth: 2,
-    borderColor: '#E5E7EB',
+    marginBottom: 12,
   },
-  dropdownText: {
+  label: {
     fontSize: 16,
-    color: '#1F2937',
     fontWeight: '600',
   },
-  dropdownIcon: {
-    fontSize: 12,
-    color: '#6B7280',
+  sublabel: {
+    fontSize: 13,
+    marginBottom: 16,
   },
-  
-  // Dates
-  dateContainer: {
+  destinationPicker: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 12,
+    borderWidth: 2,
+    padding: 16,
+  },
+  destinationInfo: {
+    flex: 1,
+  },
+  destinationName: {
+    fontSize: 16,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  destinationDetails: {
+    fontSize: 13,
+  },
+  destinationArrow: {
+    fontSize: 18,
+    fontWeight: '300',
+  },
+  dateRow: {
+    flexDirection: 'row',
     gap: 12,
   },
-  dateInput: {
+  dateColumn: {
     flex: 1,
   },
   dateLabel: {
-    fontSize: 14,
-    color: '#6B7280',
+    fontSize: 13,
+    fontWeight: '500',
     marginBottom: 8,
-    fontWeight: '600',
   },
   dateButton: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 14,
+  },
+  dateButtonText: {
+    fontSize: 15,
+    fontWeight: '500',
+  },
+  durationBadgeContainer: {
+    marginTop: 12,
+    alignItems: 'flex-start',
+  },
+  durationBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 6,
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 12,
+    borderWidth: 1,
+  },
+  durationText: {
+    fontSize: 12,
+    fontWeight: '600',
+  },
+  budgetGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  budgetCard: {
+    width: '48%',
     borderRadius: 12,
     borderWidth: 2,
-    borderColor: '#E5E7EB',
+    padding: 16,
+    position: 'relative',
+  },
+  budgetLabel: {
+    fontSize: 15,
+    fontWeight: '600',
+    marginTop: 8,
+    marginBottom: 4,
+  },
+  budgetRange: {
+    fontSize: 12,
+  },
+  budgetCheck: {
+    position: 'absolute',
+    top: 12,
+    right: 12,
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  transportGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  transportCard: {
+    width: '48%',
+    borderRadius: 12,
+    borderWidth: 2,
+    padding: 16,
+    alignItems: 'center',
+    gap: 8,
+  },
+  transportLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+  },
+  preferencesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  preferenceCard: {
+    width: '48%',
+    borderRadius: 12,
+    borderWidth: 2,
+    padding: 14,
+    position: 'relative',
+  },
+  preferenceHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 8,
+  },
+  preferenceCheck: {
+    width: 20,
+    height: 20,
+    borderRadius: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  preferenceLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    marginBottom: 4,
+  },
+  preferenceDescription: {
+    fontSize: 11,
+    lineHeight: 16,
+  },
+  summaryCard: {
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 16,
+    marginTop: 8,
+    marginBottom: 8,
+  },
+  summaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    marginBottom: 16,
+  },
+  summaryTitle: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
+  summaryContent: {
+    gap: 10,
+  },
+  summaryItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 8,
   },
-  dateButtonIcon: {
-    fontSize: 20,
-  },
-  dateButtonText: {
-    fontSize: 16,
-    color: '#1F2937',
-    fontWeight: '600',
-  },
-  dateArrow: {
-    fontSize: 20,
-    color: '#6B7280',
-    marginTop: 20,
-  },
-  
-  // Budget styles are now in BudgetSelector component
-
-  // Checkboxes
-  checkbox: {
-    backgroundColor: '#FFFFFF',
-    padding: 16,
-    borderRadius: 12,
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 12,
-    borderWidth: 2,
-    borderColor: '#E5E7EB',
-  },
-  checkboxActive: {
-    borderColor: '#2C5F2D',
-    backgroundColor: '#F0F9FF',
-  },
-  checkboxBox: {
-    width: 24,
-    height: 24,
-    borderRadius: 6,
-    borderWidth: 2,
-    borderColor: '#D1D5DB',
-    marginRight: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  checkboxBoxActive: {
-    backgroundColor: '#2C5F2D',
-    borderColor: '#2C5F2D',
-  },
-  checkmark: {
-    color: '#FFFFFF',
-    fontSize: 16,
-    fontWeight: 'bold',
-  },
-  checkboxContent: {
-    flexDirection: 'row',
-    alignItems: 'center',
+  summaryLabel: {
+    fontSize: 13,
     flex: 1,
   },
-  checkboxEmoji: {
-    fontSize: 24,
-    marginRight: 12,
-  },
-  checkboxLabel: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1F2937',
-    marginBottom: 2,
-  },
-  checkboxDescription: {
+  summaryValue: {
     fontSize: 13,
-    color: '#6B7280',
+    fontWeight: '600',
   },
-  
-  // Submit Button
   submitButton: {
     marginTop: 12,
-    borderRadius: 30,
-    overflow: 'hidden',
-    elevation: 4,
-    shadowColor: '#2C5F2D',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+    marginBottom: 24,
   },
   submitGradient: {
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
+    gap: 10,
     paddingVertical: 18,
-    gap: 8,
+    borderRadius: 14,
   },
   submitText: {
     color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+    fontSize: 17,
+    fontWeight: '700',
   },
-  submitIcon: {
-    fontSize: 20,
+  dropdown: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    borderRadius: 12,
+    borderWidth: 2,
+    padding: 16,
   },
-
-  // Modal
+  dropdownContent: {
+    flex: 1,
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  dropdownLeft: {
+    flex: 1,
+  },
+  dropdownText: {
+    fontSize: 16,
+    fontWeight: '600',
+  },
   modalOverlay: {
     flex: 1,
     backgroundColor: 'rgba(0, 0, 0, 0.5)',
     justifyContent: 'flex-end',
   },
   modalContent: {
-    backgroundColor: '#FFFFFF',
-    borderTopLeftRadius: 24,
-    borderTopRightRadius: 24,
-    maxHeight: '70%',
-    paddingBottom: 40,
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    maxHeight: '80%',
   },
   modalHeader: {
     flexDirection: 'row',
-    justifyContent: 'space-between',
     alignItems: 'center',
+    justifyContent: 'space-between',
     padding: 20,
     borderBottomWidth: 1,
-    borderBottomColor: '#E5E7EB',
   },
   modalTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#1F2937',
+    fontSize: 18,
+    fontWeight: '700',
   },
   modalCloseButton: {
     width: 32,
     height: 32,
     borderRadius: 16,
-    backgroundColor: '#F3F4F6',
-    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.05)',
     justifyContent: 'center',
-  },
-  modalCloseText: {
-    fontSize: 20,
-    color: '#6B7280',
-    fontWeight: '300',
+    alignItems: 'center',
   },
   destinationList: {
-    padding: 20,
+    padding: 16,
   },
   destinationItem: {
-    backgroundColor: '#F9FAFB',
-    borderRadius: 16,
+    borderRadius: 12,
+    borderWidth: 2,
     marginBottom: 12,
     overflow: 'hidden',
-    borderWidth: 2,
-    borderColor: 'transparent',
-  },
-  destinationItemActive: {
-    borderColor: '#2C5F2D',
-    backgroundColor: '#F0F9FF',
   },
   destinationItemContent: {
     flexDirection: 'row',
     alignItems: 'center',
     padding: 16,
   },
+  destinationIcon: {
+    width: 48,
+    height: 48,
+    borderRadius: 24,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
   destinationEmoji: {
-    fontSize: 36,
-    marginRight: 16,
-  },
-  destinationInfo: {
-    flex: 1,
-  },
-  destinationName: {
-    fontSize: 18,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 4,
+    fontSize: 24,
   },
   destinationNickname: {
-    fontSize: 14,
-    color: '#6B7280',
-    fontStyle: 'italic',
+    fontSize: 12,
+    marginTop: 2,
   },
-  destinationCheck: {
-    fontSize: 24,
-    color: '#2C5F2D',
-    fontWeight: 'bold',
+  checkCircle: {
+    width: 24,
+    height: 24,
+    borderRadius: 12,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginLeft: 'auto',
+  },
+  dateContainer: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  dateInput: {
+    flex: 1,
+    borderRadius: 12,
+    borderWidth: 1,
+    padding: 14,
   },
 });
-

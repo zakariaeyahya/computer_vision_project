@@ -8,6 +8,7 @@ import {
   Alert,
 } from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ItineraryHeader from '../components/itinerary/ItineraryHeader';
 import { ITINERARIES_BY_DESTINATION } from '../../mock';
@@ -44,7 +45,7 @@ export default function ItineraryScreen() {
       <View style={styles.content}>
         {/* Info Card */}
         <View style={styles.infoCard}>
-          <Text style={styles.infoIcon}>ℹ️</Text>
+          <MaterialCommunityIcons name="information" size={24} color="#3B82F6" />
           <Text style={styles.infoText}>
             Cet itinéraire a été personnalisé selon vos préférences
           </Text>
@@ -78,7 +79,7 @@ export default function ItineraryScreen() {
                     {/* Activity Header */}
                     <View style={styles.activityHeader}>
                       <View style={styles.activityPeriod}>
-                        <Text style={styles.periodIcon}>{activity.icon}</Text>
+                        <MaterialCommunityIcons name={activity.icon} size={16} color="#92400E" />
                         <Text style={styles.periodText}>{activity.period}</Text>
                       </View>
                       <Text style={styles.activityTime}>{activity.time}</Text>
@@ -95,8 +96,9 @@ export default function ItineraryScreen() {
                           {activity.description}
                         </Text>
                         <View style={styles.activityMeta}>
+                          <MaterialCommunityIcons name="clock-outline" size={13} color="#9CA3AF" style={{ marginRight: 4 }} />
                           <Text style={styles.activityDuration}>
-                            ⏱️ {activity.duration}
+                            {activity.duration}
                           </Text>
                         </View>
                       </View>
@@ -121,7 +123,7 @@ export default function ItineraryScreen() {
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
             >
-              <Text style={styles.saveIcon}>💾</Text>
+              <MaterialCommunityIcons name="content-save" size={22} color="#FFFFFF" />
               <Text style={styles.saveText}>Sauvegarder ce voyage</Text>
             </LinearGradient>
           </TouchableOpacity>
@@ -131,14 +133,17 @@ export default function ItineraryScreen() {
             onPress={handleModifyTrip}
             activeOpacity={0.8}
           >
-            <Text style={styles.modifyIcon}>✏️</Text>
+            <MaterialCommunityIcons name="pencil" size={20} color="#1F2937" />
             <Text style={styles.modifyText}>Modifier</Text>
           </TouchableOpacity>
         </View>
 
         {/* Tips Card */}
         <View style={styles.tipsCard}>
-          <Text style={styles.tipsTitle}>💡 Conseils pour votre voyage</Text>
+          <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginBottom: 12 }}>
+            <MaterialCommunityIcons name="lightbulb-on" size={20} color="#92400E" />
+            <Text style={styles.tipsTitle}>Conseils pour votre voyage</Text>
+          </View>
           <View style={styles.tipsList}>
             <Text style={styles.tipItem}>• Portez des chaussures confortables pour la médina</Text>
             <Text style={styles.tipItem}>• Négociez les prix dans les souks</Text>
@@ -173,9 +178,6 @@ const styles = StyleSheet.create({
     marginBottom: 24,
     borderLeftWidth: 4,
     borderLeftColor: '#3B82F6',
-  },
-  infoIcon: {
-    fontSize: 24,
   },
   infoText: {
     flex: 1,
@@ -273,9 +275,6 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderRadius: 16,
   },
-  periodIcon: {
-    fontSize: 16,
-  },
   periodText: {
     fontSize: 14,
     fontWeight: '600',
@@ -348,9 +347,6 @@ const styles = StyleSheet.create({
     paddingVertical: 18,
     gap: 10,
   },
-  saveIcon: {
-    fontSize: 22,
-  },
   saveText: {
     fontSize: 17,
     fontWeight: 'bold',
@@ -366,9 +362,6 @@ const styles = StyleSheet.create({
     gap: 10,
     borderWidth: 2,
     borderColor: '#E5E7EB',
-  },
-  modifyIcon: {
-    fontSize: 20,
   },
   modifyText: {
     fontSize: 17,
@@ -388,7 +381,6 @@ const styles = StyleSheet.create({
     fontSize: 17,
     fontWeight: 'bold',
     color: '#92400E',
-    marginBottom: 12,
   },
   tipsList: {
     gap: 8,
