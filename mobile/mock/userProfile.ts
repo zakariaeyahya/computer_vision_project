@@ -140,12 +140,12 @@ export const MOCK_USER_PROFILE: UserProfile = {
       },
       {
         id: '3',
-        emoji: 'bank',
+        emoji: 'city-variant',
         label: 'Culture',
       },
       {
         id: '4',
-        emoji: 'nature',
+        emoji: 'tree',
         label: 'Nature',
       },
     ],
@@ -172,7 +172,7 @@ export const MOCK_USER_PROFILE: UserProfile = {
       {
         id: '1',
         destination: 'Tétouan',
-        emoji: 'bank',
+        emoji: 'city-variant',
         startDate: '2024-08-15',
         endDate: '2024-08-22',
         days: 7,
@@ -207,7 +207,7 @@ export const MOCK_USER_PROFILE: UserProfile = {
     destinationStats: [
       {
         name: 'Tétouan',
-        emoji: 'bank',
+        emoji: 'city-variant',
         visits: 1,
         lastVisit: 'Août 2024',
       },
@@ -303,8 +303,8 @@ export const SETTINGS_OPTIONS = [
 export const AVAILABLE_INTERESTS: Interest[] = [
   { id: '1', emoji: 'soccer', label: 'Football' },
   { id: '2', emoji: 'silverware-fork-knife', label: 'Gastronomie' },
-  { id: '3', emoji: 'bank', label: 'Culture' },
-  { id: '4', emoji: 'nature', label: 'Nature' },
+  { id: '3', emoji: 'city-variant', label: 'Culture' },
+  { id: '4', emoji: 'tree', label: 'Nature' },
   { id: '5', emoji: 'beach', label: 'Plage' },
   { id: '6', emoji: 'image-filter-hdr', label: 'Montagne' },
   { id: '7', emoji: 'palette', label: 'Art' },

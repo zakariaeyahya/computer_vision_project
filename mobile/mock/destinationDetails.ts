@@ -24,7 +24,7 @@ export const DESTINATION_DETAILS: Record<string, DestinationDetail> = {
     places: [],
     highlights: [
       {
-        icon: 'bank',
+        icon: 'city-variant',
         title: 'UNESCO Medina',
         description: 'Preserved Andalusian architecture',
         colors: ['#C41E3A', '#8B0000'],

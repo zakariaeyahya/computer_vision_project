@@ -14,7 +14,7 @@ export const PREFERENCES_BY_DESTINATION: Record<string, Preference[]> = {
       type: 'CULTURE',
       label: 'Culture et Histoire',
       description: 'Médina UNESCO, musées, sites historiques',
-      emoji: 'bank'
+      emoji: 'city-variant'
     },
     {
       type: 'NATURE',
