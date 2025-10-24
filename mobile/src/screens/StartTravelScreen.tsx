@@ -7,9 +7,9 @@ import {
   Platform,
   Modal,
   Alert,
+  StyleSheet,
 } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import {
@@ -19,13 +19,11 @@ import {
   type Preference
 } from '../../mock';
 import { BudgetSelector } from '../components/common/BudgetSelector';
-import { useTheme } from '../context';
-import { startTravelStyles as styles } from '../styles/startTravelStyles';
 
 const MIN_BUDGET = 200;
 const MAX_BUDGET = 10000;
 
-// Budget categories matching the smart planner example
+// Budget categories
 const BUDGET_CATEGORIES = [
   { value: 'petit', label: 'Petit budget', range: '< 500 DH/jour', icon: 'wallet-outline' },
   { value: 'moyen', label: 'Moyen', range: '500-1500 DH/jour', icon: 'cash-outline' },
@@ -38,7 +36,7 @@ const TRANSPORT_OPTIONS = [
   { value: 'car', label: 'Voiture', icon: 'car' },
   { value: 'bus', label: 'Bus', icon: 'bus' },
   { value: 'train', label: 'Train', icon: 'train' },
-  { value: 'mixed', label: 'Mixte', icon: 'map' },
+  { value: 'mixed', label: 'Mixte', icon: 'map-marker-path' },
 ] as const;
 
 type BudgetCategory = typeof BUDGET_CATEGORIES[number]['value'];
@@ -47,7 +45,6 @@ type TransportType = typeof TRANSPORT_OPTIONS[number]['value'];
 export default function StartTravelScreen() {
   const navigation = useNavigation();
   const route = useRoute();
-  const { colors, isDark, setTheme } = useTheme();
 
   // Get preselected destination from navigation params
   // @ts-expect-error - Navigation typing to be fixed
@@ -146,61 +143,34 @@ export default function StartTravelScreen() {
     }, 1500);
   };
 
-  const toggleTheme = () => {
-    setTheme(isDark ? 'light' : 'dark');
-  };
-
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header */}
-      <LinearGradient
-        colors={isDark ? [colors.primary, colors.secondary] : ['#2C5F2D', '#97BC62']}
-        style={styles.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        <View style={styles.headerContent}>
-          <MaterialCommunityIcons name="brain" size={36} color="#FFFFFF" />
-          <Text style={styles.headerTitle}>Planificateur IA</Text>
-          <Text style={styles.headerSubtitle}>
-            Créez votre voyage personnalisé au Maroc
-          </Text>
+      <View style={styles.header}>
+        <View style={styles.headerIcon}>
+          <MaterialCommunityIcons name="airplane-takeoff" size={32} color="#B0CE88" />
         </View>
-        
-        {/* Theme Toggle */}
-        <TouchableOpacity 
-          style={styles.themeToggle}
-          onPress={toggleTheme}
-          activeOpacity={0.7}
-        >
-          <Feather 
-            name={isDark ? 'sun' : 'moon'} 
-            size={20} 
-            color="#FFFFFF" 
-          />
-        </TouchableOpacity>
-      </LinearGradient>
+        <Text style={styles.headerTitle}>Planifier mon voyage</Text>
+        <Text style={styles.headerSubtitle}>
+          Créez votre itinéraire personnalisé en quelques étapes
+        </Text>
+      </View>
 
       {/* Form Container */}
       <View style={styles.formContainer}>
         {/* Destination Section */}
-        <View style={styles.formSection}>
-          <View style={styles.labelContainer}>
-            <Feather name="map-pin" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[styles.label, { color: colors.text }]}>Destination principale</Text>
-          </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Destination</Text>
           <TouchableOpacity
-            style={[styles.dropdown, { backgroundColor: colors.surface, borderColor: colors.border }]}
+            style={styles.selectButton}
             activeOpacity={0.7}
             onPress={() => setShowDestinationPicker(true)}
           >
-            <View style={styles.dropdownContent}>
-              <View style={styles.dropdownLeft}>
-                <MaterialCommunityIcons name="city-variant" size={22} color={colors.primary} />
-                <Text style={[styles.dropdownText, { color: colors.text }]}>{destination}</Text>
-              </View>
-              <Feather name="chevron-down" size={20} color={colors.textSecondary} />
+            <View style={styles.selectButtonLeft}>
+              <MaterialCommunityIcons name="map-marker" size={20} color="#B0CE88" />
+              <Text style={styles.selectButtonText}>{destination}</Text>
             </View>
+            <MaterialCommunityIcons name="chevron-right" size={20} color="#9CA3AF" />
           </TouchableOpacity>
         </View>
 
@@ -212,14 +182,14 @@ export default function StartTravelScreen() {
           onRequestClose={() => setShowDestinationPicker(false)}
         >
           <View style={styles.modalOverlay}>
-            <View style={[styles.modalContent, { backgroundColor: colors.card }]}>
-              <View style={[styles.modalHeader, { borderBottomColor: colors.border }]}>
-                <Text style={[styles.modalTitle, { color: colors.text }]}>Choisir une destination</Text>
+            <View style={styles.modalContent}>
+              <View style={styles.modalHeader}>
+                <Text style={styles.modalTitle}>Choisir une destination</Text>
                 <TouchableOpacity
                   onPress={() => setShowDestinationPicker(false)}
                   style={styles.modalCloseButton}
                 >
-                  <Feather name="x" size={24} color={colors.text} />
+                  <MaterialCommunityIcons name="close" size={24} color="#B0CE88" />
                 </TouchableOpacity>
               </View>
 
@@ -229,8 +199,7 @@ export default function StartTravelScreen() {
                     key={dest.id}
                     style={[
                       styles.destinationItem,
-                      { borderColor: colors.border },
-                      destination === dest.name && { backgroundColor: colors.surface, borderColor: colors.primary }
+                      destination === dest.name && styles.destinationItemActive
                     ]}
                     onPress={() => {
                       setDestination(dest.name);
@@ -238,22 +207,22 @@ export default function StartTravelScreen() {
                       setShowDestinationPicker(false);
                     }}
                   >
-                    <View style={styles.destinationItemContent}>
-                      <View style={[styles.destinationIcon, { backgroundColor: colors.surface }]}>
-                        <Text style={styles.destinationEmoji}>
-                          {dest.features[0]?.icon || '📍'}
-                        </Text>
-                      </View>
-                      <View style={styles.destinationInfo}>
-                        <Text style={[styles.destinationName, { color: colors.text }]}>{dest.name}</Text>
-                        <Text style={[styles.destinationNickname, { color: colors.textSecondary }]}>{dest.nickname}</Text>
-                      </View>
-                      {destination === dest.name && (
-                        <View style={[styles.checkCircle, { backgroundColor: colors.primary }]}>
-                          <Feather name="check" size={16} color="#FFFFFF" />
-                        </View>
-                      )}
+                    <View style={styles.destinationIcon}>
+                      <MaterialCommunityIcons
+                        name={(dest.features[0]?.icon || 'map-marker') as string}
+                        size={28}
+                        color="#B0CE88"
+                      />
                     </View>
+                    <View style={styles.destinationInfo}>
+                      <Text style={styles.destinationName}>{dest.name}</Text>
+                      <Text style={styles.destinationNickname}>{dest.nickname}</Text>
+                    </View>
+                    {destination === dest.name && (
+                      <View style={styles.checkIcon}>
+                        <MaterialCommunityIcons name="check-circle" size={24} color="#B0CE88" />
+                      </View>
+                    )}
                   </TouchableOpacity>
                 ))}
               </ScrollView>
@@ -262,47 +231,42 @@ export default function StartTravelScreen() {
         </Modal>
 
         {/* Dates Section */}
-        <View style={styles.formSection}>
-          <View style={styles.labelContainer}>
-            <Feather name="calendar" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[styles.label, { color: colors.text }]}>Dates du voyage</Text>
-          </View>
-          <View style={styles.dateContainer}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Dates du voyage</Text>
+          <View style={styles.datesContainer}>
             {/* Start Date */}
-            <View style={styles.dateInput}>
-              <Text style={[styles.dateLabel, { color: colors.textSecondary }]}>Début</Text>
+            <View style={styles.dateBox}>
+              <Text style={styles.dateLabel}>Départ</Text>
               <TouchableOpacity
-                style={[styles.dateButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                style={styles.dateButton}
                 onPress={() => setShowStartDatePicker(true)}
               >
-                <Feather name="calendar" size={18} color={colors.primary} />
-                <Text style={[styles.dateButtonText, { color: colors.text }]}>{formatDate(startDate)}</Text>
+                <MaterialCommunityIcons name="calendar" size={18} color="#B0CE88" />
+                <Text style={styles.dateText}>{formatDate(startDate)}</Text>
               </TouchableOpacity>
             </View>
 
-            <Feather name="arrow-right" size={20} color={colors.textSecondary} style={{ marginTop: 28 }} />
+            <MaterialCommunityIcons name="arrow-right" size={20} color="#9CA3AF" style={{ marginTop: 28 }} />
 
             {/* End Date */}
-            <View style={styles.dateInput}>
-              <Text style={[styles.dateLabel, { color: colors.textSecondary }]}>Fin</Text>
+            <View style={styles.dateBox}>
+              <Text style={styles.dateLabel}>Retour</Text>
               <TouchableOpacity
-                style={[styles.dateButton, { backgroundColor: colors.surface, borderColor: colors.border }]}
+                style={styles.dateButton}
                 onPress={() => setShowEndDatePicker(true)}
               >
-                <Feather name="calendar" size={18} color={colors.primary} />
-                <Text style={[styles.dateButtonText, { color: colors.text }]}>{formatDate(endDate)}</Text>
+                <MaterialCommunityIcons name="calendar" size={18} color="#B0CE88" />
+                <Text style={styles.dateText}>{formatDate(endDate)}</Text>
               </TouchableOpacity>
             </View>
           </View>
 
           {/* Duration Badge */}
-          <View style={styles.durationBadgeContainer}>
-            <View style={[styles.durationBadge, { backgroundColor: colors.success + '15', borderColor: colors.success }]}>
-              <Feather name="clock" size={14} color={colors.success} />
-              <Text style={[styles.durationText, { color: colors.success }]}>
-                {duration} jour{duration > 1 ? 's' : ''}
-              </Text>
-            </View>
+          <View style={styles.durationBadge}>
+            <MaterialCommunityIcons name="clock-outline" size={16} color="#B0CE88" />
+            <Text style={styles.durationText}>
+              {duration} jour{duration > 1 ? 's' : ''}
+            </Text>
           </View>
 
           {/* Date Pickers */}
@@ -327,55 +291,38 @@ export default function StartTravelScreen() {
         </View>
 
         {/* Budget Category Section */}
-        <View style={styles.formSection}>
-          <View style={styles.labelContainer}>
-            <MaterialCommunityIcons name="cash-multiple" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[styles.label, { color: colors.text }]}>Catégorie de budget</Text>
-          </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Catégorie de budget</Text>
           <View style={styles.budgetGrid}>
-            {BUDGET_CATEGORIES.map((cat) => (
-              <TouchableOpacity
-                key={cat.value}
-                style={[
-                  styles.budgetCard,
-                  { 
-                    backgroundColor: colors.surface,
-                    borderColor: budgetCategory === cat.value ? colors.primary : colors.border 
-                  },
-                  budgetCategory === cat.value && { backgroundColor: colors.primary + '10' }
-                ]}
-                onPress={() => setBudgetCategory(cat.value)}
-              >
-                <MaterialCommunityIcons 
-                  name={cat.icon as unknown as import('@expo/vector-icons/build/createIconSet').IconName} 
-                  size={24} 
-                  color={budgetCategory === cat.value ? colors.primary : colors.textSecondary} 
-                />
-                <Text style={[
-                  styles.budgetLabel,
-                  { color: budgetCategory === cat.value ? colors.primary : colors.text }
-                ]}>
-                  {cat.label}
-                </Text>
-                <Text style={[styles.budgetRange, { color: colors.textSecondary }]}>
-                  {cat.range}
-                </Text>
-                {budgetCategory === cat.value && (
-                  <View style={[styles.budgetCheck, { backgroundColor: colors.primary }]}>
-                    <Feather name="check" size={12} color="#FFFFFF" />
-                  </View>
-                )}
-              </TouchableOpacity>
-            ))}
+            {BUDGET_CATEGORIES.map((cat) => {
+              const isSelected = budgetCategory === cat.value;
+              return (
+                <TouchableOpacity
+                  key={cat.value}
+                  style={[
+                    styles.budgetCard,
+                    isSelected && styles.budgetCardActive
+                  ]}
+                  onPress={() => setBudgetCategory(cat.value)}
+                >
+                  <MaterialCommunityIcons
+                    name={cat.icon as string}
+                    size={24}
+                    color={isSelected ? '#1A1A1A' : '#6B7280'}
+                  />
+                  <Text style={[styles.budgetLabel, isSelected && styles.budgetLabelActive]}>
+                    {cat.label}
+                  </Text>
+                  <Text style={styles.budgetRange}>{cat.range}</Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
 
         {/* Budget Slider */}
-        <View style={styles.formSection}>
-          <View style={styles.labelContainer}>
-            <MaterialCommunityIcons name="chart-line" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[styles.label, { color: colors.text }]}>Budget précis (optionnel)</Text>
-          </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Budget précis (optionnel)</Text>
           <BudgetSelector
             value={budget}
             onChange={setBudget}
@@ -383,53 +330,50 @@ export default function StartTravelScreen() {
             maxBudget={MAX_BUDGET}
             step={100}
             currency="DH"
-            colors={colors}
+             colors={{
+               background: '#FFFBEB',
+               surface: '#FFFFFF',
+               primary: '#B0CE88',
+               text: '#000000',
+               textSecondary: '#6B7280',
+               border: '#E5E7EB',
+             }}
           />
         </View>
 
         {/* Transport Section */}
-        <View style={styles.formSection}>
-          <View style={styles.labelContainer}>
-            <MaterialCommunityIcons name="car-side" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[styles.label, { color: colors.text }]}>Moyen de transport</Text>
-          </View>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Moyen de transport</Text>
           <View style={styles.transportGrid}>
-            {TRANSPORT_OPTIONS.map((opt) => (
-              <TouchableOpacity
-                key={opt.value}
-                style={[
-                  styles.transportCard,
-                  { 
-                    backgroundColor: colors.surface,
-                    borderColor: transport === opt.value ? colors.primary : colors.border 
-                  },
-                  transport === opt.value && { backgroundColor: colors.primary + '10' }
-                ]}
-                onPress={() => setTransport(opt.value)}
-              >
-                <MaterialCommunityIcons 
-                  name={opt.icon as unknown as import('@expo/vector-icons/build/createIconSet').IconName} 
-                  size={28} 
-                  color={transport === opt.value ? colors.primary : colors.textSecondary} 
-                />
-                <Text style={[
-                  styles.transportLabel,
-                  { color: transport === opt.value ? colors.primary : colors.text }
-                ]}>
-                  {opt.label}
-                </Text>
-              </TouchableOpacity>
-            ))}
+            {TRANSPORT_OPTIONS.map((opt) => {
+              const isSelected = transport === opt.value;
+              return (
+                <TouchableOpacity
+                  key={opt.value}
+                  style={[
+                    styles.transportCard,
+                    isSelected && styles.transportCardActive
+                  ]}
+                  onPress={() => setTransport(opt.value)}
+                >
+                  <MaterialCommunityIcons
+                    name={opt.icon as string}
+                    size={28}
+                    color={isSelected ? '#1A1A1A' : '#6B7280'}
+                  />
+                  <Text style={[styles.transportLabel, isSelected && styles.transportLabelActive]}>
+                    {opt.label}
+                  </Text>
+                </TouchableOpacity>
+              );
+            })}
           </View>
         </View>
 
         {/* Preferences Section */}
-        <View style={styles.formSection}>
-          <View style={styles.labelContainer}>
-            <MaterialCommunityIcons name="heart-multiple" size={18} color={colors.primary} style={{ marginRight: 8 }} />
-            <Text style={[styles.label, { color: colors.text }]}>Centres d&apos;intérêt</Text>
-          </View>
-          <Text style={[styles.sublabel, { color: colors.textSecondary }]}>
+        <View style={styles.section}>
+          <Text style={styles.sectionTitle}>Centres d&apos;intérêt</Text>
+          <Text style={styles.sectionSubtitle}>
             Sélectionnez vos préférences pour {destination}
           </Text>
 
@@ -441,32 +385,23 @@ export default function StartTravelScreen() {
                   key={pref.type}
                   style={[
                     styles.preferenceCard,
-                    { 
-                      backgroundColor: colors.surface,
-                      borderColor: isSelected ? colors.primary : colors.border 
-                    },
-                    isSelected && { backgroundColor: colors.primary + '10' }
+                    isSelected && styles.preferenceCardActive
                   ]}
                   onPress={() => togglePreference(pref.type)}
                 >
-                  <View style={styles.preferenceHeader}>
-                    <MaterialCommunityIcons 
-                      name={pref.emoji as unknown as import('@expo/vector-icons/build/createIconSet').IconName} 
-                      size={28} 
-                      color={isSelected ? colors.primary : colors.textSecondary} 
-                    />
-                    {isSelected && (
-                      <View style={[styles.preferenceCheck, { backgroundColor: colors.primary }]}>
-                        <Feather name="check" size={12} color="#FFFFFF" />
-                      </View>
-                    )}
-                  </View>
-                  <Text style={[styles.preferenceLabel, { color: colors.text }]}>
+                  <MaterialCommunityIcons
+                    name={pref.emoji as string}
+                    size={32}
+                    color={isSelected ? '#FFFFFF' : '#6B7280'}
+                  />
+                  <Text style={[styles.preferenceLabel, isSelected && styles.preferenceLabelActive]}>
                     {pref.label}
                   </Text>
-                  <Text style={[styles.preferenceDescription, { color: colors.textSecondary }]} numberOfLines={2}>
-                    {pref.description}
-                  </Text>
+                  {isSelected && (
+                    <View style={styles.preferenceCheck}>
+                      <MaterialCommunityIcons name="check" size={14} color="#1A1A1A" />
+                    </View>
+                  )}
                 </TouchableOpacity>
               );
             })}
@@ -475,42 +410,40 @@ export default function StartTravelScreen() {
 
         {/* Summary Card */}
         {preferences.length > 0 && (
-          <View style={[styles.summaryCard, { backgroundColor: colors.surface, borderColor: colors.border }]}>
+          <View style={styles.summaryCard}>
             <View style={styles.summaryHeader}>
-              <MaterialCommunityIcons name="clipboard-text" size={20} color={colors.primary} />
-              <Text style={[styles.summaryTitle, { color: colors.text }]}>
-                Résumé de votre voyage
-              </Text>
+              <MaterialCommunityIcons name="clipboard-text-outline" size={22} color="#B0CE88" />
+              <Text style={styles.summaryTitle}>Résumé de votre voyage</Text>
             </View>
+            <View style={styles.summaryDivider} />
             <View style={styles.summaryContent}>
-              <View style={styles.summaryItem}>
-                <Feather name="map-pin" size={14} color={colors.textSecondary} />
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Destination</Text>
-                <Text style={[styles.summaryValue, { color: colors.text }]}>{destination}</Text>
+              <View style={styles.summaryRow}>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Destination</Text>
+                  <Text style={styles.summaryValue}>{destination}</Text>
+                </View>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Durée</Text>
+                  <Text style={styles.summaryValue}>{duration} jours</Text>
+                </View>
               </View>
-              <View style={styles.summaryItem}>
-                <Feather name="calendar" size={14} color={colors.textSecondary} />
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Durée</Text>
-                <Text style={[styles.summaryValue, { color: colors.text }]}>{duration} jours</Text>
+              <View style={styles.summaryRow}>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Budget</Text>
+                  <Text style={styles.summaryValue}>
+                    {BUDGET_CATEGORIES.find(b => b.value === budgetCategory)?.label}
+                  </Text>
+                </View>
+                <View style={styles.summaryItem}>
+                  <Text style={styles.summaryLabel}>Transport</Text>
+                  <Text style={styles.summaryValue}>
+                    {TRANSPORT_OPTIONS.find(t => t.value === transport)?.label}
+                  </Text>
+                </View>
               </View>
-              <View style={styles.summaryItem}>
-                <MaterialCommunityIcons name="wallet" size={14} color={colors.textSecondary} />
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Budget</Text>
-                <Text style={[styles.summaryValue, { color: colors.text }]}>
-                  {BUDGET_CATEGORIES.find(b => b.value === budgetCategory)?.label}
-                </Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <MaterialCommunityIcons name="car" size={14} color={colors.textSecondary} />
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Transport</Text>
-                <Text style={[styles.summaryValue, { color: colors.text }]}>
-                  {TRANSPORT_OPTIONS.find(t => t.value === transport)?.label}
-                </Text>
-              </View>
-              <View style={styles.summaryItem}>
-                <MaterialCommunityIcons name="heart" size={14} color={colors.textSecondary} />
-                <Text style={[styles.summaryLabel, { color: colors.textSecondary }]}>Intérêts</Text>
-                <Text style={[styles.summaryValue, { color: colors.text }]}>
+              <View style={styles.summaryFullRow}>
+                <Text style={styles.summaryLabel}>Centres d&apos;intérêt</Text>
+                <Text style={styles.summaryValue}>
                   {preferences.length} sélectionné{preferences.length > 1 ? 's' : ''}
                 </Text>
               </View>
@@ -520,25 +453,397 @@ export default function StartTravelScreen() {
 
         {/* Submit Button */}
         <TouchableOpacity
-          style={[styles.submitButton, { opacity: isGenerating ? 0.7 : 1 }]}
+          style={[styles.submitButton, isGenerating && styles.submitButtonDisabled]}
           onPress={handleGenerateItinerary}
           activeOpacity={0.8}
           disabled={isGenerating}
         >
-          <LinearGradient
-            colors={isDark ? [colors.primary, colors.secondary] : ['#2C5F2D', '#97BC62']}
-            style={styles.submitGradient}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 0 }}
-          >
-            <MaterialCommunityIcons name="robot-happy" size={24} color="#FFFFFF" />
-            <Text style={styles.submitText}>
-              {isGenerating ? 'Génération en cours...' : 'Générer mon itinéraire IA'}
-            </Text>
-            {isGenerating && <MaterialCommunityIcons name="loading" size={20} color="#FFFFFF" />}
-          </LinearGradient>
+          <MaterialCommunityIcons
+            name={isGenerating ? "loading" : "robot-happy-outline"}
+            size={24}
+            color="#FFFFFF"
+          />
+          <Text style={styles.submitText}>
+            {isGenerating ? 'Génération en cours...' : 'Générer mon itinéraire'}
+          </Text>
         </TouchableOpacity>
       </View>
     </ScrollView>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#FFFBEB',
+  },
+  header: {
+    paddingTop: 60,
+    paddingHorizontal: 24,
+    paddingBottom: 32,
+    alignItems: 'center',
+  },
+  headerIcon: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 16,
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+   headerTitle: {
+     fontSize: 28,
+     fontWeight: '700',
+     color: '#000000',
+     marginBottom: 8,
+     textAlign: 'center',
+   },
+  headerSubtitle: {
+    fontSize: 15,
+    color: '#6B7280',
+    textAlign: 'center',
+    lineHeight: 20,
+  },
+  formContainer: {
+    paddingHorizontal: 20,
+    paddingBottom: 40,
+  },
+  section: {
+    marginBottom: 32,
+  },
+   sectionTitle: {
+     fontSize: 18,
+     fontWeight: '700',
+     color: '#000000',
+     marginBottom: 12,
+   },
+  sectionSubtitle: {
+    fontSize: 14,
+    color: '#6B7280',
+    marginBottom: 16,
+  },
+  selectButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  selectButtonLeft: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+  },
+   selectButtonText: {
+     fontSize: 16,
+     fontWeight: '600',
+     color: '#000000',
+   },
+  modalOverlay: {
+    flex: 1,
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  modalContent: {
+    backgroundColor: '#FFFFFF',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    maxHeight: '80%',
+  },
+  modalHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    padding: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+   modalTitle: {
+     fontSize: 20,
+     fontWeight: '700',
+     color: '#000000',
+   },
+  modalCloseButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  destinationList: {
+    padding: 20,
+  },
+  destinationItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    backgroundColor: '#F9FAFB',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 12,
+    borderWidth: 2,
+    borderColor: '#F9FAFB',
+  },
+  destinationItemActive: {
+    backgroundColor: '#FFFBEB',
+    borderColor: '#B0CE88',
+  },
+  destinationIcon: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  destinationInfo: {
+    flex: 1,
+  },
+   destinationName: {
+     fontSize: 16,
+     fontWeight: '700',
+     color: '#000000',
+     marginBottom: 4,
+   },
+  destinationNickname: {
+    fontSize: 14,
+    color: '#6B7280',
+  },
+  checkIcon: {
+    marginLeft: 8,
+  },
+  datesContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 12,
+  },
+  dateBox: {
+    flex: 1,
+  },
+  dateLabel: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#6B7280',
+    marginBottom: 8,
+  },
+  dateButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 14,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+   dateText: {
+     fontSize: 15,
+     fontWeight: '600',
+     color: '#000000',
+   },
+  durationBadge: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 8,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 20,
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+    marginTop: 16,
+    alignSelf: 'center',
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+   durationText: {
+     fontSize: 14,
+     fontWeight: '700',
+     color: '#000000',
+   },
+  budgetGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  budgetCard: {
+    width: '48%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+  },
+  budgetCardActive: {
+    backgroundColor: '#B0CE88',
+    borderColor: '#B0CE88',
+  },
+   budgetLabel: {
+     fontSize: 14,
+     fontWeight: '700',
+     color: '#000000',
+     marginTop: 8,
+     marginBottom: 4,
+   },
+  budgetLabelActive: {
+    color: '#FFFFFF',
+  },
+  budgetRange: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  transportGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  transportCard: {
+    width: '48%',
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 20,
+    alignItems: 'center',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+  },
+  transportCardActive: {
+    backgroundColor: '#B0CE88',
+    borderColor: '#B0CE88',
+  },
+   transportLabel: {
+     fontSize: 14,
+     fontWeight: '700',
+     color: '#000000',
+     marginTop: 12,
+   },
+  transportLabelActive: {
+    color: '#FFFFFF',
+  },
+  preferencesGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  preferenceCard: {
+    width: '31%',
+    aspectRatio: 1,
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderWidth: 2,
+    borderColor: '#E5E7EB',
+    position: 'relative',
+  },
+  preferenceCardActive: {
+    backgroundColor: '#B0CE88',
+    borderColor: '#B0CE88',
+  },
+   preferenceLabel: {
+     fontSize: 12,
+     fontWeight: '600',
+     color: '#000000',
+     textAlign: 'center',
+     marginTop: 8,
+   },
+  preferenceLabelActive: {
+    color: '#FFFFFF',
+  },
+  preferenceCheck: {
+    position: 'absolute',
+    top: 8,
+    right: 8,
+    width: 22,
+    height: 22,
+    borderRadius: 11,
+    backgroundColor: '#FFFFFF',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  summaryCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 16,
+    padding: 20,
+    marginBottom: 24,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    elevation: 2,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+  },
+  summaryHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 12,
+    marginBottom: 16,
+  },
+   summaryTitle: {
+     fontSize: 18,
+     fontWeight: '700',
+     color: '#000000',
+   },
+  summaryDivider: {
+    height: 1,
+    backgroundColor: '#F3F4F6',
+    marginBottom: 16,
+  },
+  summaryContent: {
+    gap: 12,
+  },
+  summaryRow: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  summaryItem: {
+    flex: 1,
+  },
+  summaryFullRow: {
+    marginTop: 4,
+  },
+  summaryLabel: {
+    fontSize: 13,
+    color: '#6B7280',
+    marginBottom: 4,
+  },
+   summaryValue: {
+     fontSize: 15,
+     fontWeight: '700',
+     color: '#000000',
+   },
+  submitButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    backgroundColor: '#B0CE88',
+    borderRadius: 16,
+    padding: 18,
+    elevation: 3,
+    shadowColor: '#B0CE88',
+    shadowOffset: { width: 0, height: 4 },
+    shadowOpacity: 0.2,
+    shadowRadius: 8,
+  },
+  submitButtonDisabled: {
+    opacity: 0.7,
+  },
+  submitText: {
+    fontSize: 17,
+    fontWeight: '700',
+    color: '#FFFFFF',
+  },
+});

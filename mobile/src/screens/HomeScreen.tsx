@@ -17,8 +17,8 @@ import { HeaderCard } from '../components/common';
 // const { width } = Dimensions.get('window');
 
 const CATEGORIES = [
-  { id: '1', name: 'Culture', icon: 'bank', bgColor: '#C1272D', textColor: '#FFFFFF' },
-  { id: '2', name: 'Nature', icon: 'nature', bgColor: '#F4E9D8', textColor: '#1A1A1A' },
+  { id: '1', name: 'Culture', icon: 'city-variant', bgColor: '#C1272D', textColor: '#FFFFFF' },
+  { id: '2', name: 'Nature', icon: 'tree', bgColor: '#F4E9D8', textColor: '#1A1A1A' },
   { id: '3', name: 'Plage', icon: 'beach', bgColor: '#FFF4E6', textColor: '#1A1A1A' },
   { id: '4', name: 'Montagne', icon: 'image-filter-hdr', bgColor: '#E8E4DD', textColor: '#1A1A1A' },
 ];

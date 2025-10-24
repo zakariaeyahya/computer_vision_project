@@ -1,7 +1,19 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TouchableOpacity, Modal, TextInput, ScrollView } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  TextInput,
+  ScrollView,
+  Alert,
+  Image,
+} from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
+import * as ImagePicker from 'expo-image-picker';
+import * as DocumentPicker from 'expo-document-picker';
+import VoiceModal from '../common/VoiceModal';
 
 interface ItineraryHeaderProps {
   destination: string;
@@ -9,355 +21,558 @@ interface ItineraryHeaderProps {
   budget: number;
 }
 
-const ItineraryHeader: React.FC<ItineraryHeaderProps> = ({
-  destination,
-  duration,
-  budget,
-}) => {
-  const [showChatModal, setShowChatModal] = useState(false);
-  const [message, setMessage] = useState('');
-  const [chatMessages, setChatMessages] = useState([
+interface ChatMessage {
+  id: string;
+  text: string;
+  isUser: boolean;
+  timestamp: Date;
+  type?: 'text' | 'image' | 'audio' | 'document';
+  attachment?: {
+    uri: string;
+    name?: string;
+    size?: number;
+    type?: string;
+  };
+}
+
+export default function ItineraryHeader({ destination, duration, budget }: ItineraryHeaderProps) {
+  const [isChatVisible, setIsChatVisible] = useState(false);
+  const [messages, setMessages] = useState<ChatMessage[]>([
     {
-      id: 1,
-      sender: 'ai',
-      text: `Bonjour ! Je suis votre assistant de voyage pour ${destination}. Comment puis-je vous aider ?`,
+      id: '1',
+      text: `Bonjour ! Je suis votre assistant IA pour votre voyage à ${destination}. Comment puis-je vous aider ?`,
+      isUser: false,
+      timestamp: new Date(),
     },
   ]);
+  const [inputText, setInputText] = useState('');
+  const [voiceModalVisible, setVoiceModalVisible] = useState(false);
 
   const handleSendMessage = () => {
-    if (message.trim() === '') return;
-
-    // Ajouter le message de l'utilisateur
-    const userMessage = {
-      id: chatMessages.length + 1,
-      sender: 'user',
-      text: message,
-    };
-
-    setChatMessages([...chatMessages, userMessage]);
-    setMessage('');
-
-    // Simuler une réponse de l'IA après 1 seconde
-    setTimeout(() => {
-      const aiResponse = {
-        id: chatMessages.length + 2,
-        sender: 'ai',
-        text: 'Je suis un chatbot en cours de développement. Bientôt, je pourrai vous aider avec vos questions sur votre voyage !',
+    if (inputText.trim()) {
+      const newMessage: ChatMessage = {
+        id: Date.now().toString(),
+        text: inputText.trim(),
+        isUser: true,
+        timestamp: new Date(),
+        type: 'text',
       };
-      setChatMessages((prev) => [...prev, aiResponse]);
-    }, 1000);
+      
+      setMessages(prev => [...prev, newMessage]);
+      setInputText('');
+      
+      // Simuler une réponse IA
+      setTimeout(() => {
+        const aiResponse: ChatMessage = {
+          id: (Date.now() + 1).toString(),
+          text: "Merci pour votre message ! Je vais vous aider à personnaliser votre itinéraire.",
+          isUser: false,
+          timestamp: new Date(),
+          type: 'text',
+        };
+        setMessages(prev => [...prev, aiResponse]);
+      }, 1000);
+    }
+  };
+
+  const handlePickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [4, 3],
+        quality: 1,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const newMessage: ChatMessage = {
+          id: Date.now().toString(),
+          text: "Image partagée",
+          isUser: true,
+          timestamp: new Date(),
+          type: 'image',
+          attachment: {
+            uri: result.assets[0].uri,
+            name: result.assets[0].fileName || 'image.jpg',
+            size: result.assets[0].fileSize,
+            type: result.assets[0].type,
+          },
+        };
+        
+        setMessages(prev => [...prev, newMessage]);
+      }
+    } catch {
+      Alert.alert('Erreur', 'Impossible de sélectionner une image');
+    }
+  };
+
+  const handlePickDocument = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        type: ['application/pdf', 'application/msword', 'text/plain'],
+        copyToCacheDirectory: true,
+      });
+
+      if (!result.canceled && result.assets[0]) {
+        const newMessage: ChatMessage = {
+          id: Date.now().toString(),
+          text: "Document partagé",
+          isUser: true,
+          timestamp: new Date(),
+          type: 'document',
+          attachment: {
+            uri: result.assets[0].uri,
+            name: result.assets[0].name,
+            size: result.assets[0].size,
+            type: result.assets[0].mimeType,
+          },
+        };
+        
+        setMessages(prev => [...prev, newMessage]);
+      }
+    } catch {
+      Alert.alert('Erreur', 'Impossible de sélectionner un document');
+    }
+  };
+
+
+  const formatBudget = (amount: number) => {
+    return new Intl.NumberFormat('fr-FR', {
+      style: 'currency',
+      currency: 'EUR',
+    }).format(amount);
   };
 
   return (
     <>
-      <LinearGradient
-        colors={['#C41E3A', '#8B0000']}
-        style={styles.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
-        {/* AI Chatbot Button */}
-        <TouchableOpacity
-          style={styles.aiButton}
-          onPress={() => setShowChatModal(true)}
-          activeOpacity={0.8}
-        >
-          <MaterialCommunityIcons name="robot" size={28} color="#FFFFFF" />
-        </TouchableOpacity>
-
-        <MaterialCommunityIcons name="star-four-points" size={50} color="#FFFFFF" style={styles.headerEmoji} />
-        <Text style={styles.headerTitle}>Votre itinéraire à {destination}</Text>
-        <View style={styles.headerInfo}>
-          <View style={styles.headerInfoItem}>
-            <MaterialCommunityIcons name="calendar-range" size={18} color="#FFFFFF" />
-            <Text style={styles.headerInfoText}>{duration} jours</Text>
-          </View>
-          <View style={styles.headerDivider} />
-          <View style={styles.headerInfoItem}>
-            <MaterialCommunityIcons name="cash-multiple" size={18} color="#FFFFFF" />
-            <Text style={styles.headerInfoText}>{budget} dh</Text>
+      {/* Header Principal */}
+      <View style={styles.header}>
+        {/* Informations du voyage */}
+        <View style={styles.tripInfo}>
+          <Text style={styles.destination}>{destination}</Text>
+          <View style={styles.metaInfo}>
+            <View style={styles.metaItem}>
+              <MaterialCommunityIcons name="calendar-range" size={16} color="#1A1A1A" />
+              <Text style={styles.metaText}>{duration} jour{duration > 1 ? 's' : ''}</Text>
+            </View>
+            <View style={styles.metaItem}>
+              <MaterialCommunityIcons name="currency-eur" size={16} color="#1A1A1A" />
+              <Text style={styles.metaText}>{formatBudget(budget)}</Text>
+            </View>
           </View>
         </View>
-      </LinearGradient>
+
+        {/* Bouton Chat IA */}
+        <TouchableOpacity
+          style={styles.chatButton}
+          onPress={() => setIsChatVisible(true)}
+          activeOpacity={0.8}
+        >
+          <MaterialCommunityIcons name="robot" size={24} color="#FFFFFF" />
+        </TouchableOpacity>
+      </View>
 
       {/* Chat Modal */}
       <Modal
-        visible={showChatModal}
+        visible={isChatVisible}
         animationType="slide"
-        transparent={false}
-        onRequestClose={() => setShowChatModal(false)}
+        transparent={true}
+        onRequestClose={() => setIsChatVisible(false)}
       >
-        <View style={styles.chatContainer}>
-          {/* Chat Header */}
-          <LinearGradient
-            colors={['#2C5F2D', '#97BC62']}
-            style={styles.chatHeader}
-            start={{ x: 0, y: 0 }}
-            end={{ x: 1, y: 1 }}
-          >
-            <View style={styles.chatHeaderContent}>
-              <View style={styles.chatHeaderLeft}>
-                <MaterialCommunityIcons name="robot" size={40} color="#FFFFFF" />
-                <View>
-                  <Text style={styles.chatHeaderTitle}>Assistant IA</Text>
-                  <Text style={styles.chatHeaderSubtitle}>En ligne</Text>
-                </View>
+        <View style={styles.modalOverlay}>
+          <View style={styles.chatContainer}>
+            {/* Header du Chat */}
+            <View style={styles.chatHeader}>
+              <View style={styles.chatHeaderInfo}>
+                <MaterialCommunityIcons name="robot" size={24} color="#1A1A1A" />
+                <Text style={styles.chatTitle}>Assistant IA</Text>
               </View>
               <TouchableOpacity
                 style={styles.closeButton}
-                onPress={() => setShowChatModal(false)}
+                onPress={() => setIsChatVisible(false)}
               >
-                <Feather name="x" size={24} color="#FFFFFF" />
+                <MaterialCommunityIcons name="close" size={24} color="#1A1A1A" />
               </TouchableOpacity>
             </View>
-          </LinearGradient>
 
-          {/* Chat Messages */}
-          <ScrollView style={styles.chatMessages} contentContainerStyle={styles.chatMessagesContent}>
-            {chatMessages.map((msg) => (
-              <View
-                key={msg.id}
-                style={[
-                  styles.messageContainer,
-                  msg.sender === 'user' ? styles.userMessage : styles.aiMessage,
-                ]}
-              >
-                {msg.sender === 'ai' && (
-                  <MaterialCommunityIcons name="robot" size={24} color="#2C5F2D" style={styles.messageEmoji} />
-                )}
+            {/* Messages */}
+            <ScrollView 
+              style={styles.messagesContainer}
+              showsVerticalScrollIndicator={false}
+            >
+              {messages.map((message) => (
                 <View
+                  key={message.id}
                   style={[
-                    styles.messageBubble,
-                    msg.sender === 'user' ? styles.userBubble : styles.aiBubble,
+                    styles.messageContainer,
+                    message.isUser ? styles.userMessage : styles.aiMessage,
                   ]}
                 >
-                  <Text
-                    style={[
-                      styles.messageText,
-                      msg.sender === 'user' ? styles.userText : styles.aiText,
-                    ]}
-                  >
-                    {msg.text}
+                  {/* Message Content */}
+                  {message.type === 'image' && message.attachment && (
+                    <View style={styles.attachmentContainer}>
+                      <Image 
+                        source={{ uri: message.attachment.uri }} 
+                        style={styles.attachmentImage}
+                        resizeMode="cover"
+                      />
+                      <Text style={styles.attachmentName}>{message.attachment.name}</Text>
+                    </View>
+                  )}
+                  
+                  {message.type === 'document' && message.attachment && (
+                    <View style={styles.attachmentContainer}>
+                      <View style={styles.documentIcon}>
+                        <MaterialCommunityIcons name="file-document" size={24} color="#1A1A1A" />
+                      </View>
+                      <View style={styles.documentInfo}>
+                        <Text style={styles.documentName}>{message.attachment.name}</Text>
+                        <Text style={styles.documentSize}>
+                          {message.attachment.size ? `${(message.attachment.size / 1024).toFixed(1)} KB` : 'Taille inconnue'}
+                        </Text>
+                      </View>
+                    </View>
+                  )}
+                  
+                  {message.type === 'audio' && message.attachment && (
+                    <View style={styles.attachmentContainer}>
+                      <View style={styles.audioIcon}>
+                        <MaterialCommunityIcons name="play" size={24} color="#1A1A1A" />
+                      </View>
+                      <View style={styles.audioInfo}>
+                        <Text style={styles.audioName}>Message vocal</Text>
+                        <Text style={styles.audioDuration}>Appuyez pour écouter</Text>
+                      </View>
+                    </View>
+                  )}
+                  
+                  <Text style={[
+                    styles.messageText,
+                    message.isUser ? styles.userMessageText : styles.aiMessageText,
+                  ]}>
+                    {message.text}
+                  </Text>
+                  
+                  <Text style={styles.messageTime}>
+                    {message.timestamp.toLocaleTimeString('fr-FR', {
+                      hour: '2-digit',
+                      minute: '2-digit',
+                    })}
                   </Text>
                 </View>
-              </View>
-            ))}
-          </ScrollView>
+              ))}
+            </ScrollView>
 
-          {/* Chat Input */}
-          <View style={styles.chatInputContainer}>
-            <TextInput
-              style={styles.chatInput}
-              placeholder="Posez votre question..."
-              placeholderTextColor="#9CA3AF"
-              value={message}
-              onChangeText={setMessage}
-              multiline
-            />
-            <TouchableOpacity
-              style={styles.sendButton}
-              onPress={handleSendMessage}
-              activeOpacity={0.8}
-            >
-              <MaterialCommunityIcons name="send" size={20} color="#FFFFFF" />
-            </TouchableOpacity>
+            {/* Input */}
+            <View style={styles.inputContainer}>
+              {/* Media Buttons - Left side */}
+              <View style={styles.mediaButtonsContainer}>
+                <TouchableOpacity 
+                  style={styles.mediaButton}
+                  onPress={handlePickImage}
+                >
+                  <MaterialCommunityIcons name="image" size={20} color="#1A1A1A" />
+                </TouchableOpacity>
+                
+                <TouchableOpacity 
+                  style={styles.mediaButton}
+                  onPress={handlePickDocument}
+                >
+                  <MaterialCommunityIcons name="file-document" size={20} color="#1A1A1A" />
+                </TouchableOpacity>
+              </View>
+              
+              <TextInput
+                style={styles.textInput}
+                placeholder="Posez votre question..."
+                value={inputText}
+                onChangeText={setInputText}
+                multiline
+                maxLength={500}
+              />
+              
+              {/* Right side buttons - Audio and Send */}
+              <View style={styles.rightButtonsContainer}>
+                <TouchableOpacity 
+                  style={styles.microphoneButton}
+                  onPress={() => setVoiceModalVisible(true)}
+                >
+                  <Feather name="mic" size={18} color="#FFFFFF" />
+                </TouchableOpacity>
+                
+                <TouchableOpacity
+                  style={styles.sendButton}
+                  onPress={handleSendMessage}
+                  disabled={!inputText.trim()}
+                >
+                  <MaterialCommunityIcons 
+                    name="send" 
+                    size={20} 
+                    color={inputText.trim() ? "#FFFFFF" : "#9CA3AF"} 
+                  />
+                </TouchableOpacity>
+              </View>
+            </View>
           </View>
         </View>
       </Modal>
+
+      {/* Voice Modal */}
+      <VoiceModal
+        visible={voiceModalVisible}
+        onClose={() => setVoiceModalVisible(false)}
+        onStart={() => console.log('Voice recording started')}
+        onStop={(duration) => console.log(`Voice recording stopped after ${duration} seconds`)}
+      />
     </>
   );
-};
+}
 
 const styles = StyleSheet.create({
   header: {
-    padding: 32,
-    paddingTop: 60,
-    paddingBottom: 40,
-    alignItems: 'center',
-    position: 'relative',
-  },
-  headerEmoji: {
-    marginBottom: 16,
-  },
-  headerTitle: {
-    fontSize: 26,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginBottom: 20,
-  },
-  headerInfo: {
+    backgroundColor: '#FFFBEB',
+    paddingHorizontal: 20,
+    paddingVertical: 20,
+    paddingTop: 50,
     flexDirection: 'row',
+    justifyContent: 'space-between',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 24,
-    paddingVertical: 12,
-    borderRadius: 30,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
+  },
+  tripInfo: {
+    flex: 1,
+  },
+  destination: {
+    fontSize: 24,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 8,
+  },
+  metaInfo: {
+    flexDirection: 'row',
     gap: 16,
   },
-  headerInfoItem: {
+  metaItem: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 6,
   },
-  headerInfoText: {
-    fontSize: 16,
+  metaText: {
+    fontSize: 14,
     fontWeight: '600',
-    color: '#FFFFFF',
+    color: '#6B7280',
   },
-  headerDivider: {
-    width: 1,
-    height: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-  },
-
-  // AI Button
-  aiButton: {
-    position: 'absolute',
-    top: 60,
-    right: 20,
+  chatButton: {
     width: 50,
     height: 50,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
     borderRadius: 25,
-    alignItems: 'center',
+    backgroundColor: '#1A1A1A',
     justifyContent: 'center',
-    borderWidth: 2,
-    borderColor: 'rgba(255, 255, 255, 0.3)',
-    elevation: 4,
-    shadowColor: '#000',
+    alignItems: 'center',
+    elevation: 3,
+    shadowColor: '#1A1A1A',
     shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.2,
     shadowRadius: 4,
   },
-
-  // Chat Modal
-  chatContainer: {
+  modalOverlay: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: 'flex-end',
+  },
+  chatContainer: {
+    backgroundColor: '#FFFBEB',
+    borderTopLeftRadius: 24,
+    borderTopRightRadius: 24,
+    height: '80%',
+    overflow: 'hidden',
   },
   chatHeader: {
-    paddingTop: 50,
-    paddingBottom: 20,
-    paddingHorizontal: 20,
-  },
-  chatHeaderContent: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F3F4F6',
   },
-  chatHeaderLeft: {
+  chatHeaderInfo: {
     flexDirection: 'row',
     alignItems: 'center',
     gap: 12,
   },
-  chatHeaderTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  chatHeaderSubtitle: {
-    fontSize: 14,
-    color: '#FFFFFF',
-    opacity: 0.9,
+  chatTitle: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: '#1A1A1A',
   },
   closeButton: {
-    width: 36,
-    height: 36,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 18,
-    alignItems: 'center',
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#F3F4F6',
     justifyContent: 'center',
+    alignItems: 'center',
   },
-
-  // Chat Messages
-  chatMessages: {
+  messagesContainer: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
-  },
-  chatMessagesContent: {
-    padding: 20,
-    gap: 16,
+    paddingHorizontal: 20,
+    paddingVertical: 16,
   },
   messageContainer: {
-    flexDirection: 'row',
-    gap: 8,
-    marginBottom: 12,
+    marginBottom: 16,
+    maxWidth: '80%',
   },
   userMessage: {
-    justifyContent: 'flex-end',
     alignSelf: 'flex-end',
+    backgroundColor: '#1A1A1A',
+    borderRadius: 16,
+    borderBottomRightRadius: 4,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
   },
   aiMessage: {
-    justifyContent: 'flex-start',
     alignSelf: 'flex-start',
-  },
-  messageEmoji: {
-    marginTop: 8,
-  },
-  messageBubble: {
-    maxWidth: '75%',
-    padding: 14,
-    borderRadius: 16,
-  },
-  userBubble: {
-    backgroundColor: '#2C5F2D',
-    borderBottomRightRadius: 4,
-  },
-  aiBubble: {
     backgroundColor: '#FFFFFF',
+    borderRadius: 16,
     borderBottomLeftRadius: 4,
-    elevation: 1,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    borderWidth: 1,
+    borderColor: '#F3F4F6',
   },
   messageText: {
     fontSize: 15,
-    lineHeight: 22,
+    lineHeight: 20,
   },
-  userText: {
+  userMessageText: {
     color: '#FFFFFF',
   },
-  aiText: {
-    color: '#1F2937',
+  aiMessageText: {
+    color: '#1A1A1A',
   },
-
-  // Chat Input
-  chatInputContainer: {
+  messageTime: {
+    fontSize: 12,
+    color: '#9CA3AF',
+    marginTop: 4,
+    textAlign: 'right',
+  },
+  inputContainer: {
     flexDirection: 'row',
-    padding: 16,
-    backgroundColor: '#FFFFFF',
-    borderTopWidth: 1,
-    borderTopColor: '#E5E7EB',
-    gap: 12,
     alignItems: 'flex-end',
-  },
-  chatInput: {
-    flex: 1,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 24,
     paddingHorizontal: 20,
+    paddingVertical: 16,
+    borderTopWidth: 1,
+    borderTopColor: '#F3F4F6',
+    backgroundColor: '#FFFFFF',
+    gap: 12,
+  },
+  textInput: {
+    flex: 1,
+    backgroundColor: '#F9FAFB',
+    borderRadius: 20,
+    paddingHorizontal: 16,
     paddingVertical: 12,
     fontSize: 15,
-    color: '#1F2937',
+    color: '#1A1A1A',
     maxHeight: 100,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
   },
   sendButton: {
-    width: 48,
-    height: 48,
-    backgroundColor: '#2C5F2D',
-    borderRadius: 24,
-    alignItems: 'center',
+    width: 44,
+    height: 44,
+    borderRadius: 22,
+    backgroundColor: '#1A1A1A',
     justifyContent: 'center',
-    elevation: 2,
-    shadowColor: '#2C5F2D',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    alignItems: 'center',
+  },
+  // Media buttons styles
+  mediaButtonsContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 8,
+  },
+  rightButtonsContainer: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'center',
+  },
+  mediaButton: {
+    width: 36,
+    height: 36,
+    borderRadius: 18,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  microphoneButton: {
+    width: 32,
+    height: 32,
+    borderRadius: 16,
+    backgroundColor: '#1A1A1A',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 8,
+  },
+  // Attachment styles
+  attachmentContainer: {
+    marginBottom: 8,
+  },
+  attachmentImage: {
+    width: 200,
+    height: 150,
+    borderRadius: 8,
+    marginBottom: 4,
+  },
+  attachmentName: {
+    fontSize: 12,
+    color: '#6B7280',
+    fontStyle: 'italic',
+  },
+  documentIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  documentInfo: {
+    flex: 1,
+  },
+  documentName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 2,
+  },
+  documentSize: {
+    fontSize: 12,
+    color: '#6B7280',
+  },
+  audioIcon: {
+    width: 40,
+    height: 40,
+    borderRadius: 20,
+    backgroundColor: '#F3F4F6',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  audioInfo: {
+    flex: 1,
+  },
+  audioName: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 2,
+  },
+  audioDuration: {
+    fontSize: 12,
+    color: '#6B7280',
   },
 });
-
-export default ItineraryHeader;
-
