@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -11,11 +11,16 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import ItineraryHeader from '../components/itinerary/ItineraryHeader';
+import DayCard from '../components/itinerary/DayCard';
+import ActivityDetailModal from '../components/travel/ActivityDetailModal';
 import { ITINERARIES_BY_DESTINATION } from '../../mock';
+import type { Activity } from '../../mock/itinerary';
 
 export default function ItineraryScreen() {
   const navigation = useNavigation();
   const route = useRoute();
+  const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
+  const [isModalVisible, setIsModalVisible] = useState(false);
 
   // Get parameters from navigation
   // @ts-expect-error - Navigation typing to be fixed
@@ -31,6 +36,31 @@ export default function ItineraryScreen() {
 
   const handleModifyTrip = () => {
     navigation.goBack();
+  };
+
+  const handleActivityPress = (activity: Activity) => {
+    console.log('=== handleActivityPress called ===');
+    console.log('Activity pressed:', activity.name);
+    console.log('Activity object:', activity);
+    setSelectedActivity(activity);
+    setIsModalVisible(true);
+    console.log('Modal should be visible now');
+    console.log('=== End handleActivityPress ===');
+  };
+
+  const handleCloseModal = () => {
+    setIsModalVisible(false);
+    setTimeout(() => setSelectedActivity(null), 300);
+  };
+
+  const handleAddToItinerary = () => {
+    Alert.alert('Succès', 'Activité ajoutée à votre itinéraire !');
+    handleCloseModal();
+  };
+
+  const handleGetDirections = () => {
+    Alert.alert('Directions', 'Ouverture de l\'application de navigation...');
+    handleCloseModal();
   };
 
   return (
@@ -52,63 +82,16 @@ export default function ItineraryScreen() {
         </View>
 
         {/* Days List */}
-        {itinerary.days.map((day, dayIndex) => (
-          <View key={dayIndex} style={styles.dayContainer}>
-            {/* Day Header */}
-            <View style={styles.dayHeader}>
-              <View style={styles.dayBadge}>
-                <Text style={styles.dayBadgeText}>Jour {day.day}</Text>
-              </View>
-              <Text style={styles.dayDate}>{day.date}</Text>
-            </View>
-
-            {/* Activities */}
-            <View style={styles.activitiesContainer}>
-              {day.activities.map((activity, activityIndex) => (
-                <View key={activityIndex} style={styles.activityCard}>
-                  {/* Timeline dot */}
-                  <View style={styles.timelineContainer}>
-                    <View style={styles.timelineDot} />
-                    {activityIndex < day.activities.length - 1 && (
-                      <View style={styles.timelineLine} />
-                    )}
-                  </View>
-
-                  {/* Activity Content */}
-                  <View style={styles.activityContent}>
-                    {/* Activity Header */}
-                    <View style={styles.activityHeader}>
-                      <View style={styles.activityPeriod}>
-                        <MaterialCommunityIcons name={activity.icon} size={16} color="#92400E" />
-                        <Text style={styles.periodText}>{activity.period}</Text>
-                      </View>
-                      <Text style={styles.activityTime}>{activity.time}</Text>
-                    </View>
-
-                    {/* Activity Body */}
-                    <View style={styles.activityBody}>
-                      <View style={styles.activityImageContainer}>
-                        <Text style={styles.activityImage}>{activity.image}</Text>
-                      </View>
-                      <View style={styles.activityDetails}>
-                        <Text style={styles.activityName}>{activity.name}</Text>
-                        <Text style={styles.activityDescription}>
-                          {activity.description}
-                        </Text>
-                        <View style={styles.activityMeta}>
-                          <MaterialCommunityIcons name="clock-outline" size={13} color="#9CA3AF" style={{ marginRight: 4 }} />
-                          <Text style={styles.activityDuration}>
-                            {activity.duration}
-                          </Text>
-                        </View>
-                      </View>
-                    </View>
-                  </View>
-                </View>
-              ))}
-            </View>
-          </View>
-        ))}
+        {itinerary.days.map((day, dayIndex) => {
+          console.log(`Rendering DayCard ${dayIndex} with ${day.activities.length} activities`);
+          return (
+            <DayCard
+              key={dayIndex}
+              day={day}
+              onActivityPress={handleActivityPress}
+            />
+          );
+        })}
 
         {/* Action Buttons */}
         <View style={styles.actionsContainer}>
@@ -118,7 +101,7 @@ export default function ItineraryScreen() {
             activeOpacity={0.8}
           >
             <LinearGradient
-              colors={['#2C5F2D', '#97BC62']}
+              colors={['#1A1A1A', '#2D2D2D']}
               style={styles.saveGradient}
               start={{ x: 0, y: 0 }}
               end={{ x: 1, y: 0 }}
@@ -126,15 +109,6 @@ export default function ItineraryScreen() {
               <MaterialCommunityIcons name="content-save" size={22} color="#FFFFFF" />
               <Text style={styles.saveText}>Sauvegarder ce voyage</Text>
             </LinearGradient>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={styles.modifyButton}
-            onPress={handleModifyTrip}
-            activeOpacity={0.8}
-          >
-            <MaterialCommunityIcons name="pencil" size={20} color="#1F2937" />
-            <Text style={styles.modifyText}>Modifier</Text>
           </TouchableOpacity>
         </View>
 
@@ -151,6 +125,21 @@ export default function ItineraryScreen() {
           </View>
         </View>
       </View>
+
+      {/* Activity Detail Modal */}
+      {console.log('Rendering modal with visibility:', isModalVisible, 'activity:', selectedActivity?.name)}
+      {isModalVisible && (
+        <ActivityDetailModal
+          visible={isModalVisible}
+          activity={selectedActivity}
+          onClose={handleCloseModal}
+          onAddToItinerary={handleAddToItinerary}
+          onGetDirections={handleGetDirections}
+          cityName={itinerary.destination}
+          activityPrice={45} // Prix par défaut
+          ecoScore={undefined} // Pas de score éco par défaut
+        />
+      )}
     </ScrollView>
   );
 }
@@ -186,144 +175,6 @@ const styles = StyleSheet.create({
     lineHeight: 20,
   },
 
-  // Day Container
-  dayContainer: {
-    marginBottom: 32,
-  },
-  dayHeader: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 20,
-    gap: 12,
-  },
-  dayBadge: {
-    backgroundColor: '#C41E3A',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
-    borderRadius: 20,
-  },
-  dayBadgeText: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-  },
-  dayDate: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-
-  // Activities
-  activitiesContainer: {
-    marginLeft: 8,
-  },
-  activityCard: {
-    flexDirection: 'row',
-    marginBottom: 4,
-  },
-
-  // Timeline
-  timelineContainer: {
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  timelineDot: {
-    width: 16,
-    height: 16,
-    borderRadius: 8,
-    backgroundColor: '#C41E3A',
-    borderWidth: 3,
-    borderColor: '#FFFFFF',
-    elevation: 2,
-    shadowColor: '#C41E3A',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
-  },
-  timelineLine: {
-    width: 2,
-    flex: 1,
-    backgroundColor: '#E5E7EB',
-    marginVertical: 4,
-  },
-
-  // Activity Content
-  activityContent: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 16,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  activityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: 12,
-  },
-  activityPeriod: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-    backgroundColor: '#FEF3C7',
-    paddingHorizontal: 12,
-    paddingVertical: 6,
-    borderRadius: 16,
-  },
-  periodText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#92400E',
-  },
-  activityTime: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#6B7280',
-  },
-  activityBody: {
-    flexDirection: 'row',
-    gap: 12,
-  },
-  activityImageContainer: {
-    width: 70,
-    height: 70,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  activityImage: {
-    fontSize: 36,
-  },
-  activityDetails: {
-    flex: 1,
-  },
-  activityName: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 4,
-  },
-  activityDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    lineHeight: 20,
-    marginBottom: 8,
-  },
-  activityMeta: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  activityDuration: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    fontWeight: '500',
-  },
 
   // Actions
   actionsContainer: {
@@ -335,7 +186,7 @@ const styles = StyleSheet.create({
     borderRadius: 16,
     overflow: 'hidden',
     elevation: 4,
-    shadowColor: '#2C5F2D',
+    shadowColor: '#FFFBEB',
     shadowOffset: { width: 0, height: 4 },
     shadowOpacity: 0.3,
     shadowRadius: 8,

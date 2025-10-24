@@ -173,7 +173,7 @@ export const BudgetSelector: React.FC<BudgetSelectorProps> = ({
     if (percentage < 25) return '#10B981'; // Green
     if (percentage < 50) return '#2C5F2D'; // Dark Green
     if (percentage < 75) return '#F59E0B'; // Orange
-    return '#C41E3A'; // Red
+    return '#1A1A1A'; // Dark
   }, [getBudgetPercentage]);
 
   const percentage = getBudgetPercentage();
