@@ -9,7 +9,6 @@ import {
   ScrollView,
   Alert,
   Image,
-  Platform,
 } from 'react-native';
 import { MaterialCommunityIcons, Feather } from '@expo/vector-icons';
 import * as ImagePicker from 'expo-image-picker';
@@ -102,7 +101,7 @@ export default function ItineraryHeader({ destination, duration, budget }: Itine
         
         setMessages(prev => [...prev, newMessage]);
       }
-    } catch (error) {
+    } catch {
       Alert.alert('Erreur', 'Impossible de sélectionner une image');
     }
   };
@@ -131,7 +130,7 @@ export default function ItineraryHeader({ destination, duration, budget }: Itine
         
         setMessages(prev => [...prev, newMessage]);
       }
-    } catch (error) {
+    } catch {
       Alert.alert('Erreur', 'Impossible de sélectionner un document');
     }
   };

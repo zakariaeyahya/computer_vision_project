@@ -34,7 +34,7 @@ export default function ItineraryScreen() {
     // TODO: Navigate to "Mes Voyages"
   };
 
-  const handleModifyTrip = () => {
+  const _handleModifyTrip = () => {
     navigation.goBack();
   };
 
@@ -127,7 +127,10 @@ export default function ItineraryScreen() {
       </View>
 
       {/* Activity Detail Modal */}
-      {console.log('Rendering modal with visibility:', isModalVisible, 'activity:', selectedActivity?.name)}
+      {(() => {
+        console.log('Rendering modal with visibility:', isModalVisible, 'activity:', selectedActivity?.name);
+        return null;
+      })()}
       {isModalVisible && (
         <ActivityDetailModal
           visible={isModalVisible}

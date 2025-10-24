@@ -209,7 +209,7 @@ export default function StartTravelScreen() {
                   >
                     <View style={styles.destinationIcon}>
                       <MaterialCommunityIcons
-                        name={(dest.features[0]?.icon || 'map-marker') as any}
+                        name={(dest.features[0]?.icon || 'map-marker') as string}
                         size={28}
                         color="#B0CE88"
                       />
@@ -306,7 +306,7 @@ export default function StartTravelScreen() {
                   onPress={() => setBudgetCategory(cat.value)}
                 >
                   <MaterialCommunityIcons
-                    name={cat.icon as any}
+                    name={cat.icon as string}
                     size={24}
                     color={isSelected ? '#1A1A1A' : '#6B7280'}
                   />
@@ -357,7 +357,7 @@ export default function StartTravelScreen() {
                   onPress={() => setTransport(opt.value)}
                 >
                   <MaterialCommunityIcons
-                    name={opt.icon as any}
+                    name={opt.icon as string}
                     size={28}
                     color={isSelected ? '#1A1A1A' : '#6B7280'}
                   />
@@ -390,7 +390,7 @@ export default function StartTravelScreen() {
                   onPress={() => togglePreference(pref.type)}
                 >
                   <MaterialCommunityIcons
-                    name={pref.emoji as any}
+                    name={pref.emoji as string}
                     size={32}
                     color={isSelected ? '#FFFFFF' : '#6B7280'}
                   />
