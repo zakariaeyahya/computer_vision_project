@@ -1,10 +1,10 @@
 import React from 'react';
 import { View, Text, ScrollView, TouchableOpacity, Image, ImageSourcePropType } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
+// import { LinearGradient } from 'expo-linear-gradient'; // Disabled for build stability
 import { useNavigation } from '@react-navigation/native';
 import { MOCK_USER_PROFILE, SETTINGS_OPTIONS, APP_INFO } from '../../mock';
 import { profileStyles as styles } from '../styles/profileStyles';
-import { ThemeToggle } from '../components/common';
+// import { ThemeToggle } from '../components/common'; // Temporarily disabled for build stability
 
 // eslint-disable-next-line @typescript-eslint/no-require-imports
 const profileImage = require('../../assets/images/profile/556804188_1138100278420211_2161575235186965046_n.jpg') as ImageSourcePropType;
@@ -36,12 +36,7 @@ export default function ProfileScreen() {
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header Profile */}
-      <LinearGradient
-        colors={['#2C5F2D', '#97BC62']}
-        style={styles.header}
-        start={{ x: 0, y: 0 }}
-        end={{ x: 1, y: 1 }}
-      >
+      <View style={[styles.header, { backgroundColor: '#2C5F2D' }]}>
         <View style={styles.avatarContainer}>
           <Image
             source={profileImage}
@@ -51,7 +46,7 @@ export default function ProfileScreen() {
         </View>
         <Text style={styles.headerName}>{userProfile.fullName}</Text>
         <Text style={styles.headerSubtitle}>{userProfile.subtitle}</Text>
-      </LinearGradient>
+      </View>
 
       <View style={styles.content}>
         {/* Informations Personnelles Card */}
@@ -191,8 +186,8 @@ export default function ProfileScreen() {
           </View>
         </View>
 
-        {/* Theme Toggle Card */}
-        <View style={styles.card}>
+        {/* Theme Toggle Card - Temporarily disabled for build stability */}
+        {/* <View style={styles.card}>
           <View style={styles.cardHeader}>
             <View style={styles.cardIconContainer}>
               <Text style={styles.cardIcon}>🎨</Text>
@@ -206,7 +201,7 @@ export default function ProfileScreen() {
           <View style={styles.cardContent}>
             <ThemeToggle />
           </View>
-        </View>
+        </View> */}
 
         {/* Paramètres Card */}
         <TouchableOpacity

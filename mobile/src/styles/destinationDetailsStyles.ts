@@ -1,284 +1,332 @@
-import { StyleSheet, Dimensions } from 'react-native';
-
-const { width, height } = Dimensions.get('window');
+import { StyleSheet } from 'react-native';
 
 export const destinationDetailsStyles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#F9FAFB',
+    backgroundColor: '#FFFFFF',
   },
-
-  // Hero
-  heroContainer: {
-    height: height * 0.5,
+  headerContainer: {
     position: 'relative',
+    height: 300,
   },
-  heroImage: {
+  headerButtons: {
+    position: 'absolute',
+    top: 50,
+    left: 0,
+    right: 0,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 20,
+  },
+  headerImage: {
     width: '100%',
     height: '100%',
   },
-  heroOverlay: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    height: '100%',
-    justifyContent: 'space-between',
-    paddingTop: 50,
-    paddingBottom: 30,
-    paddingHorizontal: 24,
-  },
-  backButton: {
-    width: 44,
-    height: 44,
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    borderRadius: 22,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  backButtonText: {
-    fontSize: 28,
-    color: '#FFFFFF',
-    fontWeight: '300',
-  },
-  heroContent: {
-    alignItems: 'flex-start',
-  },
-  locationBadge: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 16,
-    paddingVertical: 8,
+  headerButton: {
+    width: 40,
+    height: 40,
     borderRadius: 20,
-    gap: 6,
-    marginBottom: 16,
-  },
-  locationEmoji: {
-    fontSize: 16,
-  },
-  locationText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  heroTitle: {
-    fontSize: 48,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 8,
-  },
-  heroSubtitle: {
-    fontSize: 22,
-    color: '#FFFFFF',
-    opacity: 0.95,
-    marginBottom: 24,
-    fontStyle: 'italic',
-  },
-  heroStats: {
-    flexDirection: 'row',
+    backgroundColor: 'rgba(255, 255, 255, 0.9)',
+    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.2)',
-    paddingHorizontal: 20,
-    paddingVertical: 12,
-    borderRadius: 30,
-    gap: 12,
-  },
-  statItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 6,
-  },
-  statIcon: {
-    fontSize: 18,
-  },
-  statText: {
-    fontSize: 15,
-    fontWeight: '600',
-    color: '#FFFFFF',
-  },
-  statDivider: {
-    width: 1,
-    height: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.3)',
-  },
-
-  // Content
-  content: {
-    padding: 20,
-  },
-  section: {
-    marginBottom: 32,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#1F2937',
-    marginBottom: 16,
-  },
-  description: {
-    fontSize: 16,
-    color: '#6B7280',
-    lineHeight: 26,
-  },
-
-  // Highlights
-  highlightsGrid: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-  },
-  highlightCard: {
-    width: (width - 52) / 2,
-    borderRadius: 16,
-    overflow: 'hidden',
-    elevation: 3,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
-    shadowRadius: 8,
-  },
-  highlightGradient: {
-    padding: 20,
-    minHeight: 140,
-  },
-  highlightIcon: {
-    fontSize: 40,
-    marginBottom: 12,
-  },
-  highlightTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    marginBottom: 6,
-  },
-  highlightDescription: {
-    fontSize: 13,
-    color: '#FFFFFF',
-    opacity: 0.95,
-    lineHeight: 18,
-  },
-
-  // Places
-  placeCard: {
-    flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 16,
-    marginBottom: 12,
-    alignItems: 'center',
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
     shadowRadius: 4,
+    elevation: 3,
   },
-  placeIconContainer: {
-    width: 60,
-    height: 60,
-    backgroundColor: '#F3F4F6',
-    borderRadius: 12,
-    alignItems: 'center',
-    justifyContent: 'center',
-    marginRight: 16,
+  headerButtonText: {
+    fontSize: 20,
+    color: '#1A1A1A',
+    fontWeight: '600',
   },
-  placeIcon: {
+  destinationInfoOverlay: {
+    position: 'absolute',
+    bottom: 20,
+    left: 20,
+    right: 20,
+  },
+  destinationName: {
     fontSize: 32,
-  },
-  placeContent: {
-    flex: 1,
-  },
-  placeTitle: {
-    fontSize: 17,
-    fontWeight: 'bold',
-    color: '#1F2937',
+    fontWeight: '700',
+    color: '#FFFFFF',
     marginBottom: 4,
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  placeDescription: {
-    fontSize: 14,
-    color: '#6B7280',
-    marginBottom: 8,
-    lineHeight: 20,
-  },
-  placeMeta: {
-    flexDirection: 'row',
-    gap: 16,
-  },
-  placeMetaText: {
-    fontSize: 13,
-    color: '#9CA3AF',
-    fontWeight: '500',
-  },
-  placeArrow: {
-    fontSize: 28,
-    color: '#D1D5DB',
-    marginLeft: 8,
-  },
-
-  // Info Card
-  infoCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 16,
-    padding: 20,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 1 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-  },
-  infoRow: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    gap: 16,
-  },
-  infoIcon: {
+  priceText: {
     fontSize: 24,
-    marginTop: 2,
+    fontWeight: '700',
+    color: '#FFFFFF',
+    textShadowColor: 'rgba(0, 0, 0, 0.3)',
+    textShadowOffset: { width: 0, height: 2 },
+    textShadowRadius: 4,
   },
-  infoTextContainer: {
+  priceSubtext: {
+    fontSize: 16,
+    fontWeight: '400',
+  },
+  content: {
+    padding: 20,
+  },
+  expertSection: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginBottom: 24,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: '#F0F0F0',
+  },
+  expertAvatar: {
+    width: 50,
+    height: 50,
+    borderRadius: 25,
+    backgroundColor: '#E8F4E8',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginRight: 12,
+  },
+  avatarText: {
+    fontSize: 18,
+    fontWeight: '600',
+    color: '#2C5F2D',
+  },
+  expertInfo: {
     flex: 1,
   },
-  infoLabel: {
+  expertName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    marginBottom: 2,
+  },
+  expertTitle: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
+  ratingContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIcon: {
+    fontSize: 16,
+    marginRight: 4,
+  },
+  ratingText: {
     fontSize: 14,
     fontWeight: '600',
+    color: '#1A1A1A',
+  },
+  reviewsText: {
+    fontSize: 12,
+    fontWeight: '400',
     color: '#6B7280',
-    marginBottom: 4,
   },
-  infoValue: {
-    fontSize: 16,
-    color: '#1F2937',
-    fontWeight: '500',
+  section: {
+    marginBottom: 28,
   },
-  infoDivider: {
-    height: 1,
-    backgroundColor: '#E5E7EB',
-    marginVertical: 16,
+  sectionHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 12,
   },
-
-  // CTA
-  ctaButton: {
-    borderRadius: 16,
-    overflow: 'hidden',
-    marginBottom: 40,
-    elevation: 4,
-    shadowColor: '#2C5F2D',
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.3,
-    shadowRadius: 8,
+  sectionTitle: {
+    fontSize: 20,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    marginBottom: 12,
   },
-  ctaGradient: {
+  viewAllButton: {
     flexDirection: 'row',
     alignItems: 'center',
-    justifyContent: 'center',
-    paddingVertical: 20,
-    gap: 12,
+    gap: 4,
   },
-  ctaIcon: {
-    fontSize: 24,
+  viewAllText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#2C5F2D',
   },
-  ctaText: {
+  aboutText: {
+    fontSize: 15,
+    lineHeight: 24,
+    color: '#4B5563',
+    marginBottom: 16,
+  },
+  highlightsList: {
+    marginTop: 8,
+  },
+  highlightItem: {
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  checkIcon: {
+    fontSize: 16,
+    color: '#2C5F2D',
+    marginRight: 10,
+    marginTop: 2,
+  },
+  highlightText: {
+    fontSize: 14,
+    color: '#4B5563',
+    flex: 1,
+    lineHeight: 20,
+  },
+  activityCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+    position: 'relative',
+  },
+  activityHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 10,
+  },
+  activityName: {
+    fontSize: 16,
+    fontWeight: '600',
+    color: '#1A1A1A',
+    flex: 1,
+    marginRight: 12,
+  },
+  activityPrice: {
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
+    fontWeight: '700',
+    color: '#1A1A1A',
+  },
+  activityMeta: {
+    flexDirection: 'row',
+    marginBottom: 14,
+  },
+  activityMetaItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 16,
+  },
+  metaIcon: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  metaText: {
+    fontSize: 13,
+    color: '#6B7280',
+  },
+  ecoBadge: {
+    position: 'absolute',
+    top: 16,
+    right: 60,
+    backgroundColor: '#D1FAE5',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  ecoBadgeText: {
+    fontSize: 11,
+    fontWeight: '600',
+    color: '#059669',
+  },
+  activityFooter: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  ratingSmall: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  starIconSmall: {
+    fontSize: 14,
+    marginRight: 4,
+  },
+  ratingSmallText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1A1A1A',
+  },
+  addButton: {
+    backgroundColor: '#FEF08A',
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 20,
+  },
+  addButtonSelected: {
+    backgroundColor: '#D1FAE5',
+  },
+  addButtonText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: '#1A1A1A',
+  },
+  addButtonTextSelected: {
+    color: '#059669',
+  },
+  eventCard: {
+    backgroundColor: '#FFFFFF',
+    borderRadius: 12,
+    padding: 16,
+    marginBottom: 16,
+    flexDirection: 'row',
+    gap: 16,
+    borderWidth: 1,
+    borderColor: '#E5E7EB',
+  },
+  eventIconContainer: {
+    width: 56,
+    height: 56,
+    borderRadius: 28,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  eventContent: {
+    flex: 1,
+    gap: 8,
+  },
+  eventHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  },
+  eventName: {
+    fontSize: 16,
+    fontWeight: '700',
+    color: '#1A1A1A',
+    flex: 1,
+    marginRight: 8,
+  },
+  eventTypeBadge: {
+    backgroundColor: '#F3F4F6',
+    paddingHorizontal: 10,
+    paddingVertical: 4,
+    borderRadius: 12,
+  },
+  eventTypeText: {
+    fontSize: 12,
+    fontWeight: '600',
+    color: '#B0CE88',
+  },
+  eventDescription: {
+    fontSize: 14,
+    color: '#6B7280',
+    lineHeight: 20,
+  },
+  eventDetails: {
+    flexDirection: 'row',
+    gap: 16,
+  },
+  eventDetail: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 4,
+  },
+  eventDetailText: {
+    fontSize: 13,
+    color: '#6B7280',
   },
 });
