@@ -10,7 +10,6 @@ import { useNavigation } from '@react-navigation/native';
 import { Feather, MaterialCommunityIcons } from '@expo/vector-icons';
 import { DESTINATIONS } from '../../mock/destinations';
 import { ITINERARIES_BY_DESTINATION } from '../../mock/itinerary';
-import { useTheme } from '../context';
 import { homeScreenStyles as styles } from '../styles/homeScreenStyles';
 import { HeaderCard } from '../components/common';
 
@@ -25,7 +24,6 @@ const CATEGORIES = [
 
 export default function HomeScreen() {
   const navigation = useNavigation();
-  const { colors, isDark} = useTheme();
   const [selectedCategories, setSelectedCategories] = useState<string[]>(['Culture']);
   const [searchValue, setSearchValue] = useState<string>('');
 
@@ -51,7 +49,7 @@ export default function HomeScreen() {
 
 
   return (
-    <ScrollView style={[styles.container, { backgroundColor: colors.background }]} showsVerticalScrollIndicator={false}>
+    <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
       {/* HEADER CARD */}
       <HeaderCard
         onProfilePress={() => navigateTo('Profile')}
@@ -149,7 +147,7 @@ export default function HomeScreen() {
 
         {/* SECTION "Destinations Populaires" */}
         <View style={styles.sectionHeader}>
-          <Text style={[styles.sectionTitle, { color: colors.text }]}>Destinations Populaires</Text>
+          <Text style={styles.sectionTitle}>Destinations Populaires</Text>
         </View>
 
         {/* CARTES DE DESTINATIONS - Carrousel horizontal */}
@@ -167,7 +165,6 @@ export default function HomeScreen() {
                 key={destination.id}
                 style={[
                   styles.destinationCardHorizontal,
-                  { backgroundColor: colors.card, borderColor: colors.border },
                   index === DESTINATIONS.length - 1 ? { marginRight: 20 } : null,
                 ]}
                 activeOpacity={0.9}
@@ -178,7 +175,7 @@ export default function HomeScreen() {
                   <Image source={destination.image} style={styles.destinationImage} />
 
                   {/* Badge écologique */}
-                  <View style={[styles.ecoBadge, { backgroundColor: colors.success }]}>
+                  <View style={styles.ecoBadge}>
                     <MaterialCommunityIcons name="leaf" size={12} color="#FFFFFF" style={{ marginRight: 4 }} />
                     <Text style={styles.ecoBadgeText}>{ecoScore}%</Text>
                   </View>
@@ -192,24 +189,24 @@ export default function HomeScreen() {
                 {/* Contenu de la carte */}
                 <View style={styles.cardContent}>
                   {/* Localisation */}
-                  <Text style={[styles.location, { color: colors.textSecondary }]}>◉ {destination.location}, Maroc</Text>
+                  <Text style={styles.location}>◉ {destination.location}, Maroc</Text>
 
                   {/* Nom de la destination */}
-                  <Text style={[styles.destinationName, { color: colors.text }]}>{destination.name}</Text>
+                  <Text style={styles.destinationName}>{destination.name}</Text>
 
                   {/* Description */}
-                  <Text style={[styles.description, { color: colors.textSecondary }]} numberOfLines={3}>
+                  <Text style={styles.description} numberOfLines={3}>
                     {destination.description}
                   </Text>
 
                   {/* Footer: Prix + Bouton */}
                   <View style={styles.cardFooter}>
-                    <Text style={[styles.price, { color: colors.text }]}>{pricePerNight}€/nuit</Text>
+                    <Text style={styles.price}>{pricePerNight}€/nuit</Text>
                     <TouchableOpacity
-                      style={[styles.discoverButton, { backgroundColor: colors.accent }]}
+                      style={styles.discoverButton}
                       onPress={() => navigateTo('DestinationDetails', { destinationName: destination.name })}
                     >
-                      <Text style={[styles.discoverButtonText, { color: isDark ? '#1A1A1A' : '#1A1A1A' }]}>Découvrir ›</Text>
+                      <Text style={styles.discoverButtonText}>Découvrir ›</Text>
                     </TouchableOpacity>
                   </View>
                 </View>

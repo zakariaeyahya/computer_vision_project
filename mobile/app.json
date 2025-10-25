@@ -20,6 +20,11 @@
     },
     "android": {
       "package": "com.atlasgo.app"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f68ee49f-e3dc-4fa9-998f-cdd8e644aff7"
+      }
     }
   }
 }
