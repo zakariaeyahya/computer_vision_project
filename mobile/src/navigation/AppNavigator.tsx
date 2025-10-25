@@ -15,11 +15,12 @@ import SettingsScreen from '../components/profile/SettingsScreen';
 import DestinationDetailsScreen from '../screens/DestinationDetailsScreen';
 import MapScreen from '../screens/MapScreen';
 import ProfileScreen from '../screens/ProfileScreen';
+import EventsScreen from '../screens/EventsScreen';
 
 // Types for navigation
 export type RootStackParamList = {
   Onboarding: undefined;
-  MainTabs: undefined;
+  MainTabs: { screen?: keyof TabParamList };
   Itinerary: { id: string };
   PersonalInfo: undefined;
   TravelPreferences: undefined;
@@ -32,6 +33,7 @@ export type RootStackParamList = {
 export type TabParamList = {
   Home: undefined;
   StartTravel: undefined;
+  Events: undefined;
   MyTrips: undefined;
   Profile: undefined;
 };
@@ -95,6 +97,27 @@ function MainTabs() {
             >
               <Feather
                 name="compass"
+                size={24}
+                color={focused ? '#FFFFFF' : '#9CA3AF'}
+              />
+            </View>
+          ),
+        }}
+      />
+      <Tab.Screen 
+        name="Events" 
+        component={EventsScreen}
+        options={{ 
+          title: 'Événements',
+          tabBarIcon: ({ focused }) => (
+            <View
+              style={[
+                styles.iconContainer,
+                focused && { backgroundColor: '#2C5F2D' },
+              ]}
+            >
+              <Feather
+                name="calendar"
                 size={24}
                 color={focused ? '#FFFFFF' : '#9CA3AF'}
               />

@@ -84,15 +84,6 @@ export default function PersonalInfoScreen() {
       return;
     }
 
-    // Save logic here (API call, context update, etc.)
-    console.log('Saving personal info:', {
-      fullName,
-      email,
-      phone,
-      country,
-      language,
-    });
-
     Alert.alert('Succès', 'Vos informations ont été mises à jour', [
       {
         text: 'OK',

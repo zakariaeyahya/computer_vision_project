@@ -5,16 +5,20 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
-  StyleSheet,
 } from 'react-native';
 import { useNavigation, useRoute, RouteProp } from '@react-navigation/native';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
 import {
   DESTINATIONS,
   ITINERARIES_BY_DESTINATION,
+  EVENTS,
+  Event,
 } from '../../mock';
 import type { RootStackParamList } from '../navigation/AppNavigator';
 import type { Activity } from '../../mock/itinerary';
 import ActivityDetailModal from '../components/travel/ActivityDetailModal';
+import EventDetailsModal from '../components/events/EventDetailsModal';
+import { destinationDetailsStyles as styles } from '../styles/destinationDetailsStyles';
 
 type DestinationDetailsRouteProp = RouteProp<RootStackParamList, 'DestinationDetails'>;
 
@@ -33,6 +37,8 @@ export default function DestinationDetailsScreen() {
   const [selectedActivities, setSelectedActivities] = useState<string[]>([]);
   const [selectedActivity, setSelectedActivity] = useState<Activity | null>(null);
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedEvent, setSelectedEvent] = useState<Event | null>(null);
+  const [isEventModalVisible, setIsEventModalVisible] = useState(false);
 
   // Find destination in mock data
   const destination = DESTINATIONS.find(d => d.name === destinationName);
@@ -43,9 +49,12 @@ export default function DestinationDetailsScreen() {
 
   // Get itinerary for this destination
   const itinerary = ITINERARIES_BY_DESTINATION[destination.name];
-  
+
   // Get recommended activities from first day of itinerary
   const recommendedActivities: Activity[] = itinerary?.days[0]?.activities || [];
+
+  // Get events for this destination
+  const cityEvents = EVENTS.filter(event => event.city === destination.name);
 
   // Calculate price per person (example pricing)
   const pricePerPerson = itinerary?.budget ? Math.round(itinerary.budget / 2) : 299;
@@ -77,9 +86,24 @@ export default function DestinationDetailsScreen() {
 
   const handleGetDirections = () => {
     // TODO: Implémenter la navigation/directions
-    console.log('Get directions to:', selectedActivity?.name);
     handleCloseModal();
   };
+
+  const handleEventPress = (event: Event) => {
+    setSelectedEvent(event);
+    setIsEventModalVisible(true);
+  };
+
+  const handleCloseEventModal = () => {
+    setIsEventModalVisible(false);
+    setTimeout(() => setSelectedEvent(null), 300);
+  };
+
+  const handleAddEventToTrip = (event: Event) => {
+    console.log('Ajouter événement au voyage:', event.name);
+    // TODO: Implémenter la logique d'ajout de l'événement au voyage
+  };
+
 
   return (
     <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
@@ -222,6 +246,104 @@ export default function DestinationDetailsScreen() {
             );
           })}
         </View>
+
+        {/* Upcoming Events */}
+        {cityEvents.length > 0 && (
+          <View style={styles.section}>
+            <View style={styles.sectionHeader}>
+              <Text style={[styles.sectionTitle, { marginBottom: 0 }]}>Événements à venir</Text>
+              <TouchableOpacity
+                onPress={() => {
+                  // Navigation vers l'écran Events
+                  console.log('Navigate to Events screen');
+                }}
+                style={styles.viewAllButton}
+                activeOpacity={0.7}
+              >
+                <Text style={styles.viewAllText}>Voir tout</Text>
+                <MaterialCommunityIcons name="chevron-right" size={20} color="#2C5F2D" />
+              </TouchableOpacity>
+            </View>
+
+            {cityEvents.map((event) => {
+              const getEventIcon = (iconType: string) => {
+                switch (iconType) {
+                  case "music":
+                    return "music";
+                  case "trophy":
+                    return "trophy";
+                  case "ticket":
+                    return "ticket";
+                  case "users":
+                    return "account-group";
+                  default:
+                    return "calendar";
+                }
+              };
+
+              const getEventColor = (iconType: string) => {
+                switch (iconType) {
+                  case "music":
+                    return "#B0CE88";
+                  case "trophy":
+                    return "#FF6B6B";
+                  case "ticket":
+                    return "#4ECDC4";
+                  case "users":
+                    return "#45B7D1";
+                  default:
+                    return "#B0CE88";
+                }
+              };
+
+              return (
+                <TouchableOpacity
+                  key={event.id}
+                  style={styles.eventCard}
+                  activeOpacity={0.7}
+                  onPress={() => handleEventPress(event)}
+                >
+                  <View
+                    style={[
+                      styles.eventIconContainer,
+                      { backgroundColor: getEventColor(event.icon) },
+                    ]}
+                  >
+                    <MaterialCommunityIcons
+                      name={getEventIcon(event.icon) as string}
+                      size={24}
+                      color="#FFFFFF"
+                    />
+                  </View>
+
+                  <View style={styles.eventContent}>
+                    <View style={styles.eventHeader}>
+                      <Text style={styles.eventName}>{event.name}</Text>
+                      <View style={styles.eventTypeBadge}>
+                        <Text style={styles.eventTypeText}>{event.type}</Text>
+                      </View>
+                    </View>
+
+                    <Text style={styles.eventDescription} numberOfLines={2}>
+                      {event.description}
+                    </Text>
+
+                    <View style={styles.eventDetails}>
+                      <View style={styles.eventDetail}>
+                        <MaterialCommunityIcons name="calendar" size={14} color="#6B7280" />
+                        <Text style={styles.eventDetailText}>{event.date}</Text>
+                      </View>
+                      <View style={styles.eventDetail}>
+                        <MaterialCommunityIcons name="currency-usd" size={14} color="#6B7280" />
+                        <Text style={styles.eventDetailText}>{event.price}</Text>
+                      </View>
+                    </View>
+                  </View>
+                </TouchableOpacity>
+              );
+            })}
+          </View>
+        )}
       </View>
 
       {/* Activity Detail Modal */}
@@ -232,270 +354,26 @@ export default function DestinationDetailsScreen() {
         onAddToItinerary={handleAddToItinerary}
         onGetDirections={handleGetDirections}
         cityName={destination.name}
-        activityPrice={selectedActivity ? 
-          (recommendedActivities.indexOf(selectedActivity) === 0 ? 45 : 
-           recommendedActivities.indexOf(selectedActivity) === 1 ? 65 : 85) 
+        activityPrice={selectedActivity ?
+          (recommendedActivities.indexOf(selectedActivity) === 0 ? 45 :
+           recommendedActivities.indexOf(selectedActivity) === 1 ? 65 : 85)
           : 45
         }
-        ecoScore={selectedActivity ? 
-          (recommendedActivities.indexOf(selectedActivity) === 1 || 
-           recommendedActivities.indexOf(selectedActivity) === 2 ? 5 : undefined) 
+        ecoScore={selectedActivity ?
+          (recommendedActivities.indexOf(selectedActivity) === 1 ||
+           recommendedActivities.indexOf(selectedActivity) === 2 ? 5 : undefined)
           : undefined
         }
+      />
+
+      {/* Event Details Modal */}
+      <EventDetailsModal
+        event={selectedEvent}
+        visible={isEventModalVisible}
+        onClose={handleCloseEventModal}
+        onAddToTrip={handleAddEventToTrip}
       />
     </ScrollView>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#FFFFFF',
-  },
-  headerContainer: {
-    position: 'relative',
-    height: 300,
-  },
-  headerImage: {
-    width: '100%',
-    height: '100%',
-  },
-  headerButtons: {
-    position: 'absolute',
-    top: 50,
-    left: 0,
-    right: 0,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    paddingHorizontal: 20,
-  },
-  headerButton: {
-    width: 40,
-    height: 40,
-    borderRadius: 20,
-    backgroundColor: 'rgba(255, 255, 255, 0.9)',
-    justifyContent: 'center',
-    alignItems: 'center',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 3,
-  },
-  headerButtonText: {
-    fontSize: 20,
-    color: '#1A1A1A',
-    fontWeight: '600',
-  },
-  destinationInfoOverlay: {
-    position: 'absolute',
-    bottom: 20,
-    left: 20,
-    right: 20,
-  },
-  destinationName: {
-    fontSize: 32,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    marginBottom: 4,
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  priceText: {
-    fontSize: 24,
-    fontWeight: '700',
-    color: '#FFFFFF',
-    textShadowColor: 'rgba(0, 0, 0, 0.3)',
-    textShadowOffset: { width: 0, height: 2 },
-    textShadowRadius: 4,
-  },
-  priceSubtext: {
-    fontSize: 16,
-    fontWeight: '400',
-  },
-  content: {
-    padding: 20,
-  },
-  expertSection: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginBottom: 24,
-    paddingBottom: 20,
-    borderBottomWidth: 1,
-    borderBottomColor: '#F0F0F0',
-  },
-  expertAvatar: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
-    backgroundColor: '#E8F4E8',
-    justifyContent: 'center',
-    alignItems: 'center',
-    marginRight: 12,
-  },
-  avatarText: {
-    fontSize: 18,
-    fontWeight: '600',
-    color: '#2C5F2D',
-  },
-  expertInfo: {
-    flex: 1,
-  },
-  expertName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    marginBottom: 2,
-  },
-  expertTitle: {
-    fontSize: 13,
-    color: '#6B7280',
-  },
-  ratingContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  starIcon: {
-    fontSize: 16,
-    marginRight: 4,
-  },
-  ratingText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
-  },
-  reviewsText: {
-    fontSize: 12,
-    fontWeight: '400',
-    color: '#6B7280',
-  },
-  section: {
-    marginBottom: 28,
-  },
-  sectionTitle: {
-    fontSize: 20,
-    fontWeight: '700',
-    color: '#1A1A1A',
-    marginBottom: 12,
-  },
-  aboutText: {
-    fontSize: 15,
-    lineHeight: 24,
-    color: '#4B5563',
-    marginBottom: 16,
-  },
-  highlightsList: {
-    marginTop: 8,
-  },
-  highlightItem: {
-    flexDirection: 'row',
-    alignItems: 'flex-start',
-    marginBottom: 10,
-  },
-  checkIcon: {
-    fontSize: 16,
-    color: '#2C5F2D',
-    marginRight: 10,
-    marginTop: 2,
-  },
-  highlightText: {
-    fontSize: 14,
-    color: '#4B5563',
-    flex: 1,
-    lineHeight: 20,
-  },
-  activityCard: {
-    backgroundColor: '#FFFFFF',
-    borderRadius: 12,
-    padding: 16,
-    marginBottom: 16,
-    borderWidth: 1,
-    borderColor: '#E5E7EB',
-    position: 'relative',
-  },
-  activityHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 10,
-  },
-  activityName: {
-    fontSize: 16,
-    fontWeight: '600',
-    color: '#1A1A1A',
-    flex: 1,
-    marginRight: 12,
-  },
-  activityPrice: {
-    fontSize: 18,
-    fontWeight: '700',
-    color: '#1A1A1A',
-  },
-  activityMeta: {
-    flexDirection: 'row',
-    marginBottom: 14,
-  },
-  activityMetaItem: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginRight: 16,
-  },
-  metaIcon: {
-    fontSize: 14,
-    marginRight: 4,
-  },
-  metaText: {
-    fontSize: 13,
-    color: '#6B7280',
-  },
-  ecoBadge: {
-    position: 'absolute',
-    top: 16,
-    right: 60,
-    backgroundColor: '#D1FAE5',
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 12,
-  },
-  ecoBadgeText: {
-    fontSize: 11,
-    fontWeight: '600',
-    color: '#059669',
-  },
-  activityFooter: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-  },
-  ratingSmall: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  starIconSmall: {
-    fontSize: 14,
-    marginRight: 4,
-  },
-  ratingSmallText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
-  },
-  addButton: {
-    backgroundColor: '#FEF08A',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 20,
-  },
-  addButtonSelected: {
-    backgroundColor: '#D1FAE5',
-  },
-  addButtonText: {
-    fontSize: 14,
-    fontWeight: '600',
-    color: '#1A1A1A',
-  },
-  addButtonTextSelected: {
-    color: '#059669',
-  },
-});

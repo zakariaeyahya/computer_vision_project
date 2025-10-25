@@ -84,7 +84,13 @@ export default function HomeScreen() {
           </View>
 
           {/* Ligne 2: 1 bouton pleine largeur */}
-          <TouchableOpacity style={styles.eventsButton}>
+          <TouchableOpacity
+            style={styles.eventsButton}
+            onPress={() => {
+              console.log('[HomeScreen] Events button pressed');
+              navigateTo('MainTabs', { screen: 'Events' });
+            }}
+          >
             <Text style={styles.eventsButtonText}>◷ Événements à venir</Text>
           </TouchableOpacity>
         </View>

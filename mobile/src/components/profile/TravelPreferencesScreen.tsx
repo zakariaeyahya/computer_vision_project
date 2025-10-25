@@ -121,14 +121,6 @@ export default function TravelPreferencesScreen() {
       return;
     }
 
-    // Save logic here
-    console.log('Saving preferences:', {
-      budgetLevel,
-      selectedInterests,
-      travelStyle,
-      accommodationType,
-      groupSize,
-    });
 
     Alert.alert('Succès', 'Vos préférences ont été mises à jour', [
       {

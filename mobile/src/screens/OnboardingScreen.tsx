@@ -34,7 +34,7 @@ const OnboardingScreen: React.FC = () => {
       setCurrentIndex(nextIndex);
     } else {
       // Dernier slide, aller vers l'app principale
-      navigation.replace('MainTabs');
+      navigation.navigate('MainTabs' as never);
     }
   };
 
@@ -47,7 +47,7 @@ const OnboardingScreen: React.FC = () => {
   };
 
   const handleSkip = () => {
-    navigation.replace('MainTabs');
+    navigation.navigate('MainTabs' as never);
   };
 
   const getContentStyle = (position?: 'top' | 'center' | 'bottom') => {

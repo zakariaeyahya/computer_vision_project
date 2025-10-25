@@ -73,8 +73,6 @@ source={profileImage}
       <VoiceModal
         visible={voiceModalVisible}
         onClose={() => setVoiceModalVisible(false)}
-        onStart={() => console.log('Voice recording started')}
-        onStop={(duration) => console.log(`Voice recording stopped after ${duration} seconds`)}
       />
     </View>
   );

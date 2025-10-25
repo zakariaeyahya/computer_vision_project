@@ -8,6 +8,7 @@ export * from './trips';
 export * from './itinerary';
 export * from './preferences';
 export * from './userProfile';
+export * from './events';
 
 // Export Place type only once to avoid conflicts
 export type { Place } from './tetouanPlaces';

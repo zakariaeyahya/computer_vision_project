@@ -57,25 +57,7 @@ export default function SettingsScreen() {
    * Handle save settings
    */
   const handleSave = () => {
-    // Save logic here
-    console.log('Saving settings:', {
-      language,
-      theme,
-      privacy,
-      notifications,
-      notificationSettings: {
-        tripReminders,
-        promotions,
-        recommendations,
-        messages,
-        emailNotifications,
-        pushNotifications,
-      },
-      dataSharing,
-      locationServices,
-      offlineMode,
-      autoSync,
-    });
+
 
     Alert.alert('Succès', 'Vos paramètres ont été mis à jour', [
       {

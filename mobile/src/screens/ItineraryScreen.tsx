@@ -39,13 +39,8 @@ export default function ItineraryScreen() {
   };
 
   const handleActivityPress = (activity: Activity) => {
-    console.log('=== handleActivityPress called ===');
-    console.log('Activity pressed:', activity.name);
-    console.log('Activity object:', activity);
     setSelectedActivity(activity);
     setIsModalVisible(true);
-    console.log('Modal should be visible now');
-    console.log('=== End handleActivityPress ===');
   };
 
   const handleCloseModal = () => {
