@@ -183,6 +183,14 @@ export default function MapScreen() {
         javaScriptEnabled={true}
         domStorageEnabled={true}
         startInLoadingState={true}
+        mixedContentMode="always"
+        allowUniversalAccessFromFileURLs={true}
+        allowFileAccessFromFileURLs={true}
+        cacheEnabled={false}
+        onError={(syntheticEvent) => {
+          const { nativeEvent } = syntheticEvent;
+          console.warn('WebView error: ', nativeEvent);
+        }}
       />
 
       {/* Header */}
