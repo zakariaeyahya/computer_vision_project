@@ -16,10 +16,24 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "com.atlasgo.app"
+      "bundleIdentifier": "com.atlasgo.app",
+      "buildNumber": "1",
+      "infoPlist": {
+        "CFBundleDisplayName": "AtlasGo",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
-      "package": "com.atlasgo.app"
+      "package": "com.atlasgo.app",
+      "versionCode": 1,
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/ATLASGO.png",
+        "backgroundColor": "#2C5F2D"
+      },
+      "permissions": [
+        "INTERNET",
+        "ACCESS_NETWORK_STATE"
+      ]
     },
     "extra": {
       "eas": {
@@ -31,6 +45,9 @@
     },
     "updates": {
       "url": "https://u.expo.dev/f68ee49f-e3dc-4fa9-998f-cdd8e644aff7"
-    }
+    },
+    "plugins": [
+      "expo-font"
+    ]
   }
 }
